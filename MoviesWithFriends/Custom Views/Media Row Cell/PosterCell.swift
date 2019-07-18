@@ -51,4 +51,10 @@ class PosterCell: UICollectionViewCell {
         titleLabel.horizontalAnchors == horizontalAnchors + 6
         titleLabel.bottomAnchor == bottomAnchor - 6
     }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        posterImageView.image = nil
+        titleLabel.text = nil
+    }
 }

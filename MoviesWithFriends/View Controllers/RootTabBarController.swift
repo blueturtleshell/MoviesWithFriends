@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import FirebaseAuth
 
-class RootTabBarController: UITabBarController {
+class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     private let mediaManager: MediaManager
 
@@ -25,18 +26,35 @@ class RootTabBarController: UITabBarController {
         super.viewDidLoad()
 
         setup()
-        // fetch user and feed to view controllers
         setupViewControllers()
     }
 
     private func setup() {
-
+        delegate = self
     }
 
     private func setupViewControllers() {
+        var vcs = [UIViewController]()
         let homeViewController = HomeViewController(mediaManager: mediaManager)
         let homeNavigationController = UINavigationController(rootViewController: homeViewController)
+        vcs.append(homeNavigationController)
 
-        viewControllers = [homeNavigationController]
+        let userViewController = UserViewController(mediaManager: mediaManager)
+        let userNavigationController = UINavigationController(rootViewController: userViewController)
+        vcs.append(userNavigationController)
+
+        viewControllers = vcs
+    }
+
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        guard let index = viewControllers?.firstIndex(of: viewController) else { return false }
+
+        if index == 1 && Auth.auth().currentUser == nil {
+            let authViewController = LoginViewController()
+            let authNavigationController = UINavigationController(rootViewController: authViewController)
+            present(authNavigationController, animated: true, completion: nil)
+            return false
+        }
+        return true
     }
 }

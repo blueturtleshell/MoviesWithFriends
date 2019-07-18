@@ -11,6 +11,9 @@ import Foundation
 class MediaManager {
     typealias MediaCompletion = (Result<MediaResult, Error>) -> Void
     typealias MovieDetailCompletion = (Result<MovieDetail, Error>) -> Void
+    typealias TVShowDetailCompletion = (Result<TVShowDetail, Error>) -> Void
+    typealias PersonCompletion = (Result<PersonSearch, Error>) -> Void
+    typealias PersonCreditsCompletion = (Result<SearchCredits, Error>) -> Void
 
     private let urlSession: URLSession
     private let requestBuilder: RequestBuilder
@@ -35,10 +38,32 @@ class MediaManager {
         fetchHelper(request: request, completion: completion)
     }
 
-//    func fetchTVShowDetail(id: Int, completion: @escaping MovieDetailCompletion) {
-//        let request = requestBuilder.buildRequest(endpoint: MediaDetailEndpoint.movie(id: id), extraParams: nil)
-//        fetchHelper(request: request, completion: completion)
-//    }
+    func fetchTVShowDetail(id: Int, completion: @escaping TVShowDetailCompletion) {
+        let request = requestBuilder.buildRequest(endpoint: MediaDetailEndpoint.tv(id: id), extraParams: nil)
+        fetchHelper(request: request, completion: completion)
+    }
+
+    func searchForMovie(text: String, page: Int, completion: @escaping MediaCompletion) {
+        let request = requestBuilder.buildRequest(endpoint: SearchEndpoint.movie(text: text), extraParams: ["page": page])
+        fetchHelper(request: request, completion: completion)
+    }
+
+    func searchForTVShow(text: String, page: Int, completion: @escaping MediaCompletion) {
+        let request = requestBuilder.buildRequest(endpoint: SearchEndpoint.tv(text: text), extraParams: ["page": page])
+        fetchHelper(request: request, completion: completion)
+    }
+
+    func searchForPerson(name: String, page: Int, completion: @escaping PersonCompletion) {
+        let request = requestBuilder.buildRequest(endpoint: SearchEndpoint.person(name: name), extraParams: ["page": page])
+        fetchHelper(request: request, completion: completion)
+    }
+
+    func mediaWithPerson(endpoint: Endpoint, completion: @escaping PersonCreditsCompletion) {
+        let request = requestBuilder.buildRequest(endpoint: endpoint, extraParams: nil)
+        fetchHelper(request: request, completion: completion)
+    }
+
+    // searchForPerson
 
     func getImageURL(for imageEndpoint: ImageEndpoint) -> URL? {
         return requestBuilder.buildRequest(endpoint: imageEndpoint, extraParams: nil).url
@@ -69,4 +94,3 @@ class MediaManager {
         case failedRequest
     }
 }
-//https://api.themoviedb.org/movie/429617?api_key=e29a849bf8131d2edaf7e6127965f161&append_to_response=videos,credits,release_dates

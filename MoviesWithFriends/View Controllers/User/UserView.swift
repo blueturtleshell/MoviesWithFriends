@@ -18,6 +18,7 @@ class UserView: UIView {
 
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 50
         imageView.layer.borderWidth = 0.5
@@ -31,7 +32,7 @@ class UserView: UIView {
         label.font = UIFont(name: "AvenirNext-Regular", size: 16)
         label.textColor = .white
         label.contentMode = .center
-        label.text = "Full Name"
+        label.text = " "
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -106,15 +107,15 @@ class UserView: UIView {
         fullNameLabel.topAnchor == profileImageView.bottomAnchor + 12
 
         editProfileSettingsStackView.centerYAnchor == profileImageView.centerYAnchor
-        editProfileSettingsStackView.leftAnchor == profileImageView.rightAnchor + 12
+        editProfileSettingsStackView.leftAnchor == profileImageView.rightAnchor + 36
         editProfileSettingsStackView.rightAnchor == blurBackgroundView.rightAnchor - 12
 
-        editProfileButton.heightAnchor == 44
-        settingsButton.heightAnchor == 44
+        editProfileButton.heightAnchor == 30
+        settingsButton.heightAnchor == 30
 
         bookmarkSegmentedControl.topAnchor == fullNameLabel.bottomAnchor + 12
         bookmarkSegmentedControl.heightAnchor == 44
-        bookmarkSegmentedControl.horizontalAnchors == blurBackgroundView.horizontalAnchors + 6
+        bookmarkSegmentedControl.horizontalAnchors == blurBackgroundView.horizontalAnchors - 1
 
         tableView.topAnchor == bookmarkSegmentedControl.bottomAnchor + 1
         tableView.horizontalAnchors == blurBackgroundView.horizontalAnchors

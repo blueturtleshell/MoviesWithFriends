@@ -43,3 +43,9 @@ struct Media: Decodable, MediaDisplayable {
         overview = try values.decode(String.self, forKey: .overview)
     }
 }
+
+extension Media: Hashable {
+     var hashValue: Int {
+        return id
+    }
+}

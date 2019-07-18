@@ -118,7 +118,11 @@ extension MediaRowCell: UICollectionViewDelegate, UICollectionViewDataSource, UI
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if media.isEmpty {
+            return CGSize(width: collectionView.bounds.width, height: 180)
+        }
         return CGSize(width: 135, height: 180)
     }
 

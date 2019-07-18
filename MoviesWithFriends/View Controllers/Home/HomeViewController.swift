@@ -35,11 +35,18 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupView()
+        fetchMedia()
+    }
+
+    private func setupView() {
+        navigationItem.title = "Movies with Friends"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "search"), style: .plain, target: self, action: #selector(handleSearch))
+
         homeView.tableView.rowHeight = 225
         homeView.tableView.delegate = self
         homeView.tableView.dataSource = self
         homeView.tableView.register(MediaRowCell.self, forCellReuseIdentifier: "MediaCell")
-        fetchMedia()
     }
 
     private func fetchMedia() {
@@ -54,6 +61,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
         }
+    }
+
+    @objc private func handleSearch() {
+        let searchViewController = SearchViewController(mediaManager: mediaManager)
+        navigationController?.pushViewController(searchViewController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

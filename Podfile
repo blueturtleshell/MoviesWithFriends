@@ -9,4 +9,10 @@ target 'MoviesWithFriends' do
   pod 'Anchorage'
   pod 'Kingfisher', '~> 5.0'
 
+  # Firestore
+  pod 'Firebase/Core'
+  pod 'Firebase/Firestore'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Storage'
+
 end

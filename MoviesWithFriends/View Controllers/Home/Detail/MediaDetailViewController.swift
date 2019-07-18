@@ -83,7 +83,13 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
                 }
             }
         case .tv:
-            print("")
+            mediaManager.fetchTVShowDetail(id: mediaID) { detailResult in
+                do {
+                    self.mediaInfo = try detailResult.get()
+                } catch {
+                    print(error)
+                }
+            }
         }
     }
 
@@ -92,9 +98,14 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
 
         detailView.titleLabel.text = mediaInfo.title
         detailView.certificationLabel.text = mediaInfo.rating
-        detailView.releaseDateLabel.text = mediaInfo.releaseDate
+        detailView.releaseDateLabel.text = "Release Date: \(!mediaInfo.releaseDate.isEmpty ? mediaInfo.releaseDate : "N/A")"
         detailView.overviewLabel.text = mediaInfo.overview
         detailView.overviewLabel.setLineSpacing(lineHeightMultiple: 1.2)
+        if let runtime = mediaInfo.runtime {
+            detailView.runtimeLabel.text = getFormattedRuntime(runtime)
+        } else {
+            detailView.runtimeLabel.text = "Runtime: N/A"
+        }
         detailView.genreLabel.text = mediaInfo.genres.compactMap { $0.name }.joined(separator: ", ")
 
         detailView.backToPreviousMediaButton.isHidden = (mediaHistory.count < 1)
@@ -117,6 +128,17 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         }
 
         getRelatedMedia(id: mediaInfo.id)
+    }
+
+    private func getFormattedRuntime(_ runtime: Int) -> String {
+        let hours = runtime / 60
+        let minutes = runtime % 60
+        if hours > 0 && minutes > 0 {
+            return "Runtime: \(hours) \(hours > 1 ? "Hours" : "Hour") \(minutes) \(minutes > 1 ? "Minutes" : "Minute")"
+        } else if hours > 1 && minutes == 0 {
+            return "Runtime: \(hours) \(hours > 1 ? "Hours" : "Hour")"
+        }
+        return "Runtime: \(minutes) \(minutes > 1 ? "Minutes" : "Minute")"
     }
 
     private func getRelatedMedia(id: Int) {
@@ -184,7 +206,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         cell.delegate = self
         cell.mediaManager = mediaManager
         let media = (indexPath.row == 0 ? similarMedia : recommendedMedia)
-        cell.titleLabel.text = indexPath.row == 0 ? "Similar Movies" : "If you liked \(mediaInfo?.title ?? "")"
+        cell.titleLabel.text = indexPath.row == 0 ? "Related" : "If you liked \(mediaInfo?.title ?? "")"
         cell.titleLabel.textColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
         cell.media = media
         cell.mediaCollectionView.reloadData()

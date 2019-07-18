@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class UserViewController: UIViewController {
 
@@ -15,13 +16,18 @@ class UserViewController: UIViewController {
     }()
 
     private let mediaManager: MediaManager
-    private let userManager: UserManager
-    private var user: User?
+    private var user: MWFUser? {
+        didSet {
+            if let user = user {
+                configureView(for: user)
+            }
+        }
+    }
 
-    init(mediaManager: MediaManager, userManager: UserManager, user: User?) {
+    init(mediaManager: MediaManager) {
         self.mediaManager = mediaManager
-        self.userManager = userManager
         super.init(nibName: nil, bundle: nil)
+        tabBarItem = UITabBarItem(title: "User", image: UIImage(named: "user"), tag: 1)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,10 +47,29 @@ class UserViewController: UIViewController {
     }
 
     private func setupView() {
-
+        NotificationCenter.default.addObserver(self, selector: #selector(fetchUser), name: .userDidLogin, object: nil)
     }
 
-    private func fetchUser() {
-        
+    @objc private func fetchUser(_ notification: Notification? = nil) {
+        guard let userID = Auth.auth().currentUser?.uid, user == nil else { return }
+
+        Firestore.firestore().collection("users").document(userID).getDocument { userSnapshot, error in
+            if let error = error {
+                print(error)
+            } else if let userData = userSnapshot?.data(), let user = MWFUser(from: userData) {
+                self.user = user
+            }
+        }
     }
+
+    private func configureView(for user: MWFUser) {
+        userView.fullNameLabel.text = user.fullName ?? ""
+        if let profileURL = user.profileURL {
+            userView.profileImageView.kf.indicatorType = .activity
+            userView.profileImageView.kf.setImage(with: URL(string: profileURL))
+        } else {
+            userView.profileImageView.image = #imageLiteral(resourceName: "user")
+        }
+    }
+
 }

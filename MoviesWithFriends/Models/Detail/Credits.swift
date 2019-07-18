@@ -13,7 +13,7 @@ struct Credits: Decodable {
     let crew: [Crew]
 }
 
-struct Cast: Decodable {
+struct Cast: PersonDisplayable {
     let character: String
     let id: Int
     let name: String
@@ -26,7 +26,7 @@ struct Cast: Decodable {
     }
 }
 
-struct Crew: Decodable {
+struct Crew: PersonDisplayable {
     let id: Int
     let job: String
     let name: String

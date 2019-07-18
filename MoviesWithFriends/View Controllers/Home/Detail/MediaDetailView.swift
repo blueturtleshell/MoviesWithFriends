@@ -85,7 +85,16 @@ class MediaDetailView: UIView {
 
     let releaseDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "  "
+        label.text = " "
+        label.numberOfLines = 1
+        label.font = UIFont.preferredFont(forTextStyle: .caption1)
+        label.textColor = .white
+        return label
+    }()
+
+    let runtimeLabel: UILabel = {
+        let label = UILabel()
+        label.text = " "
         label.numberOfLines = 1
         label.font = UIFont.preferredFont(forTextStyle: .caption1)
         label.textColor = .white
@@ -150,7 +159,7 @@ class MediaDetailView: UIView {
     }()
 
     private lazy var movieInfoStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, certificationLabel, releaseDateLabel, genreLabel])
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, certificationLabel, releaseDateLabel, runtimeLabel, genreLabel])
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
         stackView.spacing = 8
@@ -224,9 +233,9 @@ class MediaDetailView: UIView {
         buttonStackView.horizontalAnchors == movieInfoStackView.horizontalAnchors
         buttonStackView.topAnchor == movieInfoStackView.bottomAnchor + 12
 
-        bookmarkButton.bottomAnchor == buttonStackView.bottomAnchor + 48
+        bookmarkButton.bottomAnchor == buttonStackView.bottomAnchor + 54
         bookmarkButton.leftAnchor == posterImageView.rightAnchor
-        bookmarkButton.sizeAnchors == CGSize(width: 44, height: 44)
+        bookmarkButton.sizeAnchors == CGSize(width: 44, height: 66)
 
         overviewLabel.topAnchor == posterImageView.bottomAnchor + 24
         overviewLabel.horizontalAnchors == contentView.horizontalAnchors + 12

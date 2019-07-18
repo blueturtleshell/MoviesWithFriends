@@ -22,17 +22,16 @@ struct MovieDetail: MediaInfo {
     let releaseDate: String
     let regionReleaseDateInfo: RegionReleaseDates
 
-    let runtime: Double?
+    let runtime: Int?
 
     var rating: String? {
         let regionReleaseDates = regionReleaseDateInfo.results.filter { $0.regionCode == "US" }.first
-        var certification = ""
-        if regionReleaseDates == nil {
-            certification = "NA"
-        } else {
-            for test in regionReleaseDates!.releaseDates {
-                certification = test.certification
-                if !certification.isEmpty {
+        var certification = "N/A"
+        if let regionReleaseDates = regionReleaseDates {
+            for test in regionReleaseDates.releaseDates {
+                let attempt = test.certification
+                if !attempt.isEmpty {
+                    certification = attempt
                     break
                 }
             }
@@ -57,3 +56,6 @@ struct MovieDetail: MediaInfo {
         case reviewScore = "vote_average"
     }
 }
+
+
+
