@@ -30,6 +30,9 @@ class SignUpViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
 
+        let tapToDismissTextFieldGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        signUpView.addGestureRecognizer(tapToDismissTextFieldGesture)
+
         signUpView.textFields.forEach {
             $0.delegate = self
             $0.addTarget(self, action: #selector(textEditingChanged), for: .editingChanged)
@@ -41,6 +44,10 @@ class SignUpViewController: UIViewController {
 
         signUpView.registerButton.isEnabled = false
         configureRegisterButton()
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 
     @objc func adjustForKeyboard(_ notification: Notification) {

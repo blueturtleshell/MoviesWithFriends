@@ -109,7 +109,7 @@ extension MediaRowCell: UICollectionViewDelegate, UICollectionViewDataSource, UI
             
             let mediaItem = media[indexPath.item]
             cell.titleLabel.text = mediaItem.title
-            if let posterPath = mediaItem.posterPath {
+            if let posterPath = mediaItem.posterPath, !posterPath.isEmpty {
                 cell.posterImageView.kf.indicatorType = .activity
                 let imageURL = mediaManager?.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
                 cell.posterImageView.kf.setImage(with: imageURL)

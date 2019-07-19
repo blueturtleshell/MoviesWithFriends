@@ -35,6 +35,10 @@ class LoginView: UIView {
     let emailTextField = createTextField(placeholderText: "Enter Email", cornerRadius: 5, keyboardType: .emailAddress)
     let passwordTextField = createTextField(placeholderText: "Enter Password", cornerRadius: 5, isSecure: true)
 
+    var textFields: [UITextField] {
+        return [emailTextField, passwordTextField]
+    }
+
     let loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Log In", for: .normal)

@@ -46,8 +46,17 @@ class UserViewController: UIViewController {
         fetchUser()
     }
 
+    //FIXME: change edit profile button target action
     private func setupView() {
+        navigationItem.title = "User Profile"
+        userView.editProfileButton.addTarget(self, action: #selector(logoutPrompt), for: .touchUpInside)
+
         NotificationCenter.default.addObserver(self, selector: #selector(fetchUser), name: .userDidLogin, object: nil)
+    }
+
+    @objc private func logoutPrompt() {
+        try? Auth.auth().signOut()
+        tabBarController?.selectedIndex = 0
     }
 
     @objc private func fetchUser(_ notification: Notification? = nil) {

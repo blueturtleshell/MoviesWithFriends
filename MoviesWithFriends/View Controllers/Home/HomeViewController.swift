@@ -14,6 +14,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         return HomeView()
     }()
 
+    lazy var mediaSegmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: ["Movie", "TV"])
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(mediaSegmentedControlChanged), for: .valueChanged)
+        return segmentedControl
+    }()
+
     private let mediaManager: MediaManager
     private var currentMediaType: MediaType = .movie
     private var mediaDictionary = [Int: [Media]]()
@@ -40,8 +47,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     private func setupView() {
-        navigationItem.title = "Movies with Friends"
+        navigationItem.title = "MwF"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "search"), style: .plain, target: self, action: #selector(handleSearch))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: mediaSegmentedControl)
 
         homeView.tableView.rowHeight = 225
         homeView.tableView.delegate = self
@@ -61,6 +69,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
         }
+    }
+
+    @objc private func mediaSegmentedControlChanged(_ segmentedControl: UISegmentedControl) {
+        currentMediaType = segmentedControl.selectedSegmentIndex == 0 ? MediaType.movie : .tv
+        fetchMedia()
     }
 
     @objc private func handleSearch() {

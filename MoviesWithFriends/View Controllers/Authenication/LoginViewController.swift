@@ -26,14 +26,30 @@ class LoginViewController: UIViewController {
         setupView()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         loginView.loginButton.isEnabled = false
         configureRegisterButton()
 
+        let tapToDismissTextFieldGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        loginView.addGestureRecognizer(tapToDismissTextFieldGesture)
+
         loginView.dismissButton.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
         loginView.signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
         loginView.loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
+
+        loginView.textFields.forEach {
+            $0.delegate = self
+            $0.addTarget(self, action: #selector(textEditingChanged), for: .editingChanged)
+        }
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 
     @objc private func handleDismiss() {
@@ -52,8 +68,10 @@ class LoginViewController: UIViewController {
                 //FIXME: display prompt
             } else if let _ = authResult {
                 NotificationCenter.default.post(name: .userDidLogin, object: nil, userInfo: nil)
-                self.tabBarController?.selectedIndex = 1 // FIXME: change index if view controllers added
-                self.dismiss(animated: true, completion: nil)
+                if let rootTabBarController = self.presentingViewController as? RootTabBarController {
+                    rootTabBarController.selectedIndex = 1 // FIXME change index when necessary
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
         }
     }
@@ -63,7 +81,7 @@ class LoginViewController: UIViewController {
     }
 
     @objc func textEditingChanged(_ textField: UITextField) {
-        loginView.loginButton.isEnabled = [loginView.emailTextField, loginView.passwordTextField].allSatisfy { !$0.text!.isEmpty }
+        loginView.loginButton.isEnabled = loginView.textFields.allSatisfy { !$0.text!.isEmpty }
         configureRegisterButton()
     }
 

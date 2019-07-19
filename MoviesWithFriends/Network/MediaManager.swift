@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 class MediaManager {
     typealias MediaCompletion = (Result<MediaResult, Error>) -> Void
@@ -17,6 +18,8 @@ class MediaManager {
 
     private let urlSession: URLSession
     private let requestBuilder: RequestBuilder
+
+    private let db = Firestore.firestore()
 
     init(urlSession: URLSession = URLSession.shared, requestBuilder: RequestBuilder = MediaRequestBuilder()) {
         self.urlSession = urlSession
@@ -63,7 +66,20 @@ class MediaManager {
         fetchHelper(request: request, completion: completion)
     }
 
-    // searchForPerson
+    func bookmarkMedia(media: MediaDisplayable, userID: String) {
+        let mediaData: [String: Any] = ["id": media.id, "title": media.title, "poster_path": media.posterPath ?? ""]
+        db.collection("bookmarks").document(userID).collection("media").document("\(media.id)").setData(mediaData)
+    }
+
+    func removeBookmarkMedia(media: MediaDisplayable, userID: String) {
+        db.collection("bookmarks").document(userID).collection("media").document("\(media.id)").delete()
+    }
+
+    func checkIfMediaIsBookmarked(mediaID: Int, forUserID userID: String, completion: @escaping (Bool) -> Void) {
+        db.collection("bookmarks").document(userID).collection("media").document("\(mediaID)").getDocument { docSnapshot, error in
+            completion(docSnapshot?.exists ?? false)
+        }
+    }
 
     func getImageURL(for imageEndpoint: ImageEndpoint) -> URL? {
         return requestBuilder.buildRequest(endpoint: imageEndpoint, extraParams: nil).url

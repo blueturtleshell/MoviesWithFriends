@@ -91,7 +91,7 @@ class MediaListViewController: UICollectionViewController, UICollectionViewDataS
 
         let item = media[indexPath.item]
         cell.titleLabel.text = item.title
-        if let posterPath = item.posterPath {
+        if let posterPath = item.posterPath, !posterPath.isEmpty {
             cell.posterImageView.kf.indicatorType = .activity
             let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
             cell.posterImageView.kf.setImage(with: imageURL)

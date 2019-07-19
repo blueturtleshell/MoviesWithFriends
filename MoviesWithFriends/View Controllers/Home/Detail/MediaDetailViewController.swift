@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class MediaDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -33,6 +34,11 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     private var similarMedia = [MediaDisplayable]()
     private var recommendedMedia = [MediaDisplayable]()
     private var mediaHistory = Stack<(id: Int, title: String?)>()
+    private var isBookmarked = false {
+        didSet {
+            detailView.bookmarkButton.tintColor = isBookmarked ? .red : .white
+        }
+    }
 
     init(mediaType: MediaType, mediaID: Int, mediaManager: MediaManager) {
         self.mediaType = mediaType
@@ -56,6 +62,26 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         fetchMedia()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        let userLoggedIn = Auth.auth().currentUser != nil
+        detailView.bookmarkButton.isHidden = !userLoggedIn
+        detailView.bookmarkButton.isEnabled = userLoggedIn
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if let mediaInfo = mediaInfo, let userID = Auth.auth().currentUser?.uid {
+            if isBookmarked {
+                mediaManager.bookmarkMedia(media: mediaInfo, userID: userID)
+            } else {
+                mediaManager.removeBookmarkMedia(media: mediaInfo, userID: userID)
+            }
+        }
+    }
+
     private func setupView() {
         detailView.relatedTableView.register(MediaRowCell.self, forCellReuseIdentifier: "MediaRow")
         detailView.relatedTableView.delegate = self
@@ -63,9 +89,8 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         detailView.relatedTableView.rowHeight = 240
         detailView.relatedTableView.separatorColor = .clear
         detailView.relatedTableView.tableFooterView = UIView()
-        //detailView.bookmarkButton.addTarget(self, action: #selector(bookmarkPressed), for: .touchUpInside)
-        //navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Group", style: .plain, target: self, action: #selector(createGroup))
 
+        detailView.bookmarkButton.addTarget(self, action: #selector(handleBookmarkButtonPressed), for: .touchUpInside)
         detailView.creditButton.addTarget(self, action: #selector(showCredits), for: .touchUpInside)
         detailView.videosButton.addTarget(self, action: #selector(showVideos), for: .touchUpInside)
         detailView.backToPreviousMediaButton.addTarget(self, action: #selector(previousMediaButtonPressed), for: .touchUpInside)
@@ -96,6 +121,12 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     private func configureView(for mediaInfo: MediaInfo) {
         detailView.scrollView.contentOffset = CGPoint.zero
 
+        if let userID = Auth.auth().currentUser?.uid {
+            mediaManager.checkIfMediaIsBookmarked(mediaID: mediaInfo.id, forUserID: userID) { bookmarkResult in
+                self.isBookmarked = bookmarkResult
+            }
+        }
+
         detailView.titleLabel.text = mediaInfo.title
         detailView.certificationLabel.text = mediaInfo.rating
         detailView.releaseDateLabel.text = "Release Date: \(!mediaInfo.releaseDate.isEmpty ? mediaInfo.releaseDate : "N/A")"
@@ -121,7 +152,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
             detailView.backdropImageView.kf.setImage(with: url)
         }
 
-        if let posterPath = mediaInfo.posterPath {
+        if let posterPath = mediaInfo.posterPath, !posterPath.isEmpty {
             detailView.posterImageView.kf.indicatorType = .activity
             let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
             detailView.posterImageView.kf.setImage(with: imageURL)
@@ -177,21 +208,25 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
 
     // MARK: - Actions
 
-    @objc func previousMediaButtonPressed(_ sender: UIButton) {
+    @objc private func previousMediaButtonPressed(_ sender: UIButton) {
         guard let media = mediaHistory.pop() else { return }
         mediaID = media.id
     }
 
-    @objc func showCredits() {
+    @objc private func showCredits() {
         guard let mediaInfo = mediaInfo else { return }
         let creditsViewController = CreditViewController(mediaManager: mediaManager, credits: mediaInfo.credits)
         navigationController?.pushViewController(creditsViewController, animated: true)
     }
 
-    @objc func showVideos() {
+    @objc private func showVideos() {
         guard let mediaInfo = mediaInfo else { return }
         let videosViewController = VideosViewController(mediaManager: mediaManager, videos: mediaInfo.videos)
         navigationController?.pushViewController(videosViewController, animated: true)
+    }
+
+    @objc private func handleBookmarkButtonPressed() {
+        isBookmarked.toggle()
     }
 
     // MARK: - TableView
