@@ -15,6 +15,11 @@
 		99703A6222D66C5000B3F2DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99703A6122D66C5000B3F2DB /* AppDelegate.swift */; };
 		99703A6922D66C5300B3F2DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99703A6822D66C5300B3F2DB /* Assets.xcassets */; };
 		99703A6C22D66C5300B3F2DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99703A6A22D66C5300B3F2DB /* LaunchScreen.storyboard */; };
+		998F04D722E26FFD000AB52D /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04D622E26FFD000AB52D /* FriendsViewController.swift */; };
+		998F04D922E41749000AB52D /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04D822E41749000AB52D /* EmptyCell.swift */; };
+		998F04E222E60547000AB52D /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04E122E60547000AB52D /* FriendViewController.swift */; };
+		998F04E422E60566000AB52D /* FriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04E322E60566000AB52D /* FriendView.swift */; };
+		998F04E622E69C8A000AB52D /* AddUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04E522E69C8A000AB52D /* AddUserCell.swift */; };
 		99BA6F0F22D6AECB0002D5FF /* MediaRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F0E22D6AECB0002D5FF /* MediaRowCell.swift */; };
 		99BA6F1222D6BBCD0002D5FF /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */; };
 		99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */; };
@@ -66,6 +71,7 @@
 		99BA6F8B22DE61FB0002D5FF /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F8A22DE61FB0002D5FF /* SearchView.swift */; };
 		99BA6F8D22DE7AF10002D5FF /* SearchEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F8C22DE7AF10002D5FF /* SearchEndpoint.swift */; };
 		99BA6F8F22DEA57F0002D5FF /* PersonDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F8E22DEA57F0002D5FF /* PersonDisplayable.swift */; };
+		99EC9BA722E806C50008790C /* PendingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC9BA622E806C50008790C /* PendingCell.swift */; };
 		E34DB04C4AC76A838B4D1403 /* Pods_MoviesWithFriends.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8234AAA8614024796E0DEF41 /* Pods_MoviesWithFriends.framework */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +87,11 @@
 		99703A6822D66C5300B3F2DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		99703A6B22D66C5300B3F2DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		99703A6D22D66C5300B3F2DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		998F04D622E26FFD000AB52D /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
+		998F04D822E41749000AB52D /* EmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCell.swift; sourceTree = "<group>"; };
+		998F04E122E60547000AB52D /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
+		998F04E322E60566000AB52D /* FriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendView.swift; sourceTree = "<group>"; };
+		998F04E522E69C8A000AB52D /* AddUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserCell.swift; sourceTree = "<group>"; };
 		99BA6F0E22D6AECB0002D5FF /* MediaRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRowCell.swift; sourceTree = "<group>"; };
 		99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
 		99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NothingFoundCell.swift; sourceTree = "<group>"; };
@@ -132,6 +143,7 @@
 		99BA6F8A22DE61FB0002D5FF /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		99BA6F8C22DE7AF10002D5FF /* SearchEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEndpoint.swift; sourceTree = "<group>"; };
 		99BA6F8E22DEA57F0002D5FF /* PersonDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDisplayable.swift; sourceTree = "<group>"; };
+		99EC9BA622E806C50008790C /* PendingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingCell.swift; sourceTree = "<group>"; };
 		C620A3CBA09A139E4B5C4088 /* Pods-MoviesWithFriends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoviesWithFriends.debug.xcconfig"; path = "Target Support Files/Pods-MoviesWithFriends/Pods-MoviesWithFriends.debug.xcconfig"; sourceTree = "<group>"; };
 		C98A9F997564D8AD4D71F6E9 /* Pods-MoviesWithFriends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoviesWithFriends.release.xcconfig"; path = "Target Support Files/Pods-MoviesWithFriends/Pods-MoviesWithFriends.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -198,6 +210,27 @@
 				99BA6F5722DA2AD50002D5FF /* Helpers */,
 			);
 			path = MoviesWithFriends;
+			sourceTree = "<group>";
+		};
+		998F04D522E26D2F000AB52D /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				998F04D822E41749000AB52D /* EmptyCell.swift */,
+				998F04D622E26FFD000AB52D /* FriendsViewController.swift */,
+				998F04E022E51C71000AB52D /* Add Friend */,
+			);
+			path = Friends;
+			sourceTree = "<group>";
+		};
+		998F04E022E51C71000AB52D /* Add Friend */ = {
+			isa = PBXGroup;
+			children = (
+				998F04E122E60547000AB52D /* FriendViewController.swift */,
+				998F04E322E60566000AB52D /* FriendView.swift */,
+				998F04E522E69C8A000AB52D /* AddUserCell.swift */,
+				99EC9BA622E806C50008790C /* PendingCell.swift */,
+			);
+			path = "Add Friend";
 			sourceTree = "<group>";
 		};
 		99BA6F1022D6BB6A0002D5FF /* Media Row Cell */ = {
@@ -277,6 +310,7 @@
 			children = (
 				99BA6F3C22D903BF0002D5FF /* RootTabBarController.swift */,
 				99BA6F3722D7DEE20002D5FF /* Home */,
+				998F04D522E26D2F000AB52D /* Friends */,
 				99BA6F6B22DA8A3C0002D5FF /* User */,
 				99BA6F7622DBDD4C0002D5FF /* Authenication */,
 			);
@@ -540,6 +574,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				998F04E622E69C8A000AB52D /* AddUserCell.swift in Sources */,
 				99BA6F7B22DBDDA30002D5FF /* LoginViewController.swift in Sources */,
 				99BA6F3F22D915C60002D5FF /* MediaDetailViewController.swift in Sources */,
 				99BA6F4622D92E690002D5FF /* Credits.swift in Sources */,
@@ -547,12 +582,15 @@
 				99BA6F2C22D7BA020002D5FF /* MediaType.swift in Sources */,
 				99BA6F7C22DBDDA30002D5FF /* SignUpViewController.swift in Sources */,
 				99BA6F6F22DA8B080002D5FF /* UserView.swift in Sources */,
+				998F04D922E41749000AB52D /* EmptyCell.swift in Sources */,
 				99BA6F2122D7B4190002D5FF /* MediaManager.swift in Sources */,
 				99BA6F1A22D7ADF60002D5FF /* Media.swift in Sources */,
 				99BA6F1222D6BBCD0002D5FF /* PosterCell.swift in Sources */,
 				99BA6F2822D7B9CA0002D5FF /* TVEndpoint.swift in Sources */,
+				998F04E422E60566000AB52D /* FriendView.swift in Sources */,
 				99BA6F4222D915DA0002D5FF /* MediaDetailView.swift in Sources */,
 				99BA6F3922D7DEEF0002D5FF /* HomeView.swift in Sources */,
+				998F04D722E26FFD000AB52D /* FriendsViewController.swift in Sources */,
 				99BA6F4E22D940420002D5FF /* Genre.swift in Sources */,
 				9957E5C022DF6664005AC297 /* PersonSearch.swift in Sources */,
 				99BA6F6822DA7ED80002D5FF /* VideosViewController.swift in Sources */,
@@ -561,6 +599,7 @@
 				9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */,
 				99BA6F5422DA20B00002D5FF /* UILabel.swift in Sources */,
 				99BA6F0F22D6AECB0002D5FF /* MediaRowCell.swift in Sources */,
+				998F04E222E60547000AB52D /* FriendViewController.swift in Sources */,
 				99BA6F5622DA22DC0002D5FF /* RelatedMediaEndpoint.swift in Sources */,
 				99BA6F5222D948430002D5FF /* MediaDetailEndpoint.swift in Sources */,
 				99BA6F2622D7B9BB0002D5FF /* Endpoint.swift in Sources */,
@@ -568,6 +607,7 @@
 				99BA6F4422D92C790002D5FF /* MediaInfo.swift in Sources */,
 				9957E5C922DFDD88005AC297 /* SearchCredits.swift in Sources */,
 				99BA6F6222DA79A00002D5FF /* CreditViewController.swift in Sources */,
+				99EC9BA722E806C50008790C /* PendingCell.swift in Sources */,
 				9957E5C522DFBEF7005AC297 /* PersonMediaListViewController.swift in Sources */,
 				99BA6F6422DA7A5B0002D5FF /* CreditCell.swift in Sources */,
 				99BA6F2E22D7BF0D0002D5FF /* RequestBuilder.swift in Sources */,

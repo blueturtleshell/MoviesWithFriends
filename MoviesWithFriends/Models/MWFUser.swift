@@ -9,7 +9,7 @@
 import Foundation
 
 struct MWFUser {
-    private let id: String
+    let id: String
     let userName: String
     let profileURL: String?
     let fullName: String?

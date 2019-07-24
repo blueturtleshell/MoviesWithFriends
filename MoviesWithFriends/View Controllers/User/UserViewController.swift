@@ -27,7 +27,7 @@ class UserViewController: UIViewController {
     init(mediaManager: MediaManager) {
         self.mediaManager = mediaManager
         super.init(nibName: nil, bundle: nil)
-        tabBarItem = UITabBarItem(title: "User", image: UIImage(named: "user"), tag: 1)
+        tabBarItem = UITabBarItem(title: "Friends", image: UIImage(named: "user"), tag: 1)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -52,11 +52,18 @@ class UserViewController: UIViewController {
         userView.editProfileButton.addTarget(self, action: #selector(logoutPrompt), for: .touchUpInside)
 
         NotificationCenter.default.addObserver(self, selector: #selector(fetchUser), name: .userDidLogin, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleLogout), name: .userDidLogout, object: nil)
+
+    }
+
+    @objc private func handleLogout(_ notification: Notification?) {
+        user = nil
+        tabBarController?.selectedIndex = 0
     }
 
     @objc private func logoutPrompt() {
         try? Auth.auth().signOut()
-        tabBarController?.selectedIndex = 0
+        handleLogout(nil)
     }
 
     @objc private func fetchUser(_ notification: Notification? = nil) {

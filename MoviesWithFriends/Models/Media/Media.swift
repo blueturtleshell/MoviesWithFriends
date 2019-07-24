@@ -45,7 +45,8 @@ struct Media: Decodable, MediaDisplayable {
 }
 
 extension Media: Hashable {
-     var hashValue: Int {
-        return id
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
+
 }

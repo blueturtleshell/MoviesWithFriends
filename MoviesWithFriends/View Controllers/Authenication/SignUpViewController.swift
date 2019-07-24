@@ -99,33 +99,45 @@ class SignUpViewController: UIViewController {
                 return
             } else if let authResult = initialAuthResult {
                 let userID = authResult.user.uid
-                var profileImageURL: URL? = nil
 
                 if let profileImage = self.profileImage, let imageData = profileImage.pngData() {
                     self.uploadImage(imageData: imageData) { uploadResult in
-                        switch uploadResult {
-                        case .success(let imageURL):
-                            profileImageURL = imageURL
-                        case .failure(let error):
+                        var profileImageURL: URL? = nil
+                        do {
+                            profileImageURL = try uploadResult.get()
+                            self.uploadUserData(id: userID, userName: userName, email: email, fullName: fullName, imageURL: profileImageURL, completion: { error in
+                                if let error = error {
+                                    print(error)
+                                } else {
+                                    NotificationCenter.default.post(name: .userDidLogin, object: nil, userInfo: nil)
+                                    self.dismiss(animated: true, completion: nil)
+                                }
+                            })
+                        } catch {
                             print(error)
-                            return
                         }
                     }
+                } else { // upload imageLess
+                    self.uploadUserData(id: userID, userName: userName, email: email, fullName: fullName, imageURL: nil, completion: { error in
+                        if let error = error {
+                            print(error)
+                        } else {
+                            NotificationCenter.default.post(name: .userDidLogin, object: nil, userInfo: nil)
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                    })
                 }
-                self.updateUserData(id: userID, userName: userName, fullName: fullName, imageURL: profileImageURL, completion: { error in
-                    if let error = error {
-                        print(error)
-                    } else {
-                        self.dismiss(animated: true, completion: nil)
-                    }
-                })
             }
         }
     }
 
-    private func updateUserData(id: String, userName: String, fullName: String?, imageURL: URL?, completion: @escaping (Error?) -> Void) {
-        let userDict: [String: Any] = ["id": id, "user_name": userName,
-                                       "full_name": fullName ?? "", "profile_url": imageURL?.absoluteString ?? ""]
+    private func uploadUserData(id: String, userName: String, email: String, fullName: String?, imageURL: URL?, completion: @escaping (Error?) -> Void) {
+        let userDict: [String: Any] = ["id": id,
+                                       "user_name": userName,
+                                       "case_insensitive_user_name": userName.lowercased(),
+                                       "email": email.lowercased(),
+                                       "full_name": fullName ?? "",
+                                       "profile_url": imageURL?.absoluteString ?? ""]
         db.document("users/\(id)").setData(userDict) { error in
             if let error = error {
                 completion(error)
