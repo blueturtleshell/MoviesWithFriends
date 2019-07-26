@@ -105,18 +105,21 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                                 if let currentUserID = Auth.auth().currentUser?.uid, currentUserID == user.id {
                                     self.requestState = .error(message: "This is your Friend Code.")
-                                } else if self.checkIfUserIsPending(userID: user.id) {
-                                    self.requestState = .error(message: "Already requested to be friends.")
-                                }
-                                else {
-                                    self.checkifFriends(user) { isFriends in
-                                        if !isFriends {
-                                            self.requestState = .validUser(user: user)
-                                            self.friendView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .left)
+                                } else {
+                                    self.checkIfUserIsPending(userID: userID, completion: { isAlreadyPending in
+                                        if !isAlreadyPending {
+                                            self.checkifFriends(user) { isFriends in
+                                                if !isFriends {
+                                                    self.requestState = .validUser(user: user)
+                                                    self.friendView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .left)
+                                                } else {
+                                                    self.requestState = .error(message: "You are already friends.")
+                                                }
+                                            }
                                         } else {
-                                            self.requestState = .error(message: "You are already friends.")
+                                            self.requestState = .error(message: "Your friend request is pending")
                                         }
-                                    }
+                                    })
                                 }
                             }
                         }
@@ -139,10 +142,15 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
 
-    private func checkIfUserIsPending(userID: String) -> Bool {
-        return requestsPending.contains(where: { pendingRequestUser -> Bool in
-            return pendingRequestUser.id == userID
-        })
+    private func checkIfUserIsPending(userID: String, completion: @escaping (Bool) -> Void) {
+        db.collection("relationships").document(currentUser.id).collection("pending").document(userID).getDocument { snapshot, error in
+            if let error = error {
+                print(error)
+                completion(false)
+            } else {
+                completion(snapshot?.exists ?? false)
+            }
+        }
     }
 
     private func fetchPendingFriendRequests() {
@@ -151,22 +159,39 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 print(error)
             } else {
                 if let snapshot = snapshot {
-                    snapshot.documents.forEach { self.getUser(from: $0.data()) }
+                    snapshot.documentChanges.forEach { diff in
+                        guard let userID = diff.document.data()["user_id"] as? String else { return }
+
+                        self.getUser(userID: userID, completion: { requestedUser in
+                            guard let requestedUser = requestedUser else { return }
+
+                            switch diff.type {
+                            case .added:
+                                self.requestsPending.append(requestedUser)
+                                self.friendView.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .right)
+                            case .removed:
+                                if let index = self.requestsPending.firstIndex(of: requestedUser) {
+                                    self.requestsPending.remove(at: index)
+                                    self.friendView.tableView.deleteRows(at: [IndexPath(row: index, section: 1)], with: .right)
+                                }
+                            default:
+                                print("Modified not used")
+                            }
+                        })
+                    }
                 }
             }
         }
     }
 
-    private func getUser(from dict: [String: Any]) {
-        guard let userID = dict["user_id"] as? String else { return }
-
+    private func getUser(userID: String, completion: @escaping (MWFUser?) -> Void) {
         db.collection("users").document(userID).getDocument { userSnapshot, error in
             if let error = error {
                 print(error)
+                completion(nil)
             } else if let snapshot = userSnapshot, let userData = snapshot.data(),
                 let user = MWFUser(from: userData) {
-                self.requestsPending.append(user)
-                self.friendView.tableView.reloadSections(IndexSet(integer: 1), with: .left)
+                completion(user)
             }
         }
     }
@@ -243,7 +268,7 @@ extension FriendViewController: AddUserCellDelegate {
             batch.setData(["user_id": requestedUser.id], forDocument: currentUserRequestDoc)
 
             // request user add current user id to request collection
-            let requestedUserDoc = db.collection("relationships").document(requestedUser.id).collection("request").document(currentUser.id)
+            let requestedUserDoc = db.collection("relationships").document(requestedUser.id).collection("requests").document(currentUser.id)
             batch.setData(["user_id": currentUser.id], forDocument: requestedUserDoc)
 
             batch.commit { error in
@@ -264,12 +289,24 @@ extension FriendViewController: AddUserCellDelegate {
 }
 
 extension FriendViewController: PendingCellDelegate {
-    func acceptPressed(_ cell: PendingCell) {
+    func cancelPressed(_ cell: PendingCell) {
+        guard let indexPath = friendView.tableView.indexPath(for: cell) else { return }
+        let requestedUser = requestsPending[indexPath.row]
 
-    }
+        let batch = db.batch()
+        // current user add requested user to pending collection
+        let currentUserRequestDoc = db.collection("relationships").document(currentUser.id).collection("pending").document(requestedUser.id)
+        currentUserRequestDoc.delete()
 
-    func denyPressed(_ cell: PendingCell) {
+        // request user add current user id to request collection
+        let requestedUserDoc = db.collection("relationships").document(requestedUser.id).collection("requests").document(currentUser.id)
+        requestedUserDoc.delete()
 
+        batch.commit { error in
+            if let error = error {
+                print(error)
+            }
+        }
     }
 }
 

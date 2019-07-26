@@ -83,6 +83,8 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     private func setupView() {
+        
+
         detailView.relatedTableView.register(MediaRowCell.self, forCellReuseIdentifier: "MediaRow")
         detailView.relatedTableView.delegate = self
         detailView.relatedTableView.dataSource = self

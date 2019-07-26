@@ -14,6 +14,7 @@ class EmptyCell: UITableViewCell {
     let emptyTextLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.numberOfLines = 2
         return label
     }()
 

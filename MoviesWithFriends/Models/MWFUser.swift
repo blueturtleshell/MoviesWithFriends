@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MWFUser {
+struct MWFUser: Equatable, Comparable {
     let id: String
     let userName: String
     let profileURL: String?
@@ -22,5 +22,13 @@ struct MWFUser {
         self.userName = userName
         profileURL = dict["profile_url"] as? String
         fullName = dict["full_name"] as? String
+    }
+
+    static func == (lhs: MWFUser, rhs: MWFUser) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+    static func < (lhs: MWFUser, rhs: MWFUser) -> Bool {
+        return lhs.userName.lowercased() < rhs.userName.lowercased()
     }
 }

@@ -27,7 +27,7 @@ class UserViewController: UIViewController {
     init(mediaManager: MediaManager) {
         self.mediaManager = mediaManager
         super.init(nibName: nil, bundle: nil)
-        tabBarItem = UITabBarItem(title: "Friends", image: UIImage(named: "user"), tag: 1)
+        tabBarItem = UITabBarItem(title: "User", image: UIImage(named: "user"), tag: 1)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -1,19 +1,20 @@
 //
-//  PendingCell.swift
+//  RequestCell.swift
 //  MoviesWithFriends
 //
-//  Created by Peter Sun on 7/23/19.
+//  Created by Peter Sun on 7/24/19.
 //  Copyright © 2019 Peter Sun. All rights reserved.
 //
 
 import UIKit
 import Anchorage
 
-protocol PendingCellDelegate: AnyObject {
-    func cancelPressed(_ cell: PendingCell)
+protocol RequestCellDelegate: AnyObject {
+    func acceptPressed(_ cell: RequestCell)
+    func denyPressed(_ cell: RequestCell)
 }
 
-class PendingCell: UITableViewCell {
+class RequestCell: UITableViewCell {
 
     private let containerView: UIView = {
         let view = UIView()
@@ -44,18 +45,19 @@ class PendingCell: UITableViewCell {
         return label
     }()
 
-    let messageLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Awaiting approval"
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.textColor = .black
-        label.textAlignment = .right
-        return label
+    let acceptButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Accept", for: .normal)
+        button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 6
+        return button
     }()
 
-    let cancelButton: UIButton = {
+    let denyButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Cancel", for: .normal)
+        button.setTitle("Deny", for: .normal)
         button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -64,14 +66,14 @@ class PendingCell: UITableViewCell {
     }()
 
     private lazy var bottomStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [messageLabel, cancelButton])
+        let stackView = UIStackView(arrangedSubviews: [acceptButton, denyButton])
         stackView.axis = .horizontal
         stackView.distribution = .fillProportionally
         stackView.spacing = 12
         return stackView
     }()
 
-    weak var delegate: PendingCellDelegate?
+    weak var delegate: RequestCellDelegate?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -113,14 +115,20 @@ class PendingCell: UITableViewCell {
         fullNameLabel.leftAnchor == userNameLabel.leftAnchor
         fullNameLabel.rightAnchor == userNameLabel.rightAnchor
 
-        cancelButton.widthAnchor == 100
+        acceptButton.widthAnchor == 100
+        denyButton.widthAnchor == 100
         bottomStackView.topAnchor == fullNameLabel.bottomAnchor + 6
         bottomStackView.rightAnchor == containerView.rightAnchor - 12
-        cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
+
+        acceptButton.addTarget(self, action: #selector(acceptPressed), for: .touchUpInside)
+        denyButton.addTarget(self, action: #selector(denyPressed), for: .touchUpInside)
     }
 
+    @objc private func acceptPressed() {
+        delegate?.acceptPressed(self)
+    }
 
-    @objc private func cancelPressed() {
-        delegate?.cancelPressed(self)
+    @objc private func denyPressed() {
+        delegate?.denyPressed(self)
     }
 }

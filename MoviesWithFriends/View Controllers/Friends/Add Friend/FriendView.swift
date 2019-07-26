@@ -107,6 +107,7 @@ class FriendView: UIView {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
+        tableView.keyboardDismissMode = .onDrag
         tableView.tableFooterView = UIView()
         return tableView
     }()
