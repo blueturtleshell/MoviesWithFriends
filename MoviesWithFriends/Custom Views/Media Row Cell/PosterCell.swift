@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class PosterCell: UICollectionViewCell {
     let posterImageView: UIImageView = {
@@ -47,9 +46,15 @@ class PosterCell: UICollectionViewCell {
         addSubview(posterImageView)
         addSubview(titleLabel)
 
-        posterImageView.edgeAnchors == edgeAnchors
-        titleLabel.horizontalAnchors == horizontalAnchors + 6
-        titleLabel.bottomAnchor == bottomAnchor - 6
+        posterImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(6)
+            make.right.equalToSuperview().inset(6)
+            make.bottom.equalToSuperview().inset(6)
+        }
     }
 
     override func prepareForReuse() {

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class VideoCell: UITableViewCell {
 
@@ -35,8 +34,11 @@ class VideoCell: UITableViewCell {
         backgroundColor = .clear
         addSubview(nameLabel)
 
-        nameLabel.horizontalAnchors == horizontalAnchors + 12
-        nameLabel.centerYAnchor == centerYAnchor
+        nameLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(12)
+            make.right.equalToSuperview().inset(12)
+            make.centerY.equalToSuperview()
+        }
     }
 }
 

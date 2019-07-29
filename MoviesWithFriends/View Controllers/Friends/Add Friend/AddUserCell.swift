@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 protocol AddUserCellDelegate: AnyObject {
     func sendRequestPressed(_ cell: AddUserCell)
@@ -103,25 +102,41 @@ class AddUserCell: UITableViewCell {
         containerView.addSubview(fullNameLabel)
         containerView.addSubview(buttonStackView)
 
-        containerView.edgeAnchors == edgeAnchors + UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0)
+        containerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0))
+        }
 
-        profileImageView.sizeAnchors == CGSize(width: 100, height: 100)
-        profileImageView.leftAnchor == leftAnchor + 12
-        profileImageView.topAnchor == topAnchor + 12
+        profileImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(100)
+            make.top.left.equalToSuperview().offset(12)
+        }
 
-        userNameLabel.topAnchor == profileImageView.topAnchor + 12
-        userNameLabel.leftAnchor == profileImageView.rightAnchor + 12
-        userNameLabel.rightAnchor <= rightAnchor - 12
 
-        fullNameLabel.topAnchor == userNameLabel.bottomAnchor + 24
-        fullNameLabel.leftAnchor == userNameLabel.leftAnchor
-        fullNameLabel.rightAnchor == userNameLabel.rightAnchor
+        userNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView).offset(12)
+            make.left.equalTo(profileImageView.snp.right).offset(12)
+            make.right.lessThanOrEqualToSuperview()
+        }
 
-        sendRequestButton.widthAnchor == 140
-        cancelButton.widthAnchor == 100
-        buttonStackView.topAnchor == profileImageView.bottomAnchor
-        buttonStackView.leftAnchor == profileImageView.rightAnchor - 12
-        buttonStackView.rightAnchor <= rightAnchor - 12
+        fullNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(userNameLabel.snp.bottom).offset(24)
+            make.left.right.equalTo(userNameLabel)
+        }
+
+        sendRequestButton.snp.makeConstraints { make in
+            make.width.equalTo(140)
+        }
+
+        cancelButton.snp.makeConstraints { make in
+            make.width.equalTo(100)
+        }
+
+        buttonStackView.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView.snp.bottom)
+            make.left.equalTo(profileImageView.snp.right).inset(12)
+            make.right.equalTo(snp.right).inset(12)
+        }
+
         sendRequestButton.addTarget(self, action: #selector(sendRequestPressed), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
     }

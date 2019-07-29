@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import SnapKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

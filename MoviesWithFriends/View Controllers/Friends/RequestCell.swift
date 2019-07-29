@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 protocol RequestCellDelegate: AnyObject {
     func acceptPressed(_ cell: RequestCell)
@@ -101,24 +100,38 @@ class RequestCell: UITableViewCell {
         containerView.addSubview(fullNameLabel)
         containerView.addSubview(bottomStackView)
 
-        containerView.edgeAnchors == edgeAnchors + UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        containerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0))
+        }
 
-        profileImageView.sizeAnchors == CGSize(width: 60, height: 60)
-        profileImageView.leftAnchor == leftAnchor + 12
-        profileImageView.topAnchor == containerView.topAnchor + 6
+        profileImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(60)
+            make.left.equalToSuperview().offset(12)
+            make.top.equalToSuperview().offset(6)
+        }
 
-        userNameLabel.topAnchor == profileImageView.topAnchor + 6
-        userNameLabel.leftAnchor == profileImageView.rightAnchor + 12
-        userNameLabel.rightAnchor <= rightAnchor - 12
+        userNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView).offset(6)
+            make.left.equalTo(userNameLabel.snp.right).offset(12)
+            make.right.lessThanOrEqualToSuperview().inset(12)
+        }
 
-        fullNameLabel.topAnchor == userNameLabel.bottomAnchor + 6
-        fullNameLabel.leftAnchor == userNameLabel.leftAnchor
-        fullNameLabel.rightAnchor == userNameLabel.rightAnchor
+        fullNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(userNameLabel.snp.bottom).offset(6)
+            make.left.equalTo(userNameLabel)
+            make.right.lessThanOrEqualToSuperview().inset(12)
+        }
 
-        acceptButton.widthAnchor == 100
-        denyButton.widthAnchor == 100
-        bottomStackView.topAnchor == fullNameLabel.bottomAnchor + 6
-        bottomStackView.rightAnchor == containerView.rightAnchor - 12
+        [acceptButton, denyButton].forEach {
+            $0.snp.makeConstraints({ make in
+                make.width.equalTo(100)
+            })
+        }
+
+        bottomStackView.snp.makeConstraints { make in
+            make.top.equalTo(fullNameLabel.snp.bottom).offset(6)
+            make.right.equalToSuperview().inset(12)
+        }
 
         acceptButton.addTarget(self, action: #selector(acceptPressed), for: .touchUpInside)
         denyButton.addTarget(self, action: #selector(denyPressed), for: .touchUpInside)

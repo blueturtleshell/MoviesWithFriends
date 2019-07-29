@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Anchorage
-
 
 class FriendCell: UITableViewCell {
 
@@ -66,18 +64,26 @@ class FriendCell: UITableViewCell {
         containerView.addSubview(userNameLabel)
         containerView.addSubview(fullNameLabel)
 
-        containerView.edgeAnchors == edgeAnchors + UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        containerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0))
+        }
 
-        profileImageView.sizeAnchors == CGSize(width: 40, height: 40)
-        profileImageView.leftAnchor == leftAnchor + 12
-        profileImageView.centerYAnchor == centerYAnchor
+        profileImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(40)
+            make.left.equalToSuperview().offset(12)
+            make.centerY.equalToSuperview()
+        }
 
-        userNameLabel.topAnchor == profileImageView.topAnchor + 2
-        userNameLabel.leftAnchor == profileImageView.rightAnchor + 12
-        userNameLabel.rightAnchor <= rightAnchor - 12
+        userNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView).offset(2)
+            make.left.equalTo(profileImageView.snp.right).offset(12)
+            make.right.equalToSuperview().inset(12)
+        }
 
-        fullNameLabel.topAnchor == userNameLabel.bottomAnchor
-        fullNameLabel.leftAnchor == userNameLabel.leftAnchor
-        fullNameLabel.rightAnchor == rightAnchor - 12
+        fullNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(userNameLabel.snp.bottom).offset(2)
+            make.left.equalTo(userNameLabel)
+            make.right.equalToSuperview().inset(12)
+        }
     }
 }

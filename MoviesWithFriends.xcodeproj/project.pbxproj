@@ -72,6 +72,8 @@
 		99BA6F8D22DE7AF10002D5FF /* SearchEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F8C22DE7AF10002D5FF /* SearchEndpoint.swift */; };
 		99BA6F8F22DEA57F0002D5FF /* PersonDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F8E22DEA57F0002D5FF /* PersonDisplayable.swift */; };
 		99DF3B9122EA3D04007C9660 /* FetchingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9022EA3D04007C9660 /* FetchingCell.swift */; };
+		99DF3B9822EA8529007C9660 /* WatchGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */; };
+		99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */; };
 		99EC9BA722E806C50008790C /* PendingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC9BA622E806C50008790C /* PendingCell.swift */; };
 		99EC9BA922E90AF60008790C /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC9BA822E90AF60008790C /* RequestCell.swift */; };
 		99EC9BAB22E91C060008790C /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC9BAA22E91C060008790C /* FriendCell.swift */; };
@@ -147,6 +149,8 @@
 		99BA6F8C22DE7AF10002D5FF /* SearchEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEndpoint.swift; sourceTree = "<group>"; };
 		99BA6F8E22DEA57F0002D5FF /* PersonDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDisplayable.swift; sourceTree = "<group>"; };
 		99DF3B9022EA3D04007C9660 /* FetchingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchingCell.swift; sourceTree = "<group>"; };
+		99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupViewController.swift; sourceTree = "<group>"; };
+		99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupView.swift; sourceTree = "<group>"; };
 		99EC9BA622E806C50008790C /* PendingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingCell.swift; sourceTree = "<group>"; };
 		99EC9BA822E90AF60008790C /* RequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
 		99EC9BAA22E91C060008790C /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
@@ -343,6 +347,7 @@
 			children = (
 				99BA6F4122D915DA0002D5FF /* MediaDetailView.swift */,
 				99BA6F3E22D915C60002D5FF /* MediaDetailViewController.swift */,
+				99DF3B9422EA84BD007C9660 /* Create Watch Group */,
 				99BA6F6522DA7D6E0002D5FF /* Credits */,
 				99BA6F6622DA7DFA0002D5FF /* Videos */,
 			);
@@ -434,6 +439,15 @@
 				99BA6F8822DE61EB0002D5FF /* SearchViewController.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		99DF3B9422EA84BD007C9660 /* Create Watch Group */ = {
+			isa = PBXGroup;
+			children = (
+				99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */,
+				99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */,
+			);
+			path = "Create Watch Group";
 			sourceTree = "<group>";
 		};
 		BCD73CABFE919667CDBD0AAE /* Pods */ = {
@@ -545,12 +559,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MoviesWithFriends/Pods-MoviesWithFriends-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Anchorage/Anchorage.framework",
 				"${BUILT_PRODUCTS_DIR}/BoringSSL-GRPC/openssl_grpc.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
@@ -560,12 +574,12 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Anchorage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl_grpc.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpcpp.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
@@ -583,7 +597,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99DF3B9822EA8529007C9660 /* WatchGroupViewController.swift in Sources */,
 				998F04E622E69C8A000AB52D /* AddUserCell.swift in Sources */,
+				99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */,
 				99EC9BA922E90AF60008790C /* RequestCell.swift in Sources */,
 				99BA6F7B22DBDDA30002D5FF /* LoginViewController.swift in Sources */,
 				99EC9BAB22E91C060008790C /* FriendCell.swift in Sources */,

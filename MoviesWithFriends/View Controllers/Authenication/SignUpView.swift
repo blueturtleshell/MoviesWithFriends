@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class SignUpView: UIView {
 
@@ -92,18 +91,29 @@ class SignUpView: UIView {
         addSubview(stackView)
         addSubview(bottomStackView)
 
-        stackView.centerYAnchor == centerYAnchor
-        stackView.horizontalAnchors == horizontalAnchors + 48
-
-        avatarButton.sizeAnchors == CGSize(width: 88, height: 88)
-
-        [userNameTextField, fullNameTextField, emailTextField, confirmEmailTextField,
-         passwordTextField, confirmPasswordTextField, registerButton].forEach { v in
-            v.heightAnchor == 44
-            v.widthAnchor == 2 * widthAnchor / 3
+        stackView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.left.equalToSuperview().offset(48)
+            make.right.equalToSuperview().inset(48)
         }
 
-        bottomStackView.bottomAnchor == safeAreaLayoutGuide.bottomAnchor - 12
-        bottomStackView.centerXAnchor == centerXAnchor
+        avatarButton.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: 88, height: 88))
+        }
+
+
+        [userNameTextField, fullNameTextField, emailTextField, confirmEmailTextField,
+         passwordTextField, confirmPasswordTextField, registerButton].forEach {
+
+            $0.snp.makeConstraints({ make in
+                make.height.equalTo(44)
+                make.width.equalTo(snp.width).multipliedBy(2.0 / 3)
+            })
+        }
+
+        bottomStackView.snp.makeConstraints { make in
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(12)
+            make.centerX.equalToSuperview()
+        }
     }
 }

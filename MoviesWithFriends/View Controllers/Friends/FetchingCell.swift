@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class FetchingCell: UITableViewCell {
 
@@ -45,7 +44,11 @@ class FetchingCell: UITableViewCell {
     private func setupCell() {
         selectionStyle = .none
         addSubview(stackView)
-        fetchLabel.widthAnchor == 130
-        stackView.centerAnchors == centerAnchors
+
+        //fetchLabel.widthAnchor == 130
+
+        stackView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
     }
 }

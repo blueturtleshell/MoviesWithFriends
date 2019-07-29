@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class SearchView: UIView {
 
@@ -41,13 +40,17 @@ class SearchView: UIView {
         addSubview(segmentedControl)
         addSubview(collectionView)
 
-        segmentedControl.topAnchor == safeAreaLayoutGuide.topAnchor + 12
-        segmentedControl.centerXAnchor == centerXAnchor
-        segmentedControl.widthAnchor == 2 * widthAnchor / 3
+        segmentedControl.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide).offset(12)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(2/3.0)
+        }
 
-        collectionView.topAnchor == segmentedControl.bottomAnchor + 12
-        collectionView.horizontalAnchors == horizontalAnchors
-        collectionView.bottomAnchor == safeAreaLayoutGuide.bottomAnchor
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(segmentedControl.snp.bottom).offset(12)
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(safeAreaLayoutGuide)
+        }
     }
 
 }

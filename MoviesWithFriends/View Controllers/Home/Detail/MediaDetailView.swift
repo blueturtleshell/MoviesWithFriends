@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class MediaDetailView: UIView {
     private let containerView: UIView = {
@@ -204,45 +203,66 @@ class MediaDetailView: UIView {
         contentView.addSubview(overviewLabel)
         contentView.addSubview(relatedTableView)
 
-        containerView.verticalAnchors == safeAreaLayoutGuide.verticalAnchors
-        containerView.horizontalAnchors == horizontalAnchors
+        containerView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
 
-        scrollView.sizeAnchors == containerView.sizeAnchors
-        scrollView.topAnchor == containerView.topAnchor
-        scrollView.leadingAnchor == containerView.leadingAnchor
+        scrollView.snp.makeConstraints { make in
+            make.size.equalToSuperview()
+            make.left.top.equalToSuperview()
+        }
 
-        contentView.widthAnchor == scrollView.widthAnchor
-        contentView.edgeAnchors == scrollView.edgeAnchors
+        contentView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.edges.equalToSuperview()
+        }
 
-        backdropImageView.horizontalAnchors == contentView.horizontalAnchors
-        backdropImageView.topAnchor == contentView.topAnchor
-        backdropImageView.heightAnchor == 200
+        backdropImageView.snp.makeConstraints { make in
+            make.left.top.right.equalToSuperview()
+            make.height.equalTo(200)
+        }
 
-        backToPreviousMediaButton.leftAnchor == backdropImageView.leftAnchor + 12
-        backToPreviousMediaButton.bottomAnchor == backdropImageView.bottomAnchor - 12
-        backToPreviousMediaButton.heightAnchor == 44
+        backToPreviousMediaButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(12)
+            make.bottom.equalToSuperview().inset(12)
+            make.height.equalTo(44)
+        }
 
-        posterImageView.leftAnchor == contentView.leftAnchor + 12
-        posterImageView.topAnchor == backdropImageView.bottomAnchor + 12
-        posterImageView.sizeAnchors == CGSize(width: 150, height: 200)
+        posterImageView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(12)
+            make.top.equalTo(backdropImageView.snp.bottom).offset(12)
+            make.size.equalTo(CGSize(width: 150, height: 200))
+        }
 
-        movieInfoStackView.leftAnchor == posterImageView.rightAnchor + 12
-        movieInfoStackView.rightAnchor == backdropImageView.rightAnchor - 12
-        movieInfoStackView.topAnchor == posterImageView.topAnchor
+        movieInfoStackView.snp.makeConstraints { make in
+            make.left.equalTo(posterImageView.snp.right).offset(12)
+            make.right.equalTo(backdropImageView).inset(12)
+            make.top.equalTo(posterImageView)
+        }
 
-        buttonStackView.horizontalAnchors == movieInfoStackView.horizontalAnchors
-        buttonStackView.topAnchor == movieInfoStackView.bottomAnchor + 12
+        buttonStackView.snp.makeConstraints { make in
+            make.left.right.equalTo(movieInfoStackView)
+            make.top.equalTo(movieInfoStackView.snp.bottom).offset(12)
+        }
 
-        bookmarkButton.bottomAnchor == buttonStackView.bottomAnchor + 54
-        bookmarkButton.leftAnchor == posterImageView.rightAnchor
-        bookmarkButton.sizeAnchors == CGSize(width: 44, height: 66)
+        bookmarkButton.snp.makeConstraints { make in
+            make.top.equalTo(buttonStackView.snp.bottom)
+            make.left.equalTo(posterImageView.snp.right)
+            make.size.equalTo(CGSize(width: 44, height: 66))
+        }
 
-        overviewLabel.topAnchor == posterImageView.bottomAnchor + 24
-        overviewLabel.horizontalAnchors == contentView.horizontalAnchors + 12
+        overviewLabel.snp.makeConstraints { make in
+            make.top.equalTo(posterImageView.snp.bottom).offset(24)
+            make.left.equalToSuperview().offset(12)
+            make.right.equalToSuperview().inset(12)
+        }
 
-        relatedTableView.topAnchor == overviewLabel.bottomAnchor + 24
-        relatedTableView.bottomAnchor == contentView.bottomAnchor - 12
-        relatedTableView.horizontalAnchors == contentView.horizontalAnchors + 12
-        relatedTableView.heightAnchor == 500
+        relatedTableView.snp.makeConstraints { make in
+            make.top.equalTo(overviewLabel.snp.bottom).offset(24)
+            make.left.equalToSuperview().offset(12)
+            make.right.equalToSuperview().inset(12)
+            make.bottom.equalToSuperview().inset(12)
+            make.height.equalTo(500)
+        }
     }
 }

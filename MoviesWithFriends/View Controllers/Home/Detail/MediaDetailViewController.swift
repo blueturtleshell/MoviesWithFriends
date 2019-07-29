@@ -83,8 +83,6 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     private func setupView() {
-        
-
         detailView.relatedTableView.register(MediaRowCell.self, forCellReuseIdentifier: "MediaRow")
         detailView.relatedTableView.delegate = self
         detailView.relatedTableView.dataSource = self
@@ -92,11 +90,18 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         detailView.relatedTableView.separatorColor = .clear
         detailView.relatedTableView.tableFooterView = UIView()
 
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Create Group", style: .plain, target: self, action: #selector(createGroup))
+
         detailView.bookmarkButton.addTarget(self, action: #selector(handleBookmarkButtonPressed), for: .touchUpInside)
         detailView.creditButton.addTarget(self, action: #selector(showCredits), for: .touchUpInside)
         detailView.videosButton.addTarget(self, action: #selector(showVideos), for: .touchUpInside)
         detailView.backToPreviousMediaButton.addTarget(self, action: #selector(previousMediaButtonPressed), for: .touchUpInside)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
+
+    @objc private func createGroup() {
+        let watchGroupViewController = WatchGroupViewController()
+        navigationController?.pushViewController(watchGroupViewController, animated: true)
     }
 
     private func fetchMedia() {

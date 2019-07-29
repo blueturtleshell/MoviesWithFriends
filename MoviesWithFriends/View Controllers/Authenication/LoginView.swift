@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class LoginView: UIView {
 
@@ -99,26 +98,36 @@ class LoginView: UIView {
         addSubview(bottomStackView)
         addSubview(dismissButton)
 
+        dismissButton.snp.makeConstraints { make in
+            make.width.height.equalTo(44)
+            make.top.left.equalTo(safeAreaLayoutGuide).offset(12)
+        }
 
-        dismissButton.sizeAnchors == CGSize(width: 44, height: 44)
-        dismissButton.topAnchor == safeAreaLayoutGuide.topAnchor + 12
-        dismissButton.leftAnchor == safeAreaLayoutGuide.leftAnchor + 12
+        logoContainerView.snp.makeConstraints { make in
+            make.left.top.right.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(200)
+        }
 
-        logoContainerView.topAnchor == safeAreaLayoutGuide.topAnchor
-        logoContainerView.horizontalAnchors == safeAreaLayoutGuide.horizontalAnchors
-        logoContainerView.heightAnchor == 200
+        logoImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
 
-        logoImageView.centerAnchors == logoContainerView.centerAnchors
+        mainStackView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.left.equalToSuperview().offset(48)
+            make.right.equalToSuperview().inset(48)
+        }
 
-        mainStackView.centerYAnchor == centerYAnchor
-        mainStackView.horizontalAnchors == horizontalAnchors + 48
+        [emailTextField, passwordTextField, loginButton].forEach {
+            $0.snp.makeConstraints({ make in
+                make.height.equalTo(44)
+            })
+        }
 
-        emailTextField.heightAnchor == 44
-        passwordTextField.heightAnchor == 44
-        loginButton.heightAnchor == 44
-
-        bottomStackView.bottomAnchor == safeAreaLayoutGuide.bottomAnchor - 12
-        bottomStackView.centerXAnchor == centerXAnchor
+        bottomStackView.snp.makeConstraints { make in
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(12)
+            make.centerX.equalToSuperview()
+        }
     }
 
 }

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class HomeView: UIView {
 
@@ -30,6 +29,8 @@ class HomeView: UIView {
     private func setupView() {
         addSubview(tableView)
 
-        tableView.edgeAnchors == edgeAnchors
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 }

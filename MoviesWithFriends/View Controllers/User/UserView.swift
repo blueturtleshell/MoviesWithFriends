@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class UserView: UIView {
     let blurBackgroundView: UIVisualEffectView = {
@@ -97,28 +96,42 @@ class UserView: UIView {
         blurBackgroundView.contentView.addSubview(bookmarkSegmentedControl)
         blurBackgroundView.contentView.addSubview(tableView)
 
-        blurBackgroundView.edgeAnchors == safeAreaLayoutGuide.edgeAnchors
+        blurBackgroundView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
 
-        profileImageView.sizeAnchors == CGSize(width: 100, height: 100)
-        profileImageView.leftAnchor == blurBackgroundView.leftAnchor + 12
-        profileImageView.topAnchor == blurBackgroundView.topAnchor + 12
+        profileImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(100)
+            make.left.top.equalToSuperview().offset(12)
+        }
 
-        fullNameLabel.leftAnchor == profileImageView.leftAnchor + 12
-        fullNameLabel.topAnchor == profileImageView.bottomAnchor + 12
+        fullNameLabel.snp.makeConstraints { make in
+            make.left.equalTo(profileImageView).offset(12)
+            make.top.equalTo(profileImageView.snp.bottom).offset(12)
+        }
 
-        editProfileSettingsStackView.centerYAnchor == profileImageView.centerYAnchor
-        editProfileSettingsStackView.leftAnchor == profileImageView.rightAnchor + 36
-        editProfileSettingsStackView.rightAnchor == blurBackgroundView.rightAnchor - 12
+        editProfileSettingsStackView.snp.makeConstraints { make in
+            make.centerY.equalTo(profileImageView)
+            make.left.equalTo(profileImageView.snp.right).offset(36)
+            make.right.equalToSuperview().inset(12)
+        }
 
-        editProfileButton.heightAnchor == 30
-        settingsButton.heightAnchor == 30
+        [editProfileButton, settingsButton].forEach {
+            $0.snp.makeConstraints({ make in
+                make.height.equalTo(30)
+            })
+        }
 
-        bookmarkSegmentedControl.topAnchor == fullNameLabel.bottomAnchor + 12
-        bookmarkSegmentedControl.heightAnchor == 44
-        bookmarkSegmentedControl.horizontalAnchors == blurBackgroundView.horizontalAnchors - 1
+        bookmarkSegmentedControl.snp.makeConstraints { make in
+            make.height.equalTo(44)
+            make.top.equalTo(fullNameLabel.snp.bottom).offset(12)
+            make.left.equalToSuperview().inset(-1)
+            make.right.equalToSuperview().offset(1)
+        }
 
-        tableView.topAnchor == bookmarkSegmentedControl.bottomAnchor + 1
-        tableView.horizontalAnchors == blurBackgroundView.horizontalAnchors
-        tableView.bottomAnchor == blurBackgroundView.bottomAnchor
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(bookmarkSegmentedControl.snp.bottom).offset(1)
+            make.left.right.bottom.equalToSuperview()
+        }
     }
 }

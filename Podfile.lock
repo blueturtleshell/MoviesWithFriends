@@ -1,5 +1,4 @@
 PODS:
-  - Anchorage (4.3)
   - BoringSSL-GRPC (0.0.3):
     - BoringSSL-GRPC/Implementation (= 0.0.3)
     - BoringSSL-GRPC/Interface (= 0.0.3)
@@ -111,18 +110,18 @@ PODS:
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - Protobuf (3.7.0)
+  - SnapKit (5.0.0)
 
 DEPENDENCIES:
-  - Anchorage
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Firestore
   - Firebase/Storage
   - Kingfisher (~> 5.0)
+  - SnapKit (~> 5.0.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Anchorage
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAnalytics
@@ -141,9 +140,9 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - Protobuf
+    - SnapKit
 
 SPEC CHECKSUMS:
-  Anchorage: 21a98675245188427f0bcea21404d42a824a766f
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   Firebase: fa80b9d987ca014a1ba9357496ef2a0178b28b12
   FirebaseAnalytics: 1743c5f4de3687d0745709dfdc4b1dea1484f44c
@@ -162,7 +161,8 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
+  SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
 
-PODFILE CHECKSUM: a2797d659021c63606c4a06a3c6631b8b2d89d51
+PODFILE CHECKSUM: e99055a9d11af769fb942598ddcb03d77fd3c042
 
 COCOAPODS: 1.6.0

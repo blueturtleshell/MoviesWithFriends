@@ -6,7 +6,7 @@ target 'MoviesWithFriends' do
   use_frameworks!
 
   # Pods for MoviesWithFriends
-  pod 'Anchorage'
+  pod 'SnapKit', '~> 5.0.0'
   pod 'Kingfisher', '~> 5.0'
 
   # Firestore

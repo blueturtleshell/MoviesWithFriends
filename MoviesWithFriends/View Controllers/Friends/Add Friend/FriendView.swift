@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 protocol AddFriendDelegate: class {
     func pasteFromClipboardPressed()
@@ -15,15 +14,21 @@ protocol AddFriendDelegate: class {
 
 class FriendView: UIView {
 
-    let blurBackgroundView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .dark)
-        let visualEffectView = UIVisualEffectView(effect: blur)
-        return visualEffectView
+    let container: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray
+        return view
     }()
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         return scrollView
+    }()
+
+    private let contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
     }()
 
     let requestFriendLabel: UILabel = {
@@ -97,7 +102,7 @@ class FriendView: UIView {
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [pasteButton, qrCodeButton])
         stackView.axis = .horizontal
-        stackView.distribution = UIStackView.Distribution.fillProportionally
+        stackView.distribution = .fillProportionally
         stackView.spacing = 12
         return stackView
     }()
@@ -124,57 +129,84 @@ class FriendView: UIView {
     }
 
     private func setupView() {
-        addSubview(blurBackgroundView)
-        blurBackgroundView.contentView.addSubview(scrollView)
-        scrollView.addSubview(requestFriendLabel)
-        scrollView.addSubview(messageLabelContainer)
+        addSubview(container)
+        container.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(requestFriendLabel)
+        contentView.addSubview(messageLabelContainer)
         messageLabelContainer.addSubview(messageLabel)
-        scrollView.addSubview(dismissButton)
-        scrollView.addSubview(friendCodeTextField)
-        scrollView.addSubview(confirmButton)
-        scrollView.addSubview(buttonStackView)
-        scrollView.addSubview(tableView)
+        contentView.addSubview(dismissButton)
+        contentView.addSubview(friendCodeTextField)
+        contentView.addSubview(confirmButton)
+        contentView.addSubview(buttonStackView)
+        contentView.addSubview(tableView)
 
-        blurBackgroundView.topAnchor == safeAreaLayoutGuide.topAnchor
-        blurBackgroundView.horizontalAnchors == horizontalAnchors
-        blurBackgroundView.bottomAnchor == bottomAnchor
+        container.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
 
-        scrollView.topAnchor == blurBackgroundView.topAnchor
-        scrollView.horizontalAnchors == blurBackgroundView.horizontalAnchors
-        scrollView.heightAnchor == blurBackgroundView.heightAnchor
+        scrollView.snp.makeConstraints { make in
+            make.height.equalToSuperview()
+            make.left.top.right.equalToSuperview()
+        }
 
-        requestFriendLabel.topAnchor == scrollView.topAnchor + 12
-        requestFriendLabel.centerXAnchor == scrollView.centerXAnchor
+        contentView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.edges.equalToSuperview()
+        }
 
-        dismissButton.leftAnchor == scrollView.leftAnchor + 12
-        dismissButton.lastBaselineAnchor == requestFriendLabel.lastBaselineAnchor
-        dismissButton.sizeAnchors == CGSize(width: 44, height: 44)
+        requestFriendLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(12)
+            make.centerX.equalToSuperview()
+        }
 
-        messageLabelContainer.topAnchor == requestFriendLabel.bottomAnchor + 24
-        messageLabelContainer.horizontalAnchors == horizontalAnchors
-        messageLabelContainer.heightAnchor == 44
+        dismissButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(12)
+            make.firstBaseline.equalTo(requestFriendLabel)
+            make.size.equalTo(CGSize(width: 44, height: 44))
+        }
 
-        messageLabel.centerAnchors == messageLabelContainer.centerAnchors
+        messageLabelContainer.snp.makeConstraints { make in
+            make.top.equalTo(requestFriendLabel.snp.bottom).offset(24)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(44)
+        }
 
-        friendCodeTextField.topAnchor == messageLabelContainer.bottomAnchor + 24
-        friendCodeTextField.leftAnchor == scrollView.leftAnchor + 12
-        friendCodeTextField.rightAnchor == confirmButton.leftAnchor - 12
-        friendCodeTextField.heightAnchor == 44
+        messageLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
-        confirmButton.rightAnchor == rightAnchor - 12
-        confirmButton.widthAnchor == 64
-        confirmButton.heightAnchor == 44
-        confirmButton.lastBaselineAnchor == friendCodeTextField.lastBaselineAnchor
+        friendCodeTextField.snp.makeConstraints { make in
+            make.top.equalTo(messageLabelContainer.snp.bottom).offset(24)
+            make.left.equalToSuperview().offset(12)
+            make.right.equalTo(confirmButton.snp.left).inset(-12)
+            make.height.equalTo(44)
+        }
 
-        pasteButton.widthAnchor == 180
-        buttonStackView.topAnchor == friendCodeTextField.bottomAnchor + 24
-        buttonStackView.centerXAnchor == centerXAnchor
-        buttonStackView.heightAnchor == 44
+        confirmButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(12)
+            make.firstBaseline.equalTo(friendCodeTextField)
+            make.size.equalTo(CGSize(width: 64, height: 44))
+        }
 
-        tableView.topAnchor == buttonStackView.bottomAnchor + 24
-        tableView.horizontalAnchors == horizontalAnchors + 12
-        tableView.heightAnchor == 800
-        tableView.bottomAnchor <= scrollView.bottomAnchor - 12
+        pasteButton.snp.makeConstraints { make in
+            make.width.equalTo(180)
+        }
+
+        buttonStackView.snp.makeConstraints { make in
+            make.top.equalTo(friendCodeTextField.snp.bottom).offset(24)
+            make.left.equalToSuperview().offset(12)
+            make.right.equalToSuperview().inset(12)
+            make.height.equalTo(44)
+        }
+
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(buttonStackView.snp.bottom).offset(24)
+            make.left.equalToSuperview().offset(12)
+            make.right.equalToSuperview().inset(12)
+            make.height.equalTo(800)
+            make.bottom.equalToSuperview().inset(12)
+        }
     }
 
 }

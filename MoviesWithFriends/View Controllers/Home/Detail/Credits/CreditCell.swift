@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class CreditCell: UITableViewCell {
 
@@ -60,16 +59,22 @@ class CreditCell: UITableViewCell {
         addSubview(nameLabel)
         addSubview(roleLabel)
 
-        profileImageView.sizeAnchors == CGSize(width: 100, height: 100)
-        profileImageView.leftAnchor == leftAnchor + 12
-        profileImageView.centerYAnchor == centerYAnchor
+        profileImageView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(12)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(CGSize(width: 100, height: 100))
+        }
 
-        nameLabel.topAnchor == profileImageView.topAnchor + 12
-        nameLabel.leftAnchor == profileImageView.rightAnchor + 12
-        nameLabel.rightAnchor <= rightAnchor - 16
+        nameLabel.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView).offset(12)
+            make.left.equalTo(profileImageView.snp.right).offset(12)
+            make.right.lessThanOrEqualToSuperview().inset(12)
+        }
 
-        roleLabel.leftAnchor == nameLabel.leftAnchor
-        roleLabel.rightAnchor == nameLabel.rightAnchor
-        roleLabel.bottomAnchor == profileImageView.bottomAnchor - 16
+        roleLabel.snp.makeConstraints { make in
+            make.left.equalTo(nameLabel)
+            make.right.lessThanOrEqualToSuperview().inset(12)
+            make.bottom.equalTo(profileImageView).inset(12)
+        }
     }
 }

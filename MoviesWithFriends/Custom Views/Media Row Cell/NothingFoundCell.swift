@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class NothingFoundCell: UICollectionViewCell {
 
@@ -34,6 +33,8 @@ class NothingFoundCell: UICollectionViewCell {
         backgroundColor = .clear
         addSubview(textLabel)
 
-        textLabel.centerAnchors == centerAnchors
+        textLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
     }
 }

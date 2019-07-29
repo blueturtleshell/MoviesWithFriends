@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double AnchorageVersionNumber;
-FOUNDATION_EXPORT const unsigned char AnchorageVersionString[];
+FOUNDATION_EXPORT double SnapKitVersionNumber;
+FOUNDATION_EXPORT const unsigned char SnapKitVersionString[];
 

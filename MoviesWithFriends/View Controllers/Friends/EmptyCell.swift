@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 
 class EmptyCell: UITableViewCell {
 
@@ -32,6 +31,8 @@ class EmptyCell: UITableViewCell {
         selectionStyle = .none
         addSubview(emptyTextLabel)
 
-        emptyTextLabel.centerAnchors == centerAnchors
+        emptyTextLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
     }
 }

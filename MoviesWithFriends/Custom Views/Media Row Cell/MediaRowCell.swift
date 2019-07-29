@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Anchorage
 import Kingfisher
 
 protocol MediaRowDelegate: AnyObject {
@@ -73,16 +72,19 @@ class MediaRowCell: UITableViewCell {
         addSubview(seeAllButton)
         addSubview(mediaCollectionView)
 
-        titleLabel.firstBaselineAnchor == seeAllButton.firstBaselineAnchor
-        titleLabel.leftAnchor == leftAnchor + 6
-        titleLabel.rightAnchor == rightAnchor - 6
+        titleLabel.snp.makeConstraints { make in
+            make.left.top.equalToSuperview().offset(6)
+        }
 
-        seeAllButton.topAnchor == topAnchor
-        seeAllButton.trailingAnchor == trailingAnchor - 6
+        seeAllButton.snp.makeConstraints { make in
+            make.firstBaseline.equalTo(titleLabel)
+            make.right.equalToSuperview().inset(6)
+        }
 
-        mediaCollectionView.topAnchor == titleLabel.bottomAnchor
-        mediaCollectionView.bottomAnchor == bottomAnchor
-        mediaCollectionView.horizontalAnchors == horizontalAnchors
+        mediaCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
+        }
     }
 
     @objc private func seeAllPressed(_ sender: UIButton) {
