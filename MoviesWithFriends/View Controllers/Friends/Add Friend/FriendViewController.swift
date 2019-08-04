@@ -162,7 +162,7 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     snapshot.documentChanges.forEach { diff in
                         guard let userID = diff.document.data()["user_id"] as? String else { return }
 
-                        self.getUser(userID: userID, completion: { requestedUser in
+                        getUser(userID: userID, completion: { requestedUser in
                             guard let requestedUser = requestedUser else { return }
 
                             switch diff.type {
@@ -180,18 +180,6 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         })
                     }
                 }
-            }
-        }
-    }
-
-    private func getUser(userID: String, completion: @escaping (MWFUser?) -> Void) {
-        db.collection("users").document(userID).getDocument { userSnapshot, error in
-            if let error = error {
-                print(error)
-                completion(nil)
-            } else if let snapshot = userSnapshot, let userData = snapshot.data(),
-                let user = MWFUser(from: userData) {
-                completion(user)
             }
         }
     }

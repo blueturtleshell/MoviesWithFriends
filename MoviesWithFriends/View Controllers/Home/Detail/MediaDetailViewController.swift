@@ -27,6 +27,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         didSet {
             if let mediaInfo = mediaInfo {
                 configureView(for: mediaInfo)
+                navigationItem.rightBarButtonItem?.isEnabled = true
             }
         }
     }
@@ -91,6 +92,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         detailView.relatedTableView.tableFooterView = UIView()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Create Group", style: .plain, target: self, action: #selector(createGroup))
+        navigationItem.rightBarButtonItem?.isEnabled = false
 
         detailView.bookmarkButton.addTarget(self, action: #selector(handleBookmarkButtonPressed), for: .touchUpInside)
         detailView.creditButton.addTarget(self, action: #selector(showCredits), for: .touchUpInside)
@@ -100,7 +102,9 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     @objc private func createGroup() {
-        let watchGroupViewController = WatchGroupViewController()
+        guard let mediaInfo = mediaInfo else { return }
+
+        let watchGroupViewController = WatchGroupViewController(mediaType: mediaType, mediaInfo: mediaInfo, mediaManager: mediaManager)
         navigationController?.pushViewController(watchGroupViewController, animated: true)
     }
 

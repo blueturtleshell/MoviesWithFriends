@@ -39,6 +39,10 @@ class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
         let homeNavigationController = UINavigationController(rootViewController: homeViewController)
         vcs.append(homeNavigationController)
 
+        let watchGroupsViewController = WatchGroupsViewController(mediaManager: mediaManager)
+        let watchGroupsNavigationController = UINavigationController(rootViewController: watchGroupsViewController)
+        vcs.append(watchGroupsNavigationController)
+
         let friendsViewController = FriendsViewController(mediaManager: mediaManager)
         let friendsNavigationController = UINavigationController(rootViewController: friendsViewController)
         vcs.append(friendsNavigationController)
@@ -58,6 +62,10 @@ class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
 
         if index == 2 && Auth.auth().currentUser == nil {
+            return false
+        }
+
+        if index == 3 && Auth.auth().currentUser == nil {
             let authViewController = LoginViewController()
             let authNavigationController = UINavigationController(rootViewController: authViewController)
             present(authNavigationController, animated: true, completion: nil)

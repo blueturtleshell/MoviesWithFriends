@@ -10,7 +10,7 @@ import UIKit
 
 class FriendCell: UITableViewCell {
 
-    private let containerView: UIView = {
+    let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 12

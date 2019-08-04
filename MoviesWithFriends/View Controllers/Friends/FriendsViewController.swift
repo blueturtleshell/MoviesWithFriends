@@ -23,7 +23,7 @@ class FriendsViewController: UITableViewController {
     init(mediaManager: MediaManager) {
         self.mediaManager = mediaManager
         super.init(style: .plain)
-        tabBarItem = UITabBarItem(title: "Friends", image: UIImage(named: "user"), tag: 1)
+        tabBarItem = UITabBarItem(title: "Friends", image: UIImage(named: "user"), tag: 2)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -81,15 +81,15 @@ class FriendsViewController: UITableViewController {
                 if let snapshot = snapshot {
                     snapshot.documentChanges.forEach { diff in
                         guard let userID = diff.document.data()["user_id"] as? String else { return }
-                        self.getUser(userID: userID, completion: { requestedUser in
+                        getUser(userID: userID, completion: { requestedUser in
                             guard let requestedUser = requestedUser else { return }
 
                             switch diff.type {
                             case .added:
-                                self.friends.append(requestedUser)
-                                self.friends.sort(by: <)
-                                self.tableView.reloadData()
                                 self.isFetching = false
+                                self.friends.append(requestedUser)
+                                self.friends.sort()
+                                self.tableView.reloadData()
                             case .removed:
                                 if let index = self.friends.firstIndex(of: requestedUser) {
                                     self.friends.remove(at: index)
@@ -111,7 +111,7 @@ class FriendsViewController: UITableViewController {
                 if let snapshot = snapshot {
                     snapshot.documentChanges.forEach { diff in
                         guard let userID = diff.document.data()["user_id"] as? String else { return }
-                        self.getUser(userID: userID, completion: { requestedUser in
+                        getUser(userID: userID, completion: { requestedUser in
                             guard let requestedUser = requestedUser else { return }
 
                             switch diff.type {
@@ -134,17 +134,6 @@ class FriendsViewController: UITableViewController {
         }
     }
 
-    private func getUser(userID: String, completion: @escaping (MWFUser?) -> Void) {
-        db.collection("users").document(userID).getDocument { userSnapshot, error in
-            if let error = error {
-                print(error)
-                completion(nil)
-            } else if let snapshot = userSnapshot, let userData = snapshot.data(),
-                let user = MWFUser(from: userData) {
-                completion(user)
-            }
-        }
-    }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -207,7 +196,7 @@ class FriendsViewController: UITableViewController {
         }
 
         if indexPath.section == 0 {
-            return 60
+            return 80
         } else {
             return 125
         }

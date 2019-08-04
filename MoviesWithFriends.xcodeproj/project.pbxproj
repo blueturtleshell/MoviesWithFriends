@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9921042622F62717003F4714 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042522F62717003F4714 /* MemberCell.swift */; };
 		9957E5C022DF6664005AC297 /* PersonSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5BF22DF6664005AC297 /* PersonSearch.swift */; };
 		9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5C222DF9083005AC297 /* TVShowDetail.swift */; };
 		9957E5C522DFBEF7005AC297 /* PersonMediaListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5C422DFBEF7005AC297 /* PersonMediaListViewController.swift */; };
@@ -20,6 +21,12 @@
 		998F04E222E60547000AB52D /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04E122E60547000AB52D /* FriendViewController.swift */; };
 		998F04E422E60566000AB52D /* FriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04E322E60566000AB52D /* FriendView.swift */; };
 		998F04E622E69C8A000AB52D /* AddUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04E522E69C8A000AB52D /* AddUserCell.swift */; };
+		9990EEA522EFB35E006C0075 /* WatchGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990EEA422EFB35E006C0075 /* WatchGroup.swift */; };
+		9990EEA822F227EC006C0075 /* WatchGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990EEA722F227EC006C0075 /* WatchGroupsViewController.swift */; };
+		9990EEAA22F238BB006C0075 /* WatchGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990EEA922F238BB006C0075 /* WatchGroupCell.swift */; };
+		9990EEAC22F27B44006C0075 /* WatchGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990EEAB22F27B44006C0075 /* WatchGroupsView.swift */; };
+		9990EEAE22F372D0006C0075 /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990EEAD22F372D0006C0075 /* HUDView.swift */; };
+		9990EEB122F38785006C0075 /* FirestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990EEB022F38785006C0075 /* FirestoreHelper.swift */; };
 		99BA6F0F22D6AECB0002D5FF /* MediaRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F0E22D6AECB0002D5FF /* MediaRowCell.swift */; };
 		99BA6F1222D6BBCD0002D5FF /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */; };
 		99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */; };
@@ -82,6 +89,7 @@
 
 /* Begin PBXFileReference section */
 		8234AAA8614024796E0DEF41 /* Pods_MoviesWithFriends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoviesWithFriends.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9921042522F62717003F4714 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		9957E5BF22DF6664005AC297 /* PersonSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonSearch.swift; sourceTree = "<group>"; };
 		9957E5C222DF9083005AC297 /* TVShowDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetail.swift; sourceTree = "<group>"; };
 		9957E5C422DFBEF7005AC297 /* PersonMediaListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonMediaListViewController.swift; sourceTree = "<group>"; };
@@ -97,6 +105,12 @@
 		998F04E122E60547000AB52D /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
 		998F04E322E60566000AB52D /* FriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendView.swift; sourceTree = "<group>"; };
 		998F04E522E69C8A000AB52D /* AddUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserCell.swift; sourceTree = "<group>"; };
+		9990EEA422EFB35E006C0075 /* WatchGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroup.swift; sourceTree = "<group>"; };
+		9990EEA722F227EC006C0075 /* WatchGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupsViewController.swift; sourceTree = "<group>"; };
+		9990EEA922F238BB006C0075 /* WatchGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupCell.swift; sourceTree = "<group>"; };
+		9990EEAB22F27B44006C0075 /* WatchGroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupsView.swift; sourceTree = "<group>"; };
+		9990EEAD22F372D0006C0075 /* HUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDView.swift; sourceTree = "<group>"; };
+		9990EEB022F38785006C0075 /* FirestoreHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreHelper.swift; sourceTree = "<group>"; };
 		99BA6F0E22D6AECB0002D5FF /* MediaRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRowCell.swift; sourceTree = "<group>"; };
 		99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
 		99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NothingFoundCell.swift; sourceTree = "<group>"; };
@@ -246,6 +260,25 @@
 			path = "Add Friend";
 			sourceTree = "<group>";
 		};
+		9990EEA322EFB34C006C0075 /* Watch Group */ = {
+			isa = PBXGroup;
+			children = (
+				9990EEA422EFB35E006C0075 /* WatchGroup.swift */,
+			);
+			path = "Watch Group";
+			sourceTree = "<group>";
+		};
+		9990EEA622F227B8006C0075 /* Watch Group */ = {
+			isa = PBXGroup;
+			children = (
+				9990EEAB22F27B44006C0075 /* WatchGroupsView.swift */,
+				9990EEA722F227EC006C0075 /* WatchGroupsViewController.swift */,
+				9990EEA922F238BB006C0075 /* WatchGroupCell.swift */,
+				9921042522F62717003F4714 /* MemberCell.swift */,
+			);
+			path = "Watch Group";
+			sourceTree = "<group>";
+		};
 		99BA6F1022D6BB6A0002D5FF /* Media Row Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -261,6 +294,7 @@
 			children = (
 				99BA6F1022D6BB6A0002D5FF /* Media Row Cell */,
 				99BA6F8122DBEA8B0002D5FF /* PaddedTextField.swift */,
+				9990EEAD22F372D0006C0075 /* HUDView.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -275,6 +309,7 @@
 				99BA6F4822D92E9A0002D5FF /* Detail */,
 				9957E5C122DF6B10005AC297 /* Search */,
 				99BA6F7222DA8F810002D5FF /* MWFUser.swift */,
+				9990EEA322EFB34C006C0075 /* Watch Group */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -323,6 +358,7 @@
 			children = (
 				99BA6F3C22D903BF0002D5FF /* RootTabBarController.swift */,
 				99BA6F3722D7DEE20002D5FF /* Home */,
+				9990EEA622F227B8006C0075 /* Watch Group */,
 				998F04D522E26D2F000AB52D /* Friends */,
 				99BA6F6B22DA8A3C0002D5FF /* User */,
 				99BA6F7622DBDD4C0002D5FF /* Authenication */,
@@ -381,6 +417,7 @@
 			isa = PBXGroup;
 			children = (
 				99BA6F5822DA2AE80002D5FF /* Stack.swift */,
+				9990EEB022F38785006C0075 /* FirestoreHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -598,6 +635,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				99DF3B9822EA8529007C9660 /* WatchGroupViewController.swift in Sources */,
+				9990EEAA22F238BB006C0075 /* WatchGroupCell.swift in Sources */,
 				998F04E622E69C8A000AB52D /* AddUserCell.swift in Sources */,
 				99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */,
 				99EC9BA922E90AF60008790C /* RequestCell.swift in Sources */,
@@ -617,6 +655,7 @@
 				998F04E422E60566000AB52D /* FriendView.swift in Sources */,
 				99DF3B9122EA3D04007C9660 /* FetchingCell.swift in Sources */,
 				99BA6F4222D915DA0002D5FF /* MediaDetailView.swift in Sources */,
+				9990EEB122F38785006C0075 /* FirestoreHelper.swift in Sources */,
 				99BA6F3922D7DEEF0002D5FF /* HomeView.swift in Sources */,
 				998F04D722E26FFD000AB52D /* FriendsViewController.swift in Sources */,
 				99BA6F4E22D940420002D5FF /* Genre.swift in Sources */,
@@ -627,10 +666,12 @@
 				9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */,
 				99BA6F5422DA20B00002D5FF /* UILabel.swift in Sources */,
 				99BA6F0F22D6AECB0002D5FF /* MediaRowCell.swift in Sources */,
+				9990EEA822F227EC006C0075 /* WatchGroupsViewController.swift in Sources */,
 				998F04E222E60547000AB52D /* FriendViewController.swift in Sources */,
 				99BA6F5622DA22DC0002D5FF /* RelatedMediaEndpoint.swift in Sources */,
 				99BA6F5222D948430002D5FF /* MediaDetailEndpoint.swift in Sources */,
 				99BA6F2622D7B9BB0002D5FF /* Endpoint.swift in Sources */,
+				9990EEAE22F372D0006C0075 /* HUDView.swift in Sources */,
 				99BA6F8D22DE7AF10002D5FF /* SearchEndpoint.swift in Sources */,
 				99BA6F4422D92C790002D5FF /* MediaInfo.swift in Sources */,
 				9957E5C922DFDD88005AC297 /* SearchCredits.swift in Sources */,
@@ -656,8 +697,11 @@
 				99BA6F5922DA2AE80002D5FF /* Stack.swift in Sources */,
 				9957E5C722DFCB8D005AC297 /* CreditsEndpoint.swift in Sources */,
 				99BA6F6A22DA7F7D0002D5FF /* VideoCell.swift in Sources */,
+				9990EEA522EFB35E006C0075 /* WatchGroup.swift in Sources */,
 				99BA6F8F22DEA57F0002D5FF /* PersonDisplayable.swift in Sources */,
 				99BA6F3322D7DB7F0002D5FF /* MediaResult.swift in Sources */,
+				9990EEAC22F27B44006C0075 /* WatchGroupsView.swift in Sources */,
+				9921042622F62717003F4714 /* MemberCell.swift in Sources */,
 				99BA6F8922DE61EB0002D5FF /* SearchViewController.swift in Sources */,
 				99BA6F3622D7DE610002D5FF /* HomeViewController.swift in Sources */,
 				99BA6F3022D7C7230002D5FF /* Dictionary.swift in Sources */,

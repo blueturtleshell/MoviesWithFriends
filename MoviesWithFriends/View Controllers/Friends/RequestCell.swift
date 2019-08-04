@@ -112,12 +112,12 @@ class RequestCell: UITableViewCell {
 
         userNameLabel.snp.makeConstraints { make in
             make.top.equalTo(profileImageView).offset(6)
-            make.left.equalTo(userNameLabel.snp.right).offset(12)
+            make.left.equalTo(profileImageView.snp.right).offset(12)
             make.right.lessThanOrEqualToSuperview().inset(12)
         }
 
         fullNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(userNameLabel.snp.bottom).offset(6)
+            make.top.equalTo(userNameLabel.snp.bottom).offset(4)
             make.left.equalTo(userNameLabel)
             make.right.lessThanOrEqualToSuperview().inset(12)
         }

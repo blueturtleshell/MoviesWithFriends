@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol CreateGroupViewDelegate: class {
-    func toggleDatePicker(isVisible: Bool)
+protocol WatchGroupViewDelegate: class {
+    func toggleDatePicker(datePicker: UIDatePicker, isVisible: Bool)
 }
 
 class WatchGroupView: UIView {
@@ -31,14 +31,6 @@ class WatchGroupView: UIView {
         return view
     }()
 
-    let createWatchGroupLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Create Watch Group"
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
-
     private let messageLabelContainer: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -56,10 +48,17 @@ class WatchGroupView: UIView {
     let movieNameLabel: UILabel = {
         let label = UILabel()
         label.text = " "
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.textColor = .white
         label.textAlignment = .center
         return label
+    }()
+
+    let posterImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
     }()
 
     let groupNameTextField: UITextField = {
@@ -106,6 +105,24 @@ class WatchGroupView: UIView {
         return label
     }()
 
+    let inviteAllButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Invite All", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 6
+        return button
+    }()
+
+    let clearSelectionButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Clear", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 6
+        return button
+    }()
+
     let dividerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
@@ -122,7 +139,7 @@ class WatchGroupView: UIView {
     }()
     
 
-    weak var delegate: CreateGroupViewDelegate?
+    weak var delegate: WatchGroupViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -138,16 +155,18 @@ class WatchGroupView: UIView {
         addSubview(container)
         container.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubview(createWatchGroupLabel)
         contentView.addSubview(messageLabelContainer)
         messageLabelContainer.addSubview(messageLabel)
         contentView.addSubview(movieNameLabel)
+        contentView.addSubview(posterImageView)
         contentView.addSubview(groupNameTextField)
         contentView.addSubview(dateLabel)
         contentView.addSubview(dateButton)
         contentView.addSubview(datePicker)
         contentView.addSubview(friendLabel)
         contentView.addSubview(friendCountLabel)
+        contentView.addSubview(inviteAllButton)
+        contentView.addSubview(clearSelectionButton)
         contentView.addSubview(dividerView)
         contentView.addSubview(friendsTableView)
 
@@ -165,13 +184,8 @@ class WatchGroupView: UIView {
             make.edges.equalToSuperview()
         }
 
-        createWatchGroupLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
-            make.centerX.equalToSuperview()
-        }
-
         messageLabelContainer.snp.makeConstraints { make in
-            make.top.equalTo(createWatchGroupLabel.snp.bottom).offset(24)
+            make.top.equalToSuperview().offset(24)
             make.left.right.equalToSuperview()
             make.height.equalTo(44)
         }
@@ -180,14 +194,20 @@ class WatchGroupView: UIView {
             make.edges.equalToSuperview()
         }
 
+        posterImageView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(12)
+            make.top.equalTo(messageLabelContainer.snp.bottom).offset(12)
+            make.size.equalTo(CGSize(width: 150, height: 200))
+        }
+
         movieNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(messageLabelContainer.snp.bottom).offset(24)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(44)
+            make.centerY.equalTo(posterImageView).inset(3)
+            make.left.equalTo(posterImageView.snp.right).offset(12)
+            make.right.lessThanOrEqualToSuperview().inset(12)
         }
 
         groupNameTextField.snp.makeConstraints { make in
-            make.top.equalTo(movieNameLabel.snp.bottom).offset(12)
+            make.top.equalTo(posterImageView.snp.bottom).offset(12)
             make.left.equalToSuperview().offset(12)
             make.right.equalToSuperview().inset(12)
             make.height.equalTo(44)
@@ -201,7 +221,6 @@ class WatchGroupView: UIView {
         dateButton.snp.makeConstraints { make in
             make.firstBaseline.equalTo(dateLabel)
             make.right.equalToSuperview().inset(12)
-            make.width.equalTo(150)
         }
 
         datePicker.snp.makeConstraints { make in
@@ -219,7 +238,21 @@ class WatchGroupView: UIView {
         friendCountLabel.snp.makeConstraints { make in
             make.top.equalTo(friendLabel)
             make.right.equalToSuperview().inset(12)
-            make.width.equalTo(60)
+            make.width.equalTo(50)
+        }
+
+        clearSelectionButton.snp.makeConstraints { make in
+            make.right.equalTo(friendCountLabel.snp.left).offset(-6)
+            make.centerY.equalTo(friendCountLabel)
+            make.height.equalTo(24)
+            make.width.equalTo(66)
+        }
+
+        inviteAllButton.snp.makeConstraints { make in
+            make.right.equalTo(clearSelectionButton.snp.left).offset(-12)
+            make.centerY.equalTo(friendCountLabel)
+            make.height.equalTo(24)
+            make.width.equalTo(66)
         }
 
         dividerView.snp.makeConstraints { make in
@@ -258,6 +291,6 @@ class WatchGroupView: UIView {
             })
             self.layoutIfNeeded()
         }
-        delegate?.toggleDatePicker(isVisible: isDatePickerVisible)
+        delegate?.toggleDatePicker(datePicker: datePicker, isVisible: isDatePickerVisible)
     }
 }

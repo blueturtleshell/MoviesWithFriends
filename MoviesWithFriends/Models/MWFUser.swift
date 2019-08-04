@@ -32,3 +32,10 @@ struct MWFUser: Equatable, Comparable {
         return lhs.userName.lowercased() < rhs.userName.lowercased()
     }
 }
+
+extension MWFUser: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+}
