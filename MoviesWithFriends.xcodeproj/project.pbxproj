@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		9921042622F62717003F4714 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042522F62717003F4714 /* MemberCell.swift */; };
+		9921042922F75CED003F4714 /* WatchGroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042822F75CED003F4714 /* WatchGroupDetailViewController.swift */; };
+		9921042E22F8F20B003F4714 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042D22F8F20B003F4714 /* Message.swift */; };
 		9957E5C022DF6664005AC297 /* PersonSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5BF22DF6664005AC297 /* PersonSearch.swift */; };
 		9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5C222DF9083005AC297 /* TVShowDetail.swift */; };
 		9957E5C522DFBEF7005AC297 /* PersonMediaListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5C422DFBEF7005AC297 /* PersonMediaListViewController.swift */; };
@@ -78,6 +80,8 @@
 		99BA6F8B22DE61FB0002D5FF /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F8A22DE61FB0002D5FF /* SearchView.swift */; };
 		99BA6F8D22DE7AF10002D5FF /* SearchEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F8C22DE7AF10002D5FF /* SearchEndpoint.swift */; };
 		99BA6F8F22DEA57F0002D5FF /* PersonDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F8E22DEA57F0002D5FF /* PersonDisplayable.swift */; };
+		99BDA48B22FB69DD00474311 /* MessageInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BDA48A22FB69DD00474311 /* MessageInputAccessoryView.swift */; };
+		99BDA48D22FCFAF400474311 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BDA48C22FCFAF400474311 /* MessageCell.swift */; };
 		99DF3B9122EA3D04007C9660 /* FetchingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9022EA3D04007C9660 /* FetchingCell.swift */; };
 		99DF3B9822EA8529007C9660 /* WatchGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */; };
 		99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */; };
@@ -90,6 +94,8 @@
 /* Begin PBXFileReference section */
 		8234AAA8614024796E0DEF41 /* Pods_MoviesWithFriends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoviesWithFriends.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9921042522F62717003F4714 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
+		9921042822F75CED003F4714 /* WatchGroupDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupDetailViewController.swift; sourceTree = "<group>"; };
+		9921042D22F8F20B003F4714 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		9957E5BF22DF6664005AC297 /* PersonSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonSearch.swift; sourceTree = "<group>"; };
 		9957E5C222DF9083005AC297 /* TVShowDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetail.swift; sourceTree = "<group>"; };
 		9957E5C422DFBEF7005AC297 /* PersonMediaListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonMediaListViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +168,8 @@
 		99BA6F8A22DE61FB0002D5FF /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		99BA6F8C22DE7AF10002D5FF /* SearchEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEndpoint.swift; sourceTree = "<group>"; };
 		99BA6F8E22DEA57F0002D5FF /* PersonDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDisplayable.swift; sourceTree = "<group>"; };
+		99BDA48A22FB69DD00474311 /* MessageInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputAccessoryView.swift; sourceTree = "<group>"; };
+		99BDA48C22FCFAF400474311 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		99DF3B9022EA3D04007C9660 /* FetchingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchingCell.swift; sourceTree = "<group>"; };
 		99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupViewController.swift; sourceTree = "<group>"; };
 		99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupView.swift; sourceTree = "<group>"; };
@@ -190,6 +198,16 @@
 				8234AAA8614024796E0DEF41 /* Pods_MoviesWithFriends.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9921042722F75CD8003F4714 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				9921042822F75CED003F4714 /* WatchGroupDetailViewController.swift */,
+				99BDA48A22FB69DD00474311 /* MessageInputAccessoryView.swift */,
+				99BDA48C22FCFAF400474311 /* MessageCell.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 		9957E5C122DF6B10005AC297 /* Search */ = {
@@ -275,6 +293,7 @@
 				9990EEA722F227EC006C0075 /* WatchGroupsViewController.swift */,
 				9990EEA922F238BB006C0075 /* WatchGroupCell.swift */,
 				9921042522F62717003F4714 /* MemberCell.swift */,
+				9921042722F75CD8003F4714 /* Detail */,
 			);
 			path = "Watch Group";
 			sourceTree = "<group>";
@@ -310,6 +329,7 @@
 				9957E5C122DF6B10005AC297 /* Search */,
 				99BA6F7222DA8F810002D5FF /* MWFUser.swift */,
 				9990EEA322EFB34C006C0075 /* Watch Group */,
+				9921042D22F8F20B003F4714 /* Message.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -640,6 +660,7 @@
 				99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */,
 				99EC9BA922E90AF60008790C /* RequestCell.swift in Sources */,
 				99BA6F7B22DBDDA30002D5FF /* LoginViewController.swift in Sources */,
+				9921042E22F8F20B003F4714 /* Message.swift in Sources */,
 				99EC9BAB22E91C060008790C /* FriendCell.swift in Sources */,
 				99BA6F3F22D915C60002D5FF /* MediaDetailViewController.swift in Sources */,
 				99BA6F4622D92E690002D5FF /* Credits.swift in Sources */,
@@ -665,6 +686,7 @@
 				99BA6F7D22DBDDA30002D5FF /* SignUpView.swift in Sources */,
 				9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */,
 				99BA6F5422DA20B00002D5FF /* UILabel.swift in Sources */,
+				99BDA48B22FB69DD00474311 /* MessageInputAccessoryView.swift in Sources */,
 				99BA6F0F22D6AECB0002D5FF /* MediaRowCell.swift in Sources */,
 				9990EEA822F227EC006C0075 /* WatchGroupsViewController.swift in Sources */,
 				998F04E222E60547000AB52D /* FriendViewController.swift in Sources */,
@@ -680,6 +702,7 @@
 				9957E5C522DFBEF7005AC297 /* PersonMediaListViewController.swift in Sources */,
 				99BA6F6422DA7A5B0002D5FF /* CreditCell.swift in Sources */,
 				99BA6F2E22D7BF0D0002D5FF /* RequestBuilder.swift in Sources */,
+				9921042922F75CED003F4714 /* WatchGroupDetailViewController.swift in Sources */,
 				99BA6F3D22D903BF0002D5FF /* RootTabBarController.swift in Sources */,
 				99BA6F7522DB8D7B0002D5FF /* Constants.swift in Sources */,
 				99BA6F6D22DA8AD00002D5FF /* UserViewController.swift in Sources */,
@@ -696,6 +719,7 @@
 				99BA6F5022D944490002D5FF /* RegionReleaseDates.swift in Sources */,
 				99BA6F5922DA2AE80002D5FF /* Stack.swift in Sources */,
 				9957E5C722DFCB8D005AC297 /* CreditsEndpoint.swift in Sources */,
+				99BDA48D22FCFAF400474311 /* MessageCell.swift in Sources */,
 				99BA6F6A22DA7F7D0002D5FF /* VideoCell.swift in Sources */,
 				9990EEA522EFB35E006C0075 /* WatchGroup.swift in Sources */,
 				99BA6F8F22DEA57F0002D5FF /* PersonDisplayable.swift in Sources */,

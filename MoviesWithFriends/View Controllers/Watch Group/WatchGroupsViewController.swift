@@ -47,6 +47,7 @@ class WatchGroupsViewController: UIViewController {
 
     private func setupView() {
         navigationItem.title = "Watch Groups"
+        navigationItem.backBarButtonItem = UIBarButtonItem()
         watchGroupsView.tableView.dataSource = self
         watchGroupsView.tableView.delegate = self
         watchGroupsView.tableView.tableFooterView = UIView()
@@ -187,6 +188,14 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
         }
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.section == 0 else { return }
+
+        let groupDetailViewController = WatchGroupDetailViewController(watchGroup: joinedWatchGroups[indexPath.row])
+        //groupDetailViewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(groupDetailViewController, animated: true)
+    }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if joinedWatchGroups.isEmpty {
             return isFetching ? 80 : 250
@@ -201,7 +210,7 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 1 {
-            return "Invited"
+            return pendingWatchGroups.count > 0 ? "Invited" : nil
         }
         return nil
     }

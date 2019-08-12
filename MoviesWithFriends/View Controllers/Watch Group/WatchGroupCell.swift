@@ -84,6 +84,7 @@ class WatchGroupCell: UITableViewCell {
 
     private func setupCell() {
         backgroundColor = .clear
+        selectionStyle = .none
         addSubview(containerView)
         containerView.addSubview(posterImageView)
         containerView.addSubview(groupNameLabel)

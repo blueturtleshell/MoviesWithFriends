@@ -223,9 +223,9 @@ class MediaDetailView: UIView {
         }
 
         backToPreviousMediaButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(12)
-            make.bottom.equalToSuperview().inset(12)
-            make.height.equalTo(44)
+            make.left.equalTo(backdropImageView).offset(6)
+            make.bottom.equalTo(backdropImageView).inset(6)
+            make.height.equalTo(22)
         }
 
         posterImageView.snp.makeConstraints { make in
