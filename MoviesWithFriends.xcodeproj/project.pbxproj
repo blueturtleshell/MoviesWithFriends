@@ -10,6 +10,12 @@
 		9921042622F62717003F4714 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042522F62717003F4714 /* MemberCell.swift */; };
 		9921042922F75CED003F4714 /* WatchGroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042822F75CED003F4714 /* WatchGroupDetailViewController.swift */; };
 		9921042E22F8F20B003F4714 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042D22F8F20B003F4714 /* Message.swift */; };
+		99331E4423024D5500F8F96C /* BookmarkMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4323024D5500F8F96C /* BookmarkMedia.swift */; };
+		99331E462302509D00F8F96C /* BookmarkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E452302509D00F8F96C /* BookmarkCell.swift */; };
+		99331E4923036AD800F8F96C /* FriendCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4823036AD800F8F96C /* FriendCodeViewController.swift */; };
+		99331E4B23036AE800F8F96C /* FriendCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4A23036AE800F8F96C /* FriendCodeView.swift */; };
+		99331E4E2304B74000F8F96C /* CameraQRScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4D2304B74000F8F96C /* CameraQRScannerViewController.swift */; };
+		99331E502304EFBF00F8F96C /* WatchGroupOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4F2304EFBF00F8F96C /* WatchGroupOptionsViewController.swift */; };
 		9957E5C022DF6664005AC297 /* PersonSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5BF22DF6664005AC297 /* PersonSearch.swift */; };
 		9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5C222DF9083005AC297 /* TVShowDetail.swift */; };
 		9957E5C522DFBEF7005AC297 /* PersonMediaListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5C422DFBEF7005AC297 /* PersonMediaListViewController.swift */; };
@@ -96,6 +102,12 @@
 		9921042522F62717003F4714 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		9921042822F75CED003F4714 /* WatchGroupDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupDetailViewController.swift; sourceTree = "<group>"; };
 		9921042D22F8F20B003F4714 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		99331E4323024D5500F8F96C /* BookmarkMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkMedia.swift; sourceTree = "<group>"; };
+		99331E452302509D00F8F96C /* BookmarkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkCell.swift; sourceTree = "<group>"; };
+		99331E4823036AD800F8F96C /* FriendCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCodeViewController.swift; sourceTree = "<group>"; };
+		99331E4A23036AE800F8F96C /* FriendCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCodeView.swift; sourceTree = "<group>"; };
+		99331E4D2304B74000F8F96C /* CameraQRScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraQRScannerViewController.swift; sourceTree = "<group>"; };
+		99331E4F2304EFBF00F8F96C /* WatchGroupOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupOptionsViewController.swift; sourceTree = "<group>"; };
 		9957E5BF22DF6664005AC297 /* PersonSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonSearch.swift; sourceTree = "<group>"; };
 		9957E5C222DF9083005AC297 /* TVShowDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetail.swift; sourceTree = "<group>"; };
 		9957E5C422DFBEF7005AC297 /* PersonMediaListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonMediaListViewController.swift; sourceTree = "<group>"; };
@@ -206,8 +218,34 @@
 				9921042822F75CED003F4714 /* WatchGroupDetailViewController.swift */,
 				99BDA48A22FB69DD00474311 /* MessageInputAccessoryView.swift */,
 				99BDA48C22FCFAF400474311 /* MessageCell.swift */,
+				99331E512304F00D00F8F96C /* User */,
 			);
 			path = Detail;
+			sourceTree = "<group>";
+		};
+		99331E4723036A7E00F8F96C /* Friend Code */ = {
+			isa = PBXGroup;
+			children = (
+				99331E4A23036AE800F8F96C /* FriendCodeView.swift */,
+				99331E4823036AD800F8F96C /* FriendCodeViewController.swift */,
+			);
+			path = "Friend Code";
+			sourceTree = "<group>";
+		};
+		99331E4C2304B72800F8F96C /* Camera QR */ = {
+			isa = PBXGroup;
+			children = (
+				99331E4D2304B74000F8F96C /* CameraQRScannerViewController.swift */,
+			);
+			path = "Camera QR";
+			sourceTree = "<group>";
+		};
+		99331E512304F00D00F8F96C /* User */ = {
+			isa = PBXGroup;
+			children = (
+				99331E4F2304EFBF00F8F96C /* WatchGroupOptionsViewController.swift */,
+			);
+			path = User;
 			sourceTree = "<group>";
 		};
 		9957E5C122DF6B10005AC297 /* Search */ = {
@@ -262,6 +300,7 @@
 				99EC9BAA22E91C060008790C /* FriendCell.swift */,
 				99EC9BA822E90AF60008790C /* RequestCell.swift */,
 				99DF3B9022EA3D04007C9660 /* FetchingCell.swift */,
+				99331E4723036A7E00F8F96C /* Friend Code */,
 				998F04E022E51C71000AB52D /* Add Friend */,
 			);
 			path = Friends;
@@ -274,6 +313,7 @@
 				998F04E322E60566000AB52D /* FriendView.swift */,
 				998F04E522E69C8A000AB52D /* AddUserCell.swift */,
 				99EC9BA622E806C50008790C /* PendingCell.swift */,
+				99331E4C2304B72800F8F96C /* Camera QR */,
 			);
 			path = "Add Friend";
 			sourceTree = "<group>";
@@ -415,6 +455,7 @@
 			children = (
 				99BA6F3222D7DB7F0002D5FF /* MediaResult.swift */,
 				99BA6F1922D7ADF60002D5FF /* Media.swift */,
+				99331E4323024D5500F8F96C /* BookmarkMedia.swift */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -474,6 +515,7 @@
 			children = (
 				99BA6F6E22DA8B080002D5FF /* UserView.swift */,
 				99BA6F6C22DA8AD00002D5FF /* UserViewController.swift */,
+				99331E452302509D00F8F96C /* BookmarkCell.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -685,13 +727,17 @@
 				99BA6F4A22D92EB90002D5FF /* Videos.swift in Sources */,
 				99BA6F7D22DBDDA30002D5FF /* SignUpView.swift in Sources */,
 				9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */,
+				99331E4423024D5500F8F96C /* BookmarkMedia.swift in Sources */,
 				99BA6F5422DA20B00002D5FF /* UILabel.swift in Sources */,
 				99BDA48B22FB69DD00474311 /* MessageInputAccessoryView.swift in Sources */,
 				99BA6F0F22D6AECB0002D5FF /* MediaRowCell.swift in Sources */,
+				99331E462302509D00F8F96C /* BookmarkCell.swift in Sources */,
 				9990EEA822F227EC006C0075 /* WatchGroupsViewController.swift in Sources */,
+				99331E4923036AD800F8F96C /* FriendCodeViewController.swift in Sources */,
 				998F04E222E60547000AB52D /* FriendViewController.swift in Sources */,
 				99BA6F5622DA22DC0002D5FF /* RelatedMediaEndpoint.swift in Sources */,
 				99BA6F5222D948430002D5FF /* MediaDetailEndpoint.swift in Sources */,
+				99331E4B23036AE800F8F96C /* FriendCodeView.swift in Sources */,
 				99BA6F2622D7B9BB0002D5FF /* Endpoint.swift in Sources */,
 				9990EEAE22F372D0006C0075 /* HUDView.swift in Sources */,
 				99BA6F8D22DE7AF10002D5FF /* SearchEndpoint.swift in Sources */,
@@ -702,6 +748,7 @@
 				9957E5C522DFBEF7005AC297 /* PersonMediaListViewController.swift in Sources */,
 				99BA6F6422DA7A5B0002D5FF /* CreditCell.swift in Sources */,
 				99BA6F2E22D7BF0D0002D5FF /* RequestBuilder.swift in Sources */,
+				99331E502304EFBF00F8F96C /* WatchGroupOptionsViewController.swift in Sources */,
 				9921042922F75CED003F4714 /* WatchGroupDetailViewController.swift in Sources */,
 				99BA6F3D22D903BF0002D5FF /* RootTabBarController.swift in Sources */,
 				99BA6F7522DB8D7B0002D5FF /* Constants.swift in Sources */,
@@ -714,6 +761,7 @@
 				99BA6F7322DA8F810002D5FF /* MWFUser.swift in Sources */,
 				99BA6F8222DBEA8B0002D5FF /* PaddedTextField.swift in Sources */,
 				99BA6F4C22D932410002D5FF /* MovieDetail.swift in Sources */,
+				99331E4E2304B74000F8F96C /* CameraQRScannerViewController.swift in Sources */,
 				99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */,
 				99BA6F8B22DE61FB0002D5FF /* SearchView.swift in Sources */,
 				99BA6F5022D944490002D5FF /* RegionReleaseDates.swift in Sources */,

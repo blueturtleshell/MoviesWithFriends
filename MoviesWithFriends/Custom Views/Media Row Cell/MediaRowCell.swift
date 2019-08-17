@@ -74,6 +74,7 @@ class MediaRowCell: UITableViewCell {
 
         titleLabel.snp.makeConstraints { make in
             make.left.top.equalToSuperview().offset(6)
+            make.right.equalToSuperview().inset(6)
         }
 
         seeAllButton.snp.makeConstraints { make in

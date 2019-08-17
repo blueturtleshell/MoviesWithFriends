@@ -11,6 +11,7 @@ import Firebase
 
 enum WatchGroupState {
     case empty
+    case editing
     case validWatchGroup(group: WatchGroup)
     case groupCreated
     case noFriendsSelected
@@ -18,7 +19,7 @@ enum WatchGroupState {
 
     var message: String? {
         switch self {
-        case .empty, .validWatchGroup: return nil
+        case .empty, .editing, .validWatchGroup: return nil
         case .groupCreated: return "Group sent"
         case .noFriendsSelected: return "No friends selected. Press Done again to confirm."
         case .error(let message): return message
@@ -28,11 +29,11 @@ enum WatchGroupState {
 
 class WatchGroupViewController: UIViewController {
 
-    let watchGroupView: WatchGroupView = {
+    private let watchGroupView: WatchGroupView = {
         return WatchGroupView()
     }()
 
-    lazy var dateFormatter: DateFormatter = {
+    private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "E, d MMM yyyy hh:mm a"
         return dateFormatter
@@ -41,6 +42,8 @@ class WatchGroupViewController: UIViewController {
     private let mediaType: MediaType
     private let mediaInfo: MediaInfo
     private let mediaManager: MediaManager
+    var watchGroupToEdit: WatchGroup?
+
     private let db = Firestore.firestore()
 
     private var friends = [MWFUser]()
@@ -82,7 +85,7 @@ class WatchGroupViewController: UIViewController {
     }
 
     private func setupView() {
-        navigationItem.title = "Create Watch Group"
+        navigationItem.title = watchGroupToEdit == nil ? "Create Watch Group" : "Edit Watch Group"
         watchGroupView.delegate = self
         watchGroupView.friendsTableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
         watchGroupView.friendsTableView.delegate = self
@@ -95,6 +98,14 @@ class WatchGroupViewController: UIViewController {
         watchGroupView.groupNameTextField.delegate = self
         watchGroupView.inviteAllButton.addTarget(self, action: #selector(inviteAllButtonPressed), for: .touchUpInside)
         watchGroupView.clearSelectionButton.addTarget(self, action: #selector(clearAllButtonPressed), for: .touchUpInside)
+
+        if let _ = watchGroupToEdit {
+            navigationItem.rightBarButtonItem?.isEnabled = (invitedFriends.count != 0)
+            watchGroupView.groupNameTextField.textColor = .lightGray
+            watchGroupView.groupNameTextField.isEnabled = false
+            watchGroupView.dateButton.setTitleColor(.lightGray, for: .normal)
+            watchGroupView.dateButton.isEnabled = false
+        }
     }
 
     @objc private func inviteAllButtonPressed() {
@@ -110,30 +121,43 @@ class WatchGroupViewController: UIViewController {
     }
 
     @objc private func donePressed() {
-        guard let userID = Auth.auth().currentUser?.uid else { return }
 
-        guard let groupName = watchGroupView.groupNameTextField.text, !groupName.isEmpty else {
-            state = .error(message: "Group name cannot be empty.")
-            return
-        }
+        if let watchGroup = watchGroupToEdit {
 
-        guard let watchDate = watchDate else {
-            state = .error(message: "Please select a date to watch \(mediaInfo.title)")
-            return
-        }
+            guard invitedFriends.count > 0  else {
+                state = .error(message: "No changes detected")
+                return
+            }
 
-        if case WatchGroupState.noFriendsSelected = state {
+            navigationItem.rightBarButtonItem?.isEnabled = false
+            inviteNewFriends(to: watchGroup)
+        } else {
+
+            guard let userID = Auth.auth().currentUser?.uid else { return }
+
+            guard let groupName = watchGroupView.groupNameTextField.text, !groupName.isEmpty else {
+                state = .error(message: "Group name cannot be empty.")
+                return
+            }
+
+            guard let watchDate = watchDate else {
+                state = .error(message: "Please select a date to watch \(mediaInfo.title)")
+                return
+            }
+
+            if case WatchGroupState.noFriendsSelected = state {
+                createWatchGroup(userID: userID, groupName:groupName, watchDate: watchDate)
+                return
+            }
+
+            guard invitedFriends.count > 0  else {
+                state = .noFriendsSelected
+                return
+            }
+
+            navigationItem.rightBarButtonItem?.isEnabled = false
             createWatchGroup(userID: userID, groupName:groupName, watchDate: watchDate)
-            return
         }
-
-        guard invitedFriends.count > 0  else {
-            state = .noFriendsSelected
-            return
-        }
-
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        createWatchGroup(userID: userID, groupName:groupName, watchDate: watchDate)
     }
 
     private func calculateMinimumDate() -> Date {
@@ -194,6 +218,38 @@ class WatchGroupViewController: UIViewController {
         }
     }
 
+    private func inviteNewFriends(to watchGroup: WatchGroup) {
+        let groupDoc = db.collection("watch_groups").document(watchGroup.id)
+
+        let userIDs: [String] = invitedFriends.map { $0.id }
+
+        let batch = db.batch()
+
+        for userID in userIDs {
+            // keep track of users invited
+            let watchGroupInvitedUsersDoc = groupDoc.collection("users_invited").document(userID)
+            batch.setData(["user_id": userID], forDocument: watchGroupInvitedUsersDoc)
+
+            // invited user has group added to groups invited to
+            let doc = db.collection("watch_group").document(userID).collection("invited").document(watchGroup.id)
+            batch.setData(["id": watchGroup.id], forDocument: doc)
+        }
+
+        batch.commit { error in
+            if let error = error {
+                self.state = .error(message: error.localizedDescription)
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
+            } else {
+                let watchGroupCreatedHUDView = HUDView.hud(inView: self.view, animated: true)
+                watchGroupCreatedHUDView.text = "Group Created"
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                    self.navigationController?.popViewController(animated: true)
+                })
+            }
+        }
+    }
+
     private func configureView() {
         guard let userID = Auth.auth().currentUser?.uid else { return }
 
@@ -203,7 +259,15 @@ class WatchGroupViewController: UIViewController {
             let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
             watchGroupView.posterImageView.kf.setImage(with: imageURL)
         }
-        getUserFriends(userID: userID)
+
+        if let watchGroupToEdit = watchGroupToEdit {
+            watchGroupView.groupNameTextField.text = watchGroupToEdit.name
+            let dateTitle = dateFormatter.string(from: Date(timeIntervalSince1970: watchGroupToEdit.dateInSeconds))
+            watchGroupView.dateButton.setTitle(dateTitle, for: .normal)
+            getUserFriendsAndConfigureForEditing(userID: userID, watchGroupID: watchGroupToEdit.id)
+        } else {
+            getUserFriends(userID: userID)
+        }
     }
 
     private func getUserFriends(userID: String) {
@@ -222,6 +286,56 @@ class WatchGroupViewController: UIViewController {
                                     self.getFriendCountLabel()
                                 }
                             })
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func getUserFriendsAndConfigureForEditing(userID: String, watchGroupID: String) {
+        // get all user friends
+        db.collection("relationships").document(userID).collection("friends").getDocuments { snapshot, error in
+            if let error = error {
+                print(error)
+            } else {
+                if let friendIDsSnapshot = snapshot {
+                    let friendIDs = friendIDsSnapshot.documents.compactMap { return $0.data()["user_id"] as? String }
+
+                    // get all users already in group
+                    self.db.collection("watch_groups").document(watchGroupID).collection("users_joined").getDocuments{ snapshot, error in
+                        if let error = error {
+                            print(error)
+                        } else {
+                            if let alreadyInGroupSnapshot = snapshot {
+                                let userIDsAlreadyInGroup = alreadyInGroupSnapshot.documents.compactMap { return $0.data()["user_id"] as? String }
+
+                                // get all users already invited to group
+                                self.db.collection("watch_groups").document(watchGroupID).collection("users_invited").getDocuments{ snapshot, error in
+                                    if let error = error {
+                                        print(error)
+                                    } else {
+                                        if let alreadyInvitedSnapshot = snapshot {
+                                            let usersAlreadyInvited = alreadyInvitedSnapshot.documents.compactMap { return $0.data()["user_id"] as? String }
+
+                                            var usersIDsValidToInvite = friendIDs.filter { !userIDsAlreadyInGroup.contains($0) }
+                                            usersIDsValidToInvite = usersIDsValidToInvite.filter { !usersAlreadyInvited.contains($0) }
+
+                                            usersIDsValidToInvite.forEach {
+                                                getUser(userID: $0, completion: { user in
+                                                    if let user = user {
+                                                        self.friends.append(user)
+                                                        self.friends.sort()
+                                                        self.watchGroupView.friendsTableView.reloadData()
+                                                        self.getFriendCountLabel()
+                                                        self.watchGroupView.friendsTableView.reloadData()
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -258,6 +372,10 @@ extension WatchGroupViewController: UITableViewDelegate, UITableViewDataSource {
             invitedFriends.remove(friend)
         } else {
             invitedFriends.insert(friend)
+        }
+
+        if let _ = watchGroupToEdit {
+            navigationItem.rightBarButtonItem?.isEnabled = (invitedFriends.count != 0)
         }
 
         getFriendCountLabel()

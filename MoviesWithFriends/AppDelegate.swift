@@ -26,6 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window?.rootViewController = RootTabBarController(mediaManager: mediaManager)
 
+        //FIXME: prompt when api not working
+
         return true
     }
 

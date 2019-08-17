@@ -76,7 +76,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
 
         if let mediaInfo = mediaInfo, let userID = Auth.auth().currentUser?.uid {
             if isBookmarked {
-                mediaManager.bookmarkMedia(media: mediaInfo, userID: userID)
+                mediaManager.bookmarkMedia(media: mediaInfo, mediaType: mediaType, userID: userID)
             } else {
                 mediaManager.removeBookmarkMedia(media: mediaInfo, userID: userID)
             }
@@ -133,8 +133,15 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         detailView.scrollView.contentOffset = CGPoint.zero
 
         if let userID = Auth.auth().currentUser?.uid {
-            mediaManager.checkIfMediaIsBookmarked(mediaID: mediaInfo.id, forUserID: userID) { bookmarkResult in
-                self.isBookmarked = bookmarkResult
+            Firestore.firestore().collection("bookmarks").document(userID)
+                .collection("media").document("\(mediaID)").addSnapshotListener { docSnapshot, error in
+                    if let error = error {
+                        print(error)
+                    } else {
+                        if let snapshot = docSnapshot {
+                            self.isBookmarked = snapshot.exists
+                        }
+                    }
             }
         }
 

@@ -31,13 +31,6 @@ class FriendView: UIView {
         return view
     }()
 
-    let requestFriendLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Request Friend"
-        label.textColor = .white
-        return label
-    }()
-
     let messageLabelContainer: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -50,13 +43,6 @@ class FriendView: UIView {
         label.textAlignment = .center
         label.textColor = .white
         return label
-    }()
-
-    let dismissButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("X", for: .normal)
-        button.tintColor = .white
-        return button
     }()
 
     let friendCodeTextField: UITextField = {
@@ -132,10 +118,8 @@ class FriendView: UIView {
         addSubview(container)
         container.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubview(requestFriendLabel)
         contentView.addSubview(messageLabelContainer)
         messageLabelContainer.addSubview(messageLabel)
-        contentView.addSubview(dismissButton)
         contentView.addSubview(friendCodeTextField)
         contentView.addSubview(confirmButton)
         contentView.addSubview(buttonStackView)
@@ -155,19 +139,9 @@ class FriendView: UIView {
             make.edges.equalToSuperview()
         }
 
-        requestFriendLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
-            make.centerX.equalToSuperview()
-        }
-
-        dismissButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(12)
-            make.firstBaseline.equalTo(requestFriendLabel)
-            make.size.equalTo(CGSize(width: 44, height: 44))
-        }
 
         messageLabelContainer.snp.makeConstraints { make in
-            make.top.equalTo(requestFriendLabel.snp.bottom).offset(24)
+            make.top.equalTo(safeAreaLayoutGuide).offset(24)
             make.left.right.equalToSuperview()
             make.height.equalTo(44)
         }

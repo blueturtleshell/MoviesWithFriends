@@ -18,7 +18,7 @@ struct TVShowDetail: MediaInfo {
 
     var backdropPath: String?
 
-    var overview: String
+    var overview: String?
 
     var releaseDate: String
 

@@ -13,15 +13,18 @@ struct MWFUser: Equatable, Comparable {
     let userName: String
     let profileURL: String?
     let fullName: String?
+    let friendCode: String
 
     init?(from dict: [String: Any]) {
         guard let id = dict["id"] as? String,
-            let userName = dict["user_name"] as? String else { return nil }
+            let userName = dict["user_name"] as? String,
+            let friendCode = dict["friend_code"] as? String else { return nil }
 
         self.id = id
         self.userName = userName
         profileURL = dict["profile_url"] as? String
         fullName = dict["full_name"] as? String
+        self.friendCode = friendCode
     }
 
     static func == (lhs: MWFUser, rhs: MWFUser) -> Bool {

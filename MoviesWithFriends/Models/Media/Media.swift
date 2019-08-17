@@ -13,7 +13,7 @@ struct Media: Decodable, MediaDisplayable {
     let title: String
     let posterPath: String?
     let backdropPath: String?
-    let overview: String
+    let overview: String?
 
     enum CodingKeys: String, CodingKey {
         case id, overview
@@ -48,5 +48,4 @@ extension Media: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-
 }

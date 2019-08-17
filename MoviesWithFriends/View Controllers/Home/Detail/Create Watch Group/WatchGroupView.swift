@@ -214,7 +214,7 @@ class WatchGroupView: UIView {
         }
 
         dateLabel.snp.makeConstraints { make in
-            make.top.equalTo(groupNameTextField.snp.bottom).offset(12)
+            make.top.equalTo(groupNameTextField.snp.bottom).offset(24)
             make.left.equalToSuperview().offset(12)
         }
 

@@ -13,5 +13,5 @@ protocol MediaDisplayable: Decodable {
     var title: String { get }
     var posterPath: String? { get }
     var backdropPath: String? { get }
-    var overview: String { get }
+    var overview: String? { get }
 }

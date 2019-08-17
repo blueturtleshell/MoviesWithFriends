@@ -55,11 +55,17 @@ class WatchGroupDetailViewController: UITableViewController {
         fetchMessages()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        messageInputAccessoryView.isHidden = true
+    }
+
     private func setupView() {
         tableView.keyboardDismissMode = .interactive
 
         navigationItem.titleView = titleButton
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Users", style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Users", style: .plain, target: self, action: #selector(userOptions))
 
         tableView.contentInset = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 0)
         tableView.register(MessageCell.self, forCellReuseIdentifier: "MessageCell")
@@ -72,6 +78,11 @@ class WatchGroupDetailViewController: UITableViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc private func userOptions() {
+        let userOptionsViewController = WatchGroupOptionsViewController(watchGroup: watchGroup)
+        navigationController?.pushViewController(userOptionsViewController, animated: true)
     }
 
     @objc func adjustForKeyboard(_ notification: Notification) {

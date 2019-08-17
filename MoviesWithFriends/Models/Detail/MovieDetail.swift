@@ -17,7 +17,7 @@ struct MovieDetail: MediaInfo {
 
     let backdropPath: String?
 
-    let overview: String
+    let overview: String?
 
     let releaseDate: String
     let regionReleaseDateInfo: RegionReleaseDates

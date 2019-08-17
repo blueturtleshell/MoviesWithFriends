@@ -15,7 +15,11 @@ class FriendsViewController: UITableViewController {
 
     private var db = Firestore.firestore()
 
-    private var currentUser: MWFUser?
+    private var currentUser: MWFUser? {
+        didSet {
+            navigationItem.leftBarButtonItem?.isEnabled = currentUser != nil
+        }
+    }
     private var friends = [MWFUser]()
     private var requestedFriends = [MWFUser]()
     private var isFetching = false
@@ -43,11 +47,21 @@ class FriendsViewController: UITableViewController {
 
     private func setupView() {
         navigationItem.title = "Friends"
+        navigationItem.backBarButtonItem = UIBarButtonItem()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Friend", style: .plain, target: self, action: #selector(displayFriendCode))
+        navigationItem.leftBarButtonItem?.isEnabled = false
+
         tableView.tableFooterView = UIView()
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
         tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         tableView.register(RequestCell.self, forCellReuseIdentifier: "RequestCell")
         tableView.register(FetchingCell.self, forCellReuseIdentifier: "FetchingCell")
+    }
+
+    @objc private func displayFriendCode() {
+        guard let currentUser = currentUser else { return }
+        let friendCodeViewController = FriendCodeViewController(user: currentUser)
+        navigationController?.pushViewController(friendCodeViewController, animated: true)
     }
 
     private func fetchCurrentUser() {
@@ -67,8 +81,7 @@ class FriendsViewController: UITableViewController {
     @objc private func addFriend() {
         guard let currentUser = currentUser else { return }
         let friendViewController = FriendViewController(user: currentUser)
-        friendViewController.modalPresentationStyle = .overFullScreen
-        present(friendViewController, animated: true, completion: nil)
+        navigationController?.pushViewController(friendViewController, animated: true)
     }
 
     private func fetchFriends() {
@@ -79,6 +92,12 @@ class FriendsViewController: UITableViewController {
                 print(error)
             } else {
                 if let snapshot = snapshot {
+                    if snapshot.documents.count == 0 {
+                        self.isFetching = false
+                        self.tableView.reloadData()
+                        return
+                    }
+
                     snapshot.documentChanges.forEach { diff in
                         guard let userID = diff.document.data()["user_id"] as? String else { return }
                         getUser(userID: userID, completion: { requestedUser in
@@ -196,7 +215,7 @@ class FriendsViewController: UITableViewController {
         }
 
         if indexPath.section == 0 {
-            return 80
+            return 60
         } else {
             return 125
         }

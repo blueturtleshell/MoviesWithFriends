@@ -101,7 +101,7 @@ class SignUpViewController: UIViewController {
                 let userID = authResult.user.uid
 
                 if let profileImage = self.profileImage, let imageData = profileImage.pngData() {
-                    self.uploadImage(imageData: imageData) { uploadResult in
+                    uploadImage(imageData: imageData, imageName: userID, storageFolder: "profile_images") { uploadResult in
                         var profileImageURL: URL? = nil
                         do {
                             profileImageURL = try uploadResult.get()
@@ -132,38 +132,30 @@ class SignUpViewController: UIViewController {
     }
 
     private func uploadUserData(id: String, userName: String, email: String, fullName: String?, imageURL: URL?, completion: @escaping (Error?) -> Void) {
+
+        let friendCode = UUID().uuidString
+
         let userDict: [String: Any] = ["id": id,
                                        "user_name": userName,
                                        "case_insensitive_user_name": userName.lowercased(),
                                        "email": email.lowercased(),
                                        "full_name": fullName ?? "",
-                                       "profile_url": imageURL?.absoluteString ?? ""]
-        db.document("users/\(id)").setData(userDict) { error in
+                                       "profile_url": imageURL?.absoluteString ?? "",
+                                       "friend_code": friendCode]
+
+        let batch = db.batch()
+        let userDoc = db.document("users/\(id)")
+        batch.setData(userDict, forDocument: userDoc)
+        let friendCodeDoc = db.document("friend_codes/\(friendCode)")
+        batch.setData(["user_id": id], forDocument: friendCodeDoc)
+
+        batch.commit { error in
             if let error = error {
                 completion(error)
             } else {
                 completion(nil)
             }
         }
-    }
-
-    private func uploadImage(imageData: Data, completion: @escaping (Result<URL?, Error>) -> Void) {
-        let filename = UUID().uuidString
-        let storageRef = Storage.storage().reference(withPath: "/profile_images/\(filename)")
-        storageRef.putData(imageData, metadata: nil, completion: { (_, error) in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-
-            storageRef.downloadURL(completion: { (url, error) in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                completion(.success(url))
-            })
-        })
     }
 
     private func showError(text: String, error: Error? = nil) {

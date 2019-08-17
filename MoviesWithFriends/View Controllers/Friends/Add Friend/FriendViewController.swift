@@ -67,6 +67,7 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     private func setupView() {
+        navigationItem.title = "Add Friend"
         friendView.tableView.delegate = self
         friendView.tableView.dataSource = self
         friendView.tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
@@ -74,12 +75,20 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
         friendView.tableView.register(PendingCell.self, forCellReuseIdentifier: "PendingCell")
 
         friendView.friendCodeTextField.delegate = self
-        friendView.dismissButton.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
         friendView.confirmButton.addTarget(self, action: #selector(requestUser), for: .touchUpInside)
+        friendView.pasteButton.addTarget(self, action: #selector(pasteFromClipboard), for: .touchUpInside)
+        friendView.qrCodeButton.addTarget(self, action: #selector(cameraQRScan), for: .touchUpInside)
     }
 
-    @objc private func handleDismiss() {
-        dismiss(animated: true, completion: nil)
+    @objc private func pasteFromClipboard() {
+        let clipboard = UIPasteboard.general
+        friendView.friendCodeTextField.text = clipboard.string
+    }
+
+    @objc private func cameraQRScan() {
+        let scannerViewController = CameraQRScannerViewController()
+        scannerViewController.delegate = self
+        present(scannerViewController, animated: true, completion: nil)
     }
 
     @objc private func requestUser() {
@@ -89,7 +98,16 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let friendCode = friendCodeText.trimmingCharacters(in: .whitespacesAndNewlines)
         friendView.friendCodeTextField.text = nil
 
-        db.collection("friend_codes").document(friendCode).getDocument { snapshot, error in
+        attemptFriendCode(code: friendCode)
+    }
+
+    private func attemptFriendCode(code: String) {
+        guard let _ = UUID(uuidString: code) else {
+            requestState = .error(message: "Invalid Friend code")
+            return
+        }
+
+        db.collection("friend_codes").document(code).getDocument { snapshot, error in
             if let error = error {
                 print(error)
             } else {
@@ -302,5 +320,11 @@ extension FriendViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+extension FriendViewController: QRScannerDelegate {
+    func qrCodeFound(code: String) {
+        attemptFriendCode(code: code)
     }
 }

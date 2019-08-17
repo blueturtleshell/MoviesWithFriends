@@ -32,3 +32,22 @@ func getWatchGroup(groupID: String, completion: @escaping (WatchGroup?) -> Void)
         }
     }
 }
+
+func uploadImage(imageData: Data, imageName: String? = nil, storageFolder: String, completion: @escaping (Result<URL?, Error>) -> Void) {
+    let filename = imageName ?? UUID().uuidString
+    let storageRef = Storage.storage().reference(withPath: "/\(storageFolder)/\(filename)")
+    storageRef.putData(imageData, metadata: nil, completion: { (_, error) in
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+
+        storageRef.downloadURL(completion: { (url, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            completion(.success(url))
+        })
+    })
+}

@@ -66,19 +66,15 @@ class MediaManager {
         fetchHelper(request: request, completion: completion)
     }
 
-    func bookmarkMedia(media: MediaDisplayable, userID: String) {
-        let mediaData: [String: Any] = ["id": media.id, "title": media.title, "poster_path": media.posterPath ?? ""]
+    func bookmarkMedia(media: MediaDisplayable, mediaType: MediaType, userID: String) {
+        let mediaData: [String: Any] = ["id": media.id, "title": media.title,
+                                        "poster_path": media.posterPath ?? "",
+                                        "type": mediaType == .movie ? 0 : 1]
         db.collection("bookmarks").document(userID).collection("media").document("\(media.id)").setData(mediaData)
     }
 
     func removeBookmarkMedia(media: MediaDisplayable, userID: String) {
         db.collection("bookmarks").document(userID).collection("media").document("\(media.id)").delete()
-    }
-
-    func checkIfMediaIsBookmarked(mediaID: Int, forUserID userID: String, completion: @escaping (Bool) -> Void) {
-        db.collection("bookmarks").document(userID).collection("media").document("\(mediaID)").getDocument { docSnapshot, error in
-            completion(docSnapshot?.exists ?? false)
-        }
     }
 
     func getImageURL(for imageEndpoint: ImageEndpoint) -> URL? {

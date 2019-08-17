@@ -66,6 +66,12 @@ class WatchGroupsViewController: UIViewController {
                 print(error)
             } else {
                 if let snapshot = snapshot {
+                    if snapshot.documents.count == 0 {
+                        self.isFetching = false
+                        self.watchGroupsView.tableView.reloadData()
+                        return
+                    }
+
                     snapshot.documentChanges.forEach { diff in
                         guard let groupID = diff.document.data()["id"] as? String else { return }
                         getWatchGroup(groupID: groupID) { watchGroup in
@@ -76,6 +82,7 @@ class WatchGroupsViewController: UIViewController {
                                 let lastIndex = self.joinedWatchGroups.count
                                 self.joinedWatchGroups.append(watchGroup)
                                 if self.joinedWatchGroups.count == 1 {
+                                    self.isFetching = false
                                     self.watchGroupsView.tableView.reloadData()
                                 } else {
                                     self.watchGroupsView.tableView.insertRows(at: [IndexPath(row: lastIndex, section: 0)], with: .automatic)
@@ -89,7 +96,6 @@ class WatchGroupsViewController: UIViewController {
                                 print("Modified not used")
                             }
                         }
-                        self.isFetching = false
                     }
                 }
             }
@@ -150,7 +156,7 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell
-                    cell.emptyTextLabel.text = "No Groups"
+                    cell.emptyTextLabel.text = "No watch groups scheduled"
                     return cell
                 }
             }
@@ -189,7 +195,7 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 0 else { return }
+        guard indexPath.section == 0 && !isFetching else { return }
 
         let groupDetailViewController = WatchGroupDetailViewController(watchGroup: joinedWatchGroups[indexPath.row])
         //groupDetailViewController.hidesBottomBarWhenPushed = true
@@ -197,11 +203,10 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if joinedWatchGroups.isEmpty {
-            return isFetching ? 80 : 250
-        }
-
         if indexPath.section == 0 {
+            if joinedWatchGroups.isEmpty {
+                return isFetching ? 80 : 250
+            }
             return 154
         } else {
             return 125
