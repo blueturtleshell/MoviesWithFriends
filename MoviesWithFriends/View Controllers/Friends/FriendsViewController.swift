@@ -11,21 +11,20 @@ import Firebase
 
 class FriendsViewController: UITableViewController {
 
-    private let mediaManager: MediaManager
+    private let mediaManager = MediaManager()
 
     private var db = Firestore.firestore()
+    private var friendSnapshotListener: ListenerRegistration?
+    private var requestSnapshotListener: ListenerRegistration?
 
-    private var currentUser: MWFUser? {
-        didSet {
-            navigationItem.leftBarButtonItem?.isEnabled = currentUser != nil
-        }
-    }
+    private var currentUser: MWFUser
+
     private var friends = [MWFUser]()
     private var requestedFriends = [MWFUser]()
     private var isFetching = false
 
-    init(mediaManager: MediaManager) {
-        self.mediaManager = mediaManager
+    init(user: MWFUser) {
+        self.currentUser = user
         super.init(style: .plain)
         tabBarItem = UITabBarItem(title: "Friends", image: UIImage(named: "user"), tag: 2)
     }
@@ -40,8 +39,6 @@ class FriendsViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addFriend))
 
         setupView()
-
-        fetchCurrentUser()
         fetchFriends()
     }
 
@@ -49,37 +46,27 @@ class FriendsViewController: UITableViewController {
         navigationItem.title = "Friends"
         navigationItem.backBarButtonItem = UIBarButtonItem()
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Friend", style: .plain, target: self, action: #selector(displayFriendCode))
-        navigationItem.leftBarButtonItem?.isEnabled = false
 
         tableView.tableFooterView = UIView()
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
         tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         tableView.register(RequestCell.self, forCellReuseIdentifier: "RequestCell")
         tableView.register(FetchingCell.self, forCellReuseIdentifier: "FetchingCell")
+
+        NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
+    }
+
+    @objc private func cleanUpFirestoreListeners(_ notification: Notification) {
+        friendSnapshotListener?.remove()
+        requestSnapshotListener?.remove()
     }
 
     @objc private func displayFriendCode() {
-        guard let currentUser = currentUser else { return }
         let friendCodeViewController = FriendCodeViewController(user: currentUser)
         navigationController?.pushViewController(friendCodeViewController, animated: true)
     }
 
-    private func fetchCurrentUser() {
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
-        db.collection("users").document(currentUserID).getDocument { userSnapshot, error in
-            if let error = error {
-                print(error)
-            } else if let snapshot = userSnapshot, let userData = snapshot.data(),
-                let user = MWFUser(from: userData) {
-                self.currentUser = user
-                self.navigationItem.rightBarButtonItem?.isEnabled = true
-            }
-        }
-    }
-
     @objc private func addFriend() {
-        guard let currentUser = currentUser else { return }
         let friendViewController = FriendViewController(user: currentUser)
         navigationController?.pushViewController(friendViewController, animated: true)
     }
@@ -87,7 +74,8 @@ class FriendsViewController: UITableViewController {
     private func fetchFriends() {
         isFetching = true
         guard let userID = Auth.auth().currentUser?.uid else { return }
-        db.collection("relationships").document(userID).collection("friends").addSnapshotListener { snapshot, error in
+
+        friendSnapshotListener = db.collection("relationships").document(userID).collection("friends").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
             } else {
@@ -123,7 +111,7 @@ class FriendsViewController: UITableViewController {
             }
         }
 
-        db.collection("relationships").document(userID).collection("requests").addSnapshotListener { snapshot, error in
+        requestSnapshotListener = db.collection("relationships").document(userID).collection("requests").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
             } else {
@@ -231,7 +219,7 @@ class FriendsViewController: UITableViewController {
 
 extension FriendsViewController: RequestCellDelegate {
     func acceptPressed(_ cell: RequestCell) {
-        guard let currentUser = currentUser, let indexPath = tableView.indexPath(for: cell) else { return }
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
         let friend = requestedFriends[indexPath.row]
 
         let batch = db.batch()
@@ -258,7 +246,7 @@ extension FriendsViewController: RequestCellDelegate {
     }
 
     func denyPressed(_ cell: RequestCell) {
-        guard let currentUser = currentUser, let indexPath = tableView.indexPath(for: cell) else { return }
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
         let requestedUser = requestedFriends[indexPath.row]
 
         let batch = db.batch()
@@ -269,7 +257,6 @@ extension FriendsViewController: RequestCellDelegate {
         // request user remove current user id from request collection
         let requestedUserDoc = db.collection("relationships").document(requestedUser.id).collection("pending").document(currentUser.id)
         batch.deleteDocument(requestedUserDoc)
-
 
         batch.commit { error in
             if let error = error {

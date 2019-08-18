@@ -9,8 +9,15 @@
 import UIKit
 
 class HUDView: UIView {
-    var text = ""
 
+    enum AccessoryType {
+        case none
+        case image(imageName: String)
+        case activityIndicator
+    }
+
+    var text = ""
+    var accessoryType: AccessoryType = .none
 
     class func hud(inView view: UIView, animated: Bool) -> HUDView {
         let hudView = HUDView(frame: view.bounds)
@@ -21,6 +28,11 @@ class HUDView: UIView {
 
         hudView.show(animated: animated)
         return hudView
+    }
+
+    func remove(from view: UIView) {
+        removeFromSuperview()
+        view.isUserInteractionEnabled = true
     }
 
     override func draw(_ rect: CGRect) {
@@ -37,12 +49,21 @@ class HUDView: UIView {
         UIColor(white: 0.3, alpha: 0.8).setFill()
         roundedRect.fill()
 
-        if let image = UIImage(named: "Checkmark") {
-            let imagePoint = CGPoint(
-                x: center.x - round(image.size.width / 2),
-                y: center.y - round(image.size.height / 2) - boxHeight / 8)
-
-            image.draw(at: imagePoint)
+        switch accessoryType {
+        case .image(let imageName):
+            if let image = UIImage(named: imageName) {
+                let imagePoint = CGPoint(
+                    x: center.x - round(image.size.width / 2),
+                    y: center.y - round(image.size.height / 2) - boxHeight / 8)
+                image.draw(at: imagePoint)
+            }
+        case .activityIndicator:
+            let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+            addSubview(activityIndicator)
+            activityIndicator.center = CGPoint(x: center.x, y: center.y - (activityIndicator.frame.height / 2))
+            activityIndicator.startAnimating()
+        default:
+            break
         }
 
         let attribs = [ NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16),

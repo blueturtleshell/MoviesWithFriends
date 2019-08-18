@@ -210,6 +210,7 @@ class WatchGroupViewController: UIViewController {
             } else {
                 let watchGroupCreatedHUDView = HUDView.hud(inView: self.view, animated: true)
                 watchGroupCreatedHUDView.text = "Group Created"
+                watchGroupCreatedHUDView.accessoryType = .image(imageName: "checkmark")
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                     self.navigationController?.popViewController(animated: true)
@@ -241,7 +242,8 @@ class WatchGroupViewController: UIViewController {
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
             } else {
                 let watchGroupCreatedHUDView = HUDView.hud(inView: self.view, animated: true)
-                watchGroupCreatedHUDView.text = "Group Created"
+                watchGroupCreatedHUDView.text = "Inviting friends"
+                watchGroupCreatedHUDView.accessoryType = .activityIndicator
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                     self.navigationController?.popViewController(animated: true)

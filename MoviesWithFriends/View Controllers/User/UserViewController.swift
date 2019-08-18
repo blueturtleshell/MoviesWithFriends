@@ -15,22 +15,17 @@ class UserViewController: UIViewController {
         return UserView()
     }()
 
-    private let mediaManager: MediaManager
+    private let user: MWFUser?
+    private let mediaManager = MediaManager()
     private let db = Firestore.firestore()
-    private var user: MWFUser? {
-        didSet {
-            if let user = user {
-                configureView(for: user)
-            }
-        }
-    }
 
     private var bookmarkedMovies = [BookmarkMedia]()
     private var bookmarkedTV = [BookmarkMedia]()
+    private var bookmarkListener: ListenerRegistration?
 
 
-    init(mediaManager: MediaManager) {
-        self.mediaManager = mediaManager
+    init(user: MWFUser?) {
+        self.user = user
         super.init(nibName: nil, bundle: nil)
         tabBarItem = UITabBarItem(title: "User", image: UIImage(named: "user"), tag: 3)
     }
@@ -47,18 +42,16 @@ class UserViewController: UIViewController {
         super.viewDidLoad()
 
         setupView()
-
-        fetchUser()
-
+        configureForUser()
         fetchBookmarks()
     }
 
-    //FIXME: change edit profile button target action
     private func setupView() {
         navigationItem.title = "User Profile"
 
-        userView.editProfileButton.addTarget(self, action: #selector(logoutPrompt), for: .touchUpInside)
+        NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
 
+        userView.editProfileButton.addTarget(self, action: #selector(handleLogoutButtonPressed), for: .touchUpInside)
         userView.bookmarkSegmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
 
         userView.tableView.delegate = self
@@ -67,43 +60,39 @@ class UserViewController: UIViewController {
         userView.tableView.contentInset = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 0)
         userView.tableView.tableFooterView = UIView()
         userView.tableView.separatorStyle = .none
+    }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(fetchUser), name: .userDidLogin, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleLogout), name: .userDidLogout, object: nil)
+    @objc private func cleanUpFirestoreListeners(_ notification: Notification) {
+        bookmarkListener?.remove()
+    }
 
+    @objc private func handleLogoutButtonPressed() {
+        NotificationCenter.default.post(name: .userDidLogout, object: nil)
     }
 
     @objc private func segmentedControlChanged(_ segment: UISegmentedControl) {
         userView.tableView.reloadData()
     }
 
-    @objc private func handleLogout(_ notification: Notification?) {
-        user = nil
-        tabBarController?.selectedIndex = 0
-    }
+    private func configureForUser() {
+        guard let user = user else { return }
 
-    @objc private func logoutPrompt() {
-        try? Auth.auth().signOut()
-        handleLogout(nil)
-    }
-
-    @objc private func fetchUser(_ notification: Notification? = nil) {
-        guard let userID = Auth.auth().currentUser?.uid, user == nil else { return }
-
-        db.collection("users").document(userID).getDocument { userSnapshot, error in
-            if let error = error {
-                print(error)
-            } else if let userData = userSnapshot?.data(), let user = MWFUser(from: userData) {
-                self.user = user
-            }
+        userView.fullNameLabel.text = user.fullName ?? ""
+        if let profileURL = user.profileURL {
+            userView.profileImageView.kf.indicatorType = .activity
+            userView.profileImageView.kf.setImage(with: URL(string: profileURL))
+        } else {
+            userView.profileImageView.image = #imageLiteral(resourceName: "user")
         }
     }
 
     private func fetchBookmarks() {
-        guard let userID = Auth.auth().currentUser?.uid, user == nil else { return }
-        db.collection("bookmarks").document(userID).collection("media").addSnapshotListener { snapshot, error in
+        guard let userID = user?.id else { return }
+        bookmarkListener = db.collection("bookmarks").document(userID).collection("media").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
+                self.bookmarkListener?.remove()
+                return
             } else {
                 if let snapshot = snapshot {
                     snapshot.documentChanges.forEach { diff in
@@ -135,16 +124,6 @@ class UserViewController: UIViewController {
                     }
                 }
             }
-        }
-    }
-
-    private func configureView(for user: MWFUser) {
-        userView.fullNameLabel.text = user.fullName ?? ""
-        if let profileURL = user.profileURL {
-            userView.profileImageView.kf.indicatorType = .activity
-            userView.profileImageView.kf.setImage(with: URL(string: profileURL))
-        } else {
-            userView.profileImageView.image = #imageLiteral(resourceName: "user")
         }
     }
 }

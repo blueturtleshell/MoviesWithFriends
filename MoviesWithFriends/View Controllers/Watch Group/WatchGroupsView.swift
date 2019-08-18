@@ -13,6 +13,7 @@ class WatchGroupsView: UIView {
     let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .black
         return tableView
     }()
 
@@ -27,7 +28,6 @@ class WatchGroupsView: UIView {
     }
 
     private func setupView() {
-        tableView.backgroundColor = .none
         addSubview(tableView)
 
         tableView.snp.makeConstraints { make in

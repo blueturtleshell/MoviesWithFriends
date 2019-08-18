@@ -65,6 +65,7 @@ class WatchGroupView: UIView {
         let textField = UITextField()
         textField.placeholder = "Group Name"
         textField.borderStyle = .roundedRect
+        textField.returnKeyType = .done
         return textField
     }()
 

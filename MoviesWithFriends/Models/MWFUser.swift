@@ -40,5 +40,4 @@ extension MWFUser: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-
 }

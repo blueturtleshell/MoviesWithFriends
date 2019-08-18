@@ -63,6 +63,7 @@ class WatchGroupCell: UITableViewCell {
     
     private var users = [MWFUser]()
     private let db = Firestore.firestore()
+    private var usersInGroupListener: ListenerRegistration?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -80,6 +81,7 @@ class WatchGroupCell: UITableViewCell {
         users.removeAll()
         userCollectionView.reloadData()
         groupID = nil
+        usersInGroupListener?.remove()
     }
 
     private func setupCell() {
@@ -134,7 +136,7 @@ class WatchGroupCell: UITableViewCell {
 
     private func getUsers() {
         guard let groupID = groupID else { return }
-        db.collection("watch_groups").document(groupID).collection("users_joined").addSnapshotListener { snapshot, error in
+        usersInGroupListener = db.collection("watch_groups").document(groupID).collection("users_joined").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
             } else {

@@ -10,9 +10,7 @@ import UIKit
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    let homeView: HomeView = {
-        return HomeView()
-    }()
+    let homeView: HomeView = { return HomeView() }()
 
     lazy var mediaSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["Movie", "TV"])
@@ -20,6 +18,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         segmentedControl.addTarget(self, action: #selector(mediaSegmentedControlChanged), for: .valueChanged)
         return segmentedControl
     }()
+
+    var currentUser: MWFUser?
 
     private let mediaManager: MediaManager
     private var currentMediaType: MediaType = .movie

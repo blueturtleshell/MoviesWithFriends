@@ -15,16 +15,19 @@ class WatchGroupsViewController: UIViewController {
         return WatchGroupsView()
     }()
 
-    private let mediaManager: MediaManager
+    private let mediaManager = MediaManager()
+    private let currentUser: MWFUser
 
     private var db = Firestore.firestore()
+    private var watchGroupJoinedListener: ListenerRegistration?
+    private var watchGroupInvitedListener: ListenerRegistration?
 
     private var joinedWatchGroups = [WatchGroup]()
     private var pendingWatchGroups = [WatchGroup]()
     private var isFetching = false
 
-    init(mediaManager: MediaManager) {
-        self.mediaManager = mediaManager
+    init(user: MWFUser) {
+        self.currentUser = user
         super.init(nibName: nil, bundle: nil)
         tabBarItem = UITabBarItem(title: "Watch Groups", image: UIImage(named: "user"), tag: 2)
     }
@@ -55,15 +58,22 @@ class WatchGroupsViewController: UIViewController {
         watchGroupsView.tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         watchGroupsView.tableView.register(RequestCell.self, forCellReuseIdentifier: "RequestCell")
         watchGroupsView.tableView.register(FetchingCell.self, forCellReuseIdentifier: "FetchingCell")
+
+        NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
+    }
+
+    @objc private func cleanUpFirestoreListeners(_ notification: Notification) {
+        watchGroupJoinedListener?.remove()
+        watchGroupInvitedListener?.remove()
     }
 
     private func fetchWatchGroups() {
         isFetching = true
-        guard let userID = Auth.auth().currentUser?.uid else { return }
 
-        db.collection("watch_group").document(userID).collection("joined").addSnapshotListener { snapshot, error in
+        watchGroupJoinedListener = db.collection("watch_group").document(currentUser.id).collection("joined").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
+                return
             } else {
                 if let snapshot = snapshot {
                     if snapshot.documents.count == 0 {
@@ -76,13 +86,13 @@ class WatchGroupsViewController: UIViewController {
                         guard let groupID = diff.document.data()["id"] as? String else { return }
                         getWatchGroup(groupID: groupID) { watchGroup in
                             guard let watchGroup = watchGroup else { return }
+                            self.isFetching = false
 
                             switch diff.type {
                             case .added:
                                 let lastIndex = self.joinedWatchGroups.count
                                 self.joinedWatchGroups.append(watchGroup)
                                 if self.joinedWatchGroups.count == 1 {
-                                    self.isFetching = false
                                     self.watchGroupsView.tableView.reloadData()
                                 } else {
                                     self.watchGroupsView.tableView.insertRows(at: [IndexPath(row: lastIndex, section: 0)], with: .automatic)
@@ -101,9 +111,10 @@ class WatchGroupsViewController: UIViewController {
             }
         }
 
-        db.collection("watch_group").document(userID).collection("invited").addSnapshotListener { snapshot, error in
+        watchGroupInvitedListener = db.collection("watch_group").document(currentUser.id).collection("invited").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
+                return
             } else {
                 if let snapshot = snapshot {
                     snapshot.documentChanges.forEach { diff in
@@ -198,7 +209,6 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
         guard indexPath.section == 0 && !isFetching else { return }
 
         let groupDetailViewController = WatchGroupDetailViewController(watchGroup: joinedWatchGroups[indexPath.row])
-        //groupDetailViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(groupDetailViewController, animated: true)
     }
 

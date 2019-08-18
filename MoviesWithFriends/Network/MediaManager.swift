@@ -28,6 +28,8 @@ class MediaManager {
 
     func fetchMedia(endpoint: Endpoint, page: Int, completion: @escaping MediaCompletion) {
         let request = requestBuilder.buildRequest(endpoint: endpoint, extraParams: ["page": page, "region": "us"])
+
+        print(request)
         fetchHelper(request: request, completion: completion)
     }
 

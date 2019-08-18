@@ -10,12 +10,15 @@
 		9921042622F62717003F4714 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042522F62717003F4714 /* MemberCell.swift */; };
 		9921042922F75CED003F4714 /* WatchGroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042822F75CED003F4714 /* WatchGroupDetailViewController.swift */; };
 		9921042E22F8F20B003F4714 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921042D22F8F20B003F4714 /* Message.swift */; };
+		9929722B2309EF9A001CD763 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992972292309EF9A001CD763 /* KeychainWrapper.swift */; };
+		9929722C2309EF9A001CD763 /* KeychainItemAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929722A2309EF9A001CD763 /* KeychainItemAccessibility.swift */; };
 		99331E4423024D5500F8F96C /* BookmarkMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4323024D5500F8F96C /* BookmarkMedia.swift */; };
 		99331E462302509D00F8F96C /* BookmarkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E452302509D00F8F96C /* BookmarkCell.swift */; };
 		99331E4923036AD800F8F96C /* FriendCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4823036AD800F8F96C /* FriendCodeViewController.swift */; };
 		99331E4B23036AE800F8F96C /* FriendCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4A23036AE800F8F96C /* FriendCodeView.swift */; };
 		99331E4E2304B74000F8F96C /* CameraQRScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4D2304B74000F8F96C /* CameraQRScannerViewController.swift */; };
 		99331E502304EFBF00F8F96C /* WatchGroupOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E4F2304EFBF00F8F96C /* WatchGroupOptionsViewController.swift */; };
+		99331E5623088F9D00F8F96C /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99331E5523088F9D00F8F96C /* UserManager.swift */; };
 		9957E5C022DF6664005AC297 /* PersonSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5BF22DF6664005AC297 /* PersonSearch.swift */; };
 		9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5C222DF9083005AC297 /* TVShowDetail.swift */; };
 		9957E5C522DFBEF7005AC297 /* PersonMediaListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9957E5C422DFBEF7005AC297 /* PersonMediaListViewController.swift */; };
@@ -102,12 +105,15 @@
 		9921042522F62717003F4714 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		9921042822F75CED003F4714 /* WatchGroupDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupDetailViewController.swift; sourceTree = "<group>"; };
 		9921042D22F8F20B003F4714 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		992972292309EF9A001CD763 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
+		9929722A2309EF9A001CD763 /* KeychainItemAccessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItemAccessibility.swift; sourceTree = "<group>"; };
 		99331E4323024D5500F8F96C /* BookmarkMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkMedia.swift; sourceTree = "<group>"; };
 		99331E452302509D00F8F96C /* BookmarkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkCell.swift; sourceTree = "<group>"; };
 		99331E4823036AD800F8F96C /* FriendCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCodeViewController.swift; sourceTree = "<group>"; };
 		99331E4A23036AE800F8F96C /* FriendCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCodeView.swift; sourceTree = "<group>"; };
 		99331E4D2304B74000F8F96C /* CameraQRScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraQRScannerViewController.swift; sourceTree = "<group>"; };
 		99331E4F2304EFBF00F8F96C /* WatchGroupOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupOptionsViewController.swift; sourceTree = "<group>"; };
+		99331E5523088F9D00F8F96C /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		9957E5BF22DF6664005AC297 /* PersonSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonSearch.swift; sourceTree = "<group>"; };
 		9957E5C222DF9083005AC297 /* TVShowDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetail.swift; sourceTree = "<group>"; };
 		9957E5C422DFBEF7005AC297 /* PersonMediaListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonMediaListViewController.swift; sourceTree = "<group>"; };
@@ -248,6 +254,14 @@
 			path = User;
 			sourceTree = "<group>";
 		};
+		99331E542308542400F8F96C /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				99BA6F8522DD00700002D5FF /* NotificationName.swift */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
 		9957E5C122DF6B10005AC297 /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -383,6 +397,7 @@
 				99BA6F2B22D7BA020002D5FF /* MediaType.swift */,
 				99BA6F2D22D7BF0D0002D5FF /* RequestBuilder.swift */,
 				99BA6F2022D7B4190002D5FF /* MediaManager.swift */,
+				99331E5523088F9D00F8F96C /* UserManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -408,7 +423,7 @@
 				99BA6F2F22D7C7230002D5FF /* Dictionary.swift */,
 				99BA6F5322DA20B00002D5FF /* UILabel.swift */,
 				99BA6F7F22DBEA400002D5FF /* UIView.swift */,
-				99BA6F8522DD00700002D5FF /* NotificationName.swift */,
+				99331E542308542400F8F96C /* Notification */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -477,6 +492,8 @@
 		99BA6F5722DA2AD50002D5FF /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				9929722A2309EF9A001CD763 /* KeychainItemAccessibility.swift */,
+				992972292309EF9A001CD763 /* KeychainWrapper.swift */,
 				99BA6F5822DA2AE80002D5FF /* Stack.swift */,
 				9990EEB022F38785006C0075 /* FirestoreHelper.swift */,
 			);
@@ -725,13 +742,16 @@
 				9957E5C022DF6664005AC297 /* PersonSearch.swift in Sources */,
 				99BA6F6822DA7ED80002D5FF /* VideosViewController.swift in Sources */,
 				99BA6F4A22D92EB90002D5FF /* Videos.swift in Sources */,
+				9929722C2309EF9A001CD763 /* KeychainItemAccessibility.swift in Sources */,
 				99BA6F7D22DBDDA30002D5FF /* SignUpView.swift in Sources */,
 				9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */,
 				99331E4423024D5500F8F96C /* BookmarkMedia.swift in Sources */,
 				99BA6F5422DA20B00002D5FF /* UILabel.swift in Sources */,
+				99331E5623088F9D00F8F96C /* UserManager.swift in Sources */,
 				99BDA48B22FB69DD00474311 /* MessageInputAccessoryView.swift in Sources */,
 				99BA6F0F22D6AECB0002D5FF /* MediaRowCell.swift in Sources */,
 				99331E462302509D00F8F96C /* BookmarkCell.swift in Sources */,
+				9929722B2309EF9A001CD763 /* KeychainWrapper.swift in Sources */,
 				9990EEA822F227EC006C0075 /* WatchGroupsViewController.swift in Sources */,
 				99331E4923036AD800F8F96C /* FriendCodeViewController.swift in Sources */,
 				998F04E222E60547000AB52D /* FriendViewController.swift in Sources */,

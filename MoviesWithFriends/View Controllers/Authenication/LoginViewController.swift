@@ -65,13 +65,8 @@ class LoginViewController: UIViewController {
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
             if let error = error {
                 print(error)
-                //FIXME: display prompt
             } else if let _ = authResult {
                 NotificationCenter.default.post(name: .userDidLogin, object: nil, userInfo: nil)
-                if let rootTabBarController = self.presentingViewController as? RootTabBarController {
-                    rootTabBarController.selectedIndex = 1 // FIXME change index when necessary
-                    self.dismiss(animated: true, completion: nil)
-                }
             }
         }
     }
