@@ -15,19 +15,16 @@ class WatchGroupsViewController: UIViewController {
         return WatchGroupsView()
     }()
 
-    private let mediaManager = MediaManager()
-    private let currentUser: MWFUser
+    private let mediaManager: MediaManager
 
     private var db = Firestore.firestore()
-    private var watchGroupJoinedListener: ListenerRegistration?
-    private var watchGroupInvitedListener: ListenerRegistration?
 
     private var joinedWatchGroups = [WatchGroup]()
     private var pendingWatchGroups = [WatchGroup]()
     private var isFetching = false
 
-    init(user: MWFUser) {
-        self.currentUser = user
+    init(mediaManager: MediaManager) {
+        self.mediaManager = mediaManager
         super.init(nibName: nil, bundle: nil)
         tabBarItem = UITabBarItem(title: "Watch Groups", image: UIImage(named: "user"), tag: 2)
     }
@@ -56,24 +53,17 @@ class WatchGroupsViewController: UIViewController {
         watchGroupsView.tableView.tableFooterView = UIView()
         watchGroupsView.tableView.register(WatchGroupCell.self, forCellReuseIdentifier: "WatchGroupCell")
         watchGroupsView.tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
-        watchGroupsView.tableView.register(WatchGroupInviteCell.self, forCellReuseIdentifier: "WatchGroupInviteCell")
+        watchGroupsView.tableView.register(RequestCell.self, forCellReuseIdentifier: "RequestCell")
         watchGroupsView.tableView.register(FetchingCell.self, forCellReuseIdentifier: "FetchingCell")
-
-        NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
-    }
-
-    @objc private func cleanUpFirestoreListeners(_ notification: Notification) {
-        watchGroupJoinedListener?.remove()
-        watchGroupInvitedListener?.remove()
     }
 
     private func fetchWatchGroups() {
         isFetching = true
+        guard let userID = Auth.auth().currentUser?.uid else { return }
 
-        watchGroupJoinedListener = db.collection("watch_group").document(currentUser.id).collection("joined").addSnapshotListener { snapshot, error in
+        db.collection("watch_group").document(userID).collection("joined").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
-                return
             } else {
                 if let snapshot = snapshot {
                     if snapshot.documents.count == 0 {
@@ -86,13 +76,13 @@ class WatchGroupsViewController: UIViewController {
                         guard let groupID = diff.document.data()["id"] as? String else { return }
                         getWatchGroup(groupID: groupID) { watchGroup in
                             guard let watchGroup = watchGroup else { return }
-                            self.isFetching = false
 
                             switch diff.type {
                             case .added:
                                 let lastIndex = self.joinedWatchGroups.count
                                 self.joinedWatchGroups.append(watchGroup)
                                 if self.joinedWatchGroups.count == 1 {
+                                    self.isFetching = false
                                     self.watchGroupsView.tableView.reloadData()
                                 } else {
                                     self.watchGroupsView.tableView.insertRows(at: [IndexPath(row: lastIndex, section: 0)], with: .automatic)
@@ -111,10 +101,9 @@ class WatchGroupsViewController: UIViewController {
             }
         }
 
-        watchGroupInvitedListener = db.collection("watch_group").document(currentUser.id).collection("invited").addSnapshotListener { snapshot, error in
+        db.collection("watch_group").document(userID).collection("invited").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
-                return
             } else {
                 if let snapshot = snapshot {
                     snapshot.documentChanges.forEach { diff in
@@ -173,8 +162,9 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
             }
 
             let cell = tableView.dequeueReusableCell(withIdentifier: "WatchGroupCell", for: indexPath) as! WatchGroupCell
-            cell.delegate = self
             let group = joinedWatchGroups[indexPath.row]
+
+            cell.groupID = group.id
 
             cell.groupNameLabel.text = group.name
             cell.movieNameLabel.text = group.mediaTitle
@@ -188,22 +178,16 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
             return cell
 
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "WatchGroupInviteCell", for: indexPath) as! WatchGroupInviteCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RequestCell", for: indexPath) as! RequestCell
             cell.delegate = self
             let pendingGroup = pendingWatchGroups[indexPath.row]
 
-            cell.groupNameLabel.text = pendingGroup.name
-            cell.dateLabel.text = pendingGroup.displayDate
-
-            getUser(userID: pendingGroup.creatorID) { user in
-                if let user = user {
-                    cell.invitedLabel.text = "Invited by: \(user.fullName ?? user.userName)"
-                }
-            }
+            cell.userNameLabel.text = pendingGroup.name
+            cell.fullNameLabel.text = pendingGroup.mediaTitle
 
             if let posterImagePath = pendingGroup.posterPath {
                 let posterURL = mediaManager.getImageURL(for: .poster(path: posterImagePath, size: .medium))
-                cell.posterImageView.kf.setImage(with: posterURL)
+                cell.profileImageView.kf.setImage(with: posterURL)
             }
 
             return cell
@@ -214,6 +198,7 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
         guard indexPath.section == 0 && !isFetching else { return }
 
         let groupDetailViewController = WatchGroupDetailViewController(watchGroup: joinedWatchGroups[indexPath.row])
+        //groupDetailViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(groupDetailViewController, animated: true)
     }
 
@@ -222,8 +207,10 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
             if joinedWatchGroups.isEmpty {
                 return isFetching ? 80 : 250
             }
+            return 154
+        } else {
+            return 125
         }
-        return 154
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -232,30 +219,10 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
         }
         return nil
     }
-
-    func displayMediaDetails(for watchGroup: WatchGroup) {
-        let mediaDetailViewController = MediaDetailViewController(mediaType: watchGroup.type,
-                                                                  mediaID: watchGroup.mediaID, mediaManager: mediaManager, allowGroupCreation: false)
-        navigationController?.pushViewController(mediaDetailViewController, animated: true)
-    }
 }
 
-extension WatchGroupsViewController: WatchGroupCellDelegate {
-    func infoButtonPressed(_ cell: WatchGroupCell) {
-        guard let indexPath = watchGroupsView.tableView.indexPath(for: cell) else { return }
-        displayMediaDetails(for: joinedWatchGroups[indexPath.row])
-    }
-}
-
-extension WatchGroupsViewController: WatchGroupInviteCellDelegate {
-
-    func infoButtonPressed(_ cell: WatchGroupInviteCell) {
-        guard let indexPath = watchGroupsView.tableView.indexPath(for: cell) else { return }
-
-        displayMediaDetails(for: pendingWatchGroups[indexPath.row])
-    }
-
-    func acceptPressed(_ cell: WatchGroupInviteCell) {
+extension WatchGroupsViewController: RequestCellDelegate {
+    func acceptPressed(_ cell: RequestCell) {
         guard let indexPath = watchGroupsView.tableView.indexPath(for: cell),
         let userID = Auth.auth().currentUser?.uid else { return }
 
@@ -281,7 +248,7 @@ extension WatchGroupsViewController: WatchGroupInviteCellDelegate {
         }
     }
 
-    func denyPressed(_ cell: WatchGroupInviteCell) {
+    func denyPressed(_ cell: RequestCell) {
         guard let indexPath = watchGroupsView.tableView.indexPath(for: cell),
             let userID = Auth.auth().currentUser?.uid else { return }
 

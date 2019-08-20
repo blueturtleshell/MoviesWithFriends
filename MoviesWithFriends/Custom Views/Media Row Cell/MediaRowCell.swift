@@ -89,7 +89,7 @@ class MediaRowCell: UITableViewCell {
     }
 
     @objc private func seeAllPressed(_ sender: UIButton) {
-        if let endpoint = endpoint {
+        if let endpoint = endpoint, media.count > 0 {
             delegate?.seeAllPressed(endpoint: endpoint)
         }
     }
@@ -106,10 +106,15 @@ extension MediaRowCell: UICollectionViewDelegate, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if media.isEmpty {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyCell", for: indexPath) as! NothingFoundCell
+            if let endpoint = endpoint {
+                cell.textLabel.textColor = .black
+                cell.textLabel.text = "There was a problem fetching \(endpoint.description).\nPlease try again later"
+            }
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
             
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
+
             let mediaItem = media[indexPath.item]
             cell.titleLabel.text = mediaItem.title
             if let posterPath = mediaItem.posterPath, !posterPath.isEmpty {

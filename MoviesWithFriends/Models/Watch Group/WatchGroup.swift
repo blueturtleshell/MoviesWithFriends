@@ -10,6 +10,7 @@ import Foundation
 
 struct WatchGroup: Equatable, Comparable {
     var id: String
+    var creatorID: String
     var name: String
     var type: MediaType
     var mediaID: Int
@@ -26,6 +27,7 @@ struct WatchGroup: Equatable, Comparable {
 
     init?(from dict: [String: Any]) {
         guard let id = dict["id"] as? String,
+            let creatorID = dict["creator_id"] as? String,
             let name = dict["name"] as? String,
             let type = dict["type"] as? String,
             let mediaID = dict["media_id"] as? Int,
@@ -33,6 +35,7 @@ struct WatchGroup: Equatable, Comparable {
             let dateInSeconds = dict["date"] as? Double else { return nil }
 
         self.id = id
+        self.creatorID = creatorID
         self.name = name
         self.type = type == "movie" ? .movie : .tv
         self.mediaID = mediaID

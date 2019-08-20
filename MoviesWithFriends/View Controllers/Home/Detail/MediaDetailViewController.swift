@@ -22,12 +22,13 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
             fetchMedia()
         }
     }
+    private var allowGroupCreation: Bool
 
     private var mediaInfo: MediaInfo? {
         didSet {
             if let mediaInfo = mediaInfo {
                 configureView(for: mediaInfo)
-                navigationItem.rightBarButtonItem?.isEnabled = true
+                configureWatchGroupCreationButton()
             }
         }
     }
@@ -41,10 +42,11 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         }
     }
 
-    init(mediaType: MediaType, mediaID: Int, mediaManager: MediaManager) {
+    init(mediaType: MediaType, mediaID: Int, mediaManager: MediaManager, allowGroupCreation: Bool = true) {
         self.mediaType = mediaType
         self.mediaID = mediaID
         self.mediaManager = mediaManager
+        self.allowGroupCreation = allowGroupCreation
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -99,6 +101,17 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         detailView.videosButton.addTarget(self, action: #selector(showVideos), for: .touchUpInside)
         detailView.backToPreviousMediaButton.addTarget(self, action: #selector(previousMediaButtonPressed), for: .touchUpInside)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
+
+    private func configureWatchGroupCreationButton() {
+        let rightBarButtonEnabled: Bool
+        if mediaHistory.count > 0 {
+            rightBarButtonEnabled = true
+        } else {
+            rightBarButtonEnabled = allowGroupCreation
+        }
+
+        navigationItem.rightBarButtonItem?.isEnabled = rightBarButtonEnabled
     }
 
     @objc private func createGroup() {
