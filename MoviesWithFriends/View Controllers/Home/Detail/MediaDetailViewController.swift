@@ -15,6 +15,8 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         return MediaDetailView()
     }()
 
+    // TODO: blur background / poster image for effect
+
     private let mediaManager: MediaManager
     private let mediaType: MediaType
     private var mediaID: Int {
@@ -70,6 +72,10 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         super.viewDidLoad()
 
         setupView()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchMedia()
     }
 
@@ -127,10 +133,16 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     private func fetchMedia() {
+
+        let fetchHUD = HUDView.hud(inView: detailView, animated: true)
+        fetchHUD.text = "Fetching Details"
+        fetchHUD.accessoryType = .activityIndicator
+
         switch mediaType {
         case .movie:
             mediaManager.fetchMovieDetail(id: mediaID) { detailResult in
                 do {
+                    fetchHUD.remove(from: self.detailView)
                     self.mediaInfo = try detailResult.get()
                 } catch {
                     print(error)
@@ -139,6 +151,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         case .tv:
             mediaManager.fetchTVShowDetail(id: mediaID) { detailResult in
                 do {
+                    fetchHUD.remove(from: self.detailView)
                     self.mediaInfo = try detailResult.get()
                 } catch {
                     print(error)

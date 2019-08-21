@@ -81,7 +81,7 @@ class WatchGroupOptionsViewController: UITableViewController {
     }
 
     private func configureView() {
-
+        //TODO: figure out what happens here
     }
 
     private func fetchUsers() {

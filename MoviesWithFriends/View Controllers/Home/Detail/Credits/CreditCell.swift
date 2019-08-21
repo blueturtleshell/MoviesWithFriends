@@ -66,7 +66,7 @@ class CreditCell: UITableViewCell {
         }
 
         nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView).offset(12)
+            make.centerY.equalToSuperview().offset(-12)
             make.left.equalTo(profileImageView.snp.right).offset(12)
             make.right.lessThanOrEqualToSuperview().inset(12)
         }
@@ -74,7 +74,7 @@ class CreditCell: UITableViewCell {
         roleLabel.snp.makeConstraints { make in
             make.left.equalTo(nameLabel)
             make.right.lessThanOrEqualToSuperview().inset(12)
-            make.bottom.equalTo(profileImageView).inset(12)
+            make.centerY.equalToSuperview().offset(12)
         }
     }
 }

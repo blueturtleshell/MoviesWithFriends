@@ -91,4 +91,10 @@ class CreditViewController: UITableViewController {
         default: return nil
         }
     }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let person: PersonDisplayable = indexPath.section == 0 ? credits.cast[indexPath.row] : credits.crew[indexPath.row]
+        let personMediaViewController = PersonMediaListViewController(person: person, mediaManager: mediaManager)
+        navigationController?.pushViewController(personMediaViewController, animated: true)
+    }
 }
