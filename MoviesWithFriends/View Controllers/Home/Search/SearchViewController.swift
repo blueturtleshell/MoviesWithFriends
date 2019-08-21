@@ -24,6 +24,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSource
     }()
 
     private let mediaManager: MediaManager
+    private var mediaType: MediaType
 
     private var searchTerm = "" {
         didSet {
@@ -36,8 +37,9 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSource
     private var media = [MediaDisplayable]()
     private var people = [PersonDisplayable]()
 
-    init(mediaManager: MediaManager) {
+    init(mediaManager: MediaManager, type: MediaType) {
         self.mediaManager = mediaManager
+        self.mediaType = type
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -60,9 +62,12 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSource
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
 
+        searchView.segmentedControl.selectedSegmentIndex = mediaType == .movie ? 0 : 1
+
         searchView.collectionView.delegate = self
         searchView.collectionView.dataSource = self
         searchView.collectionView.prefetchDataSource = self
+
 
         searchView.collectionView.register(PosterCell.self, forCellWithReuseIdentifier: "PosterCell")
         searchView.collectionView.register(NothingFoundCell.self, forCellWithReuseIdentifier: "NothingFoundCell")

@@ -90,6 +90,7 @@
 		99D1E2F3230C64BE004780F7 /* MediaRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2F2230C64BE004780F7 /* MediaRowCell.swift */; };
 		99D1E2F5230C64D2004780F7 /* WatchGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2F4230C64D1004780F7 /* WatchGroupsView.swift */; };
 		99D1E2F7230C6685004780F7 /* MediaDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2F6230C6685004780F7 /* MediaDetailViewController.swift */; };
+		99D1E2F9230CEFEC004780F7 /* InviteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2F8230CEFEC004780F7 /* InviteHeaderView.swift */; };
 		99DF3B9122EA3D04007C9660 /* FetchingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9022EA3D04007C9660 /* FetchingCell.swift */; };
 		99DF3B9822EA8529007C9660 /* WatchGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */; };
 		99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */; };
@@ -186,6 +187,7 @@
 		99D1E2F2230C64BE004780F7 /* MediaRowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaRowCell.swift; sourceTree = "<group>"; };
 		99D1E2F4230C64D1004780F7 /* WatchGroupsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchGroupsView.swift; sourceTree = "<group>"; };
 		99D1E2F6230C6685004780F7 /* MediaDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDetailViewController.swift; sourceTree = "<group>"; };
+		99D1E2F8230CEFEC004780F7 /* InviteHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteHeaderView.swift; sourceTree = "<group>"; };
 		99DF3B9022EA3D04007C9660 /* FetchingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchingCell.swift; sourceTree = "<group>"; };
 		99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupViewController.swift; sourceTree = "<group>"; };
 		99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupView.swift; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 				9990EEA922F238BB006C0075 /* WatchGroupCell.swift */,
 				99D1E2EE230C6468004780F7 /* WatchGroupInviteCell.swift */,
 				9921042522F62717003F4714 /* MemberCell.swift */,
+				99D1E2F8230CEFEC004780F7 /* InviteHeaderView.swift */,
 				9921042722F75CD8003F4714 /* Detail */,
 			);
 			path = "Watch Group";
@@ -729,6 +732,7 @@
 				99BA6F1A22D7ADF60002D5FF /* Media.swift in Sources */,
 				99BA6F1222D6BBCD0002D5FF /* PosterCell.swift in Sources */,
 				99BA6F2822D7B9CA0002D5FF /* TVEndpoint.swift in Sources */,
+				99D1E2F9230CEFEC004780F7 /* InviteHeaderView.swift in Sources */,
 				998F04E422E60566000AB52D /* FriendView.swift in Sources */,
 				99DF3B9122EA3D04007C9660 /* FetchingCell.swift in Sources */,
 				99BA6F4222D915DA0002D5FF /* MediaDetailView.swift in Sources */,

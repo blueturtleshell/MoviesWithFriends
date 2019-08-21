@@ -38,9 +38,17 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     private var mediaHistory = Stack<(id: Int, title: String?)>()
     private var isBookmarked = false {
         didSet {
-            detailView.bookmarkButton.tintColor = isBookmarked ? .red : .white
+            navigationItem.rightBarButtonItems = [createWatchGroupBarButtonItem, bookmarkBarButtonItem()]
         }
     }
+
+    private func bookmarkBarButtonItem() -> UIBarButtonItem  {
+        let imageName = isBookmarked ? "bookmark_fill" : "bookmark"
+        let bookmarkImage = UIImage(named: imageName)
+        let test = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(handleBookmarkButtonPressed))
+        return test
+    }
+    private var createWatchGroupBarButtonItem = UIBarButtonItem(title: "Create Group", style: .plain, target: self, action: #selector(createGroup))
 
     init(mediaType: MediaType, mediaID: Int, mediaManager: MediaManager, allowGroupCreation: Bool = true) {
         self.mediaType = mediaType
@@ -68,9 +76,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        let userLoggedIn = Auth.auth().currentUser != nil
-        detailView.bookmarkButton.isHidden = !userLoggedIn
-        detailView.bookmarkButton.isEnabled = userLoggedIn
+        navigationItem.rightBarButtonItems?.last?.isEnabled = Auth.auth().currentUser != nil
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -93,10 +99,9 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         detailView.relatedTableView.separatorColor = .clear
         detailView.relatedTableView.tableFooterView = UIView()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Create Group", style: .plain, target: self, action: #selector(createGroup))
-        navigationItem.rightBarButtonItem?.isEnabled = false
+        navigationItem.rightBarButtonItems = [createWatchGroupBarButtonItem, bookmarkBarButtonItem()]
+        createWatchGroupBarButtonItem.isEnabled = false
 
-        detailView.bookmarkButton.addTarget(self, action: #selector(handleBookmarkButtonPressed), for: .touchUpInside)
         detailView.creditButton.addTarget(self, action: #selector(showCredits), for: .touchUpInside)
         detailView.videosButton.addTarget(self, action: #selector(showVideos), for: .touchUpInside)
         detailView.backToPreviousMediaButton.addTarget(self, action: #selector(previousMediaButtonPressed), for: .touchUpInside)
@@ -104,14 +109,14 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     private func configureWatchGroupCreationButton() {
-        let rightBarButtonEnabled: Bool
+        let buttonEnabled: Bool
         if mediaHistory.count > 0 {
-            rightBarButtonEnabled = true
+            buttonEnabled = true
         } else {
-            rightBarButtonEnabled = allowGroupCreation
+            buttonEnabled = allowGroupCreation
         }
 
-        navigationItem.rightBarButtonItem?.isEnabled = rightBarButtonEnabled
+        createWatchGroupBarButtonItem.isEnabled = buttonEnabled
     }
 
     @objc private func createGroup() {
@@ -268,7 +273,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MediaRow", for: indexPath) as! MediaRowCell
-        cell.seeAllButton.isHidden = true // TODO: maybe implement
+        cell.seeAllButton.isHidden = true
         cell.delegate = self
         cell.mediaManager = mediaManager
         let media = (indexPath.row == 0 ? similarMedia : recommendedMedia)

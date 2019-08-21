@@ -13,6 +13,7 @@ class PosterCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 4
         return imageView
     }()
 

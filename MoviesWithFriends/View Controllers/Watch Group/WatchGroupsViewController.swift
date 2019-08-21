@@ -24,7 +24,8 @@ class WatchGroupsViewController: UIViewController {
 
     private var joinedWatchGroups = [WatchGroup]()
     private var pendingWatchGroups = [WatchGroup]()
-    private var isFetching = false
+
+    private var didFetch = false
 
     init(user: MWFUser) {
         self.currentUser = user
@@ -44,22 +45,33 @@ class WatchGroupsViewController: UIViewController {
         super.viewDidLoad()
 
         setupView()
+    }
 
-        fetchWatchGroups()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if !didFetch {
+            fetchWatchGroups()
+            didFetch = true
+        }
     }
 
     private func setupView() {
         navigationItem.title = "Watch Groups"
         navigationItem.backBarButtonItem = UIBarButtonItem()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "ticket"), style: .plain, target: self, action: #selector(createCustomWatchGroup))
+
         watchGroupsView.tableView.dataSource = self
         watchGroupsView.tableView.delegate = self
         watchGroupsView.tableView.tableFooterView = UIView()
         watchGroupsView.tableView.register(WatchGroupCell.self, forCellReuseIdentifier: "WatchGroupCell")
         watchGroupsView.tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         watchGroupsView.tableView.register(WatchGroupInviteCell.self, forCellReuseIdentifier: "WatchGroupInviteCell")
-        watchGroupsView.tableView.register(FetchingCell.self, forCellReuseIdentifier: "FetchingCell")
 
         NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
+    }
+
+    @objc private func createCustomWatchGroup() {
+
     }
 
     @objc private func cleanUpFirestoreListeners(_ notification: Notification) {
@@ -68,7 +80,9 @@ class WatchGroupsViewController: UIViewController {
     }
 
     private func fetchWatchGroups() {
-        isFetching = true
+        let fetchingHUD = HUDView.hud(inView: watchGroupsView, animated: true)
+        fetchingHUD.text = "Fetching Groups"
+        fetchingHUD.accessoryType = .activityIndicator
 
         watchGroupJoinedListener = db.collection("watch_group").document(currentUser.id).collection("joined").addSnapshotListener { snapshot, error in
             if let error = error {
@@ -76,8 +90,11 @@ class WatchGroupsViewController: UIViewController {
                 return
             } else {
                 if let snapshot = snapshot {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75, execute: {
+                        fetchingHUD.remove(from: self.watchGroupsView)
+                    })
+
                     if snapshot.documents.count == 0 {
-                        self.isFetching = false
                         self.watchGroupsView.tableView.reloadData()
                         return
                     }
@@ -86,17 +103,13 @@ class WatchGroupsViewController: UIViewController {
                         guard let groupID = diff.document.data()["id"] as? String else { return }
                         getWatchGroup(groupID: groupID) { watchGroup in
                             guard let watchGroup = watchGroup else { return }
-                            self.isFetching = false
 
                             switch diff.type {
                             case .added:
-                                let lastIndex = self.joinedWatchGroups.count
+                                let groupCount = self.joinedWatchGroups.count
                                 self.joinedWatchGroups.append(watchGroup)
-                                if self.joinedWatchGroups.count == 1 {
-                                    self.watchGroupsView.tableView.reloadData()
-                                } else {
-                                    self.watchGroupsView.tableView.insertRows(at: [IndexPath(row: lastIndex, section: 0)], with: .automatic)
-                                }
+                                self.watchGroupsView.tableView.insertRows(at: [IndexPath(row: groupCount, section: 0)], with: .none)
+
                             case .removed:
                                 if let index = self.joinedWatchGroups.firstIndex(of: watchGroup) {
                                     self.joinedWatchGroups.remove(at: index)
@@ -124,9 +137,9 @@ class WatchGroupsViewController: UIViewController {
 
                             switch diff.type {
                             case .added:
+                                let index = self.pendingWatchGroups.count
                                 self.pendingWatchGroups.append(watchGroup)
-                                self.watchGroupsView.tableView.reloadData()
-                                self.isFetching = false
+                                self.watchGroupsView.tableView.insertRows(at: [IndexPath(row: index, section: 1)], with: .none)
                             case .removed:
                                 if let index = self.pendingWatchGroups.firstIndex(of: watchGroup) {
                                     self.pendingWatchGroups.remove(at: index)
@@ -150,9 +163,6 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            if joinedWatchGroups.isEmpty {
-                return 1
-            }
             return joinedWatchGroups.count
         }
         return pendingWatchGroups.count
@@ -160,18 +170,6 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            if joinedWatchGroups.isEmpty {
-                if isFetching {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "FetchingCell", for: indexPath) as! FetchingCell
-                    cell.fetchLabel.text = "Fetching Groups"
-                    return cell
-                } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell
-                    cell.emptyTextLabel.text = "No watch groups scheduled"
-                    return cell
-                }
-            }
-
             let cell = tableView.dequeueReusableCell(withIdentifier: "WatchGroupCell", for: indexPath) as! WatchGroupCell
             cell.delegate = self
             let group = joinedWatchGroups[indexPath.row]
@@ -211,7 +209,7 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 0 && !isFetching else { return }
+        guard indexPath.section == 0 else { return }
 
         let groupDetailViewController = WatchGroupDetailViewController(watchGroup: joinedWatchGroups[indexPath.row])
         navigationController?.pushViewController(groupDetailViewController, animated: true)
@@ -220,15 +218,20 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             if joinedWatchGroups.isEmpty {
-                return isFetching ? 80 : 250
+                return 250
             }
         }
         return 154
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return section == 0 ? 0 : 52
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
-            return pendingWatchGroups.count > 0 ? "Invited" : nil
+            let inviteHeader = InviteHeaderView()
+            return inviteHeader
         }
         return nil
     }

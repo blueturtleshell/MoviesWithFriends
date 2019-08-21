@@ -34,6 +34,7 @@ class WatchGroupCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
 
@@ -104,5 +105,12 @@ class WatchGroupCell: UITableViewCell {
             make.left.equalTo(posterImageView.snp.right).offset(12)
             make.right.equalToSuperview().inset(12)
         }
+
+        let posterTapped = UITapGestureRecognizer(target: self, action: #selector(showMediaInfo))
+        posterImageView.addGestureRecognizer(posterTapped)
+    }
+
+    @objc private func showMediaInfo() {
+        delegate?.infoButtonPressed(self)
     }
 }

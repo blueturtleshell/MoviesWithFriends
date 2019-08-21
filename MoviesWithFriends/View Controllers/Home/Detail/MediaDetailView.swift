@@ -36,13 +36,6 @@ class MediaDetailView: UIView {
         return imageView
     }()
 
-    let bookmarkButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "bookmark"), for: .normal)
-        button.tintColor = .white
-        return button
-    }()
-
     let backToPreviousMediaButton: UIButton = {
         let button = UIButton(type: .system)
         button.isHidden = true
@@ -61,6 +54,7 @@ class MediaDetailView: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 4
         return imageView
     }()
 
@@ -197,7 +191,6 @@ class MediaDetailView: UIView {
         contentView.addSubview(backdropImageView)
         contentView.addSubview(backToPreviousMediaButton)
         contentView.addSubview(posterImageView)
-        contentView.addSubview(bookmarkButton)
         contentView.addSubview(movieInfoStackView)
         contentView.addSubview(buttonStackView)
         contentView.addSubview(overviewLabel)
@@ -243,12 +236,6 @@ class MediaDetailView: UIView {
         buttonStackView.snp.makeConstraints { make in
             make.left.right.equalTo(movieInfoStackView)
             make.top.equalTo(movieInfoStackView.snp.bottom).offset(12)
-        }
-
-        bookmarkButton.snp.makeConstraints { make in
-            make.top.equalTo(buttonStackView.snp.bottom)
-            make.left.equalTo(posterImageView.snp.right)
-            make.size.equalTo(CGSize(width: 44, height: 66))
         }
 
         overviewLabel.snp.makeConstraints { make in

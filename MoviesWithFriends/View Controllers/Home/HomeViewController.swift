@@ -77,7 +77,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     @objc private func handleSearch() {
-        let searchViewController = SearchViewController(mediaManager: mediaManager)
+        let searchViewController = SearchViewController(mediaManager: mediaManager, type: currentMediaType)
         navigationController?.pushViewController(searchViewController, animated: true)
     }
 

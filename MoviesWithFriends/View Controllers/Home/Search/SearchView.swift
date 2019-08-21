@@ -12,7 +12,6 @@ class SearchView: UIView {
 
     let segmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["Movie", "TV Show", "Person"])
-        segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
 

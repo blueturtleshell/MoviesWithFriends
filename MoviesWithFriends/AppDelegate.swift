@@ -25,8 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
 
         window?.rootViewController = RootTabBarController(userManager: userManager)
-
-        //FIXME: prompt when api not working
         return true
     }
 
