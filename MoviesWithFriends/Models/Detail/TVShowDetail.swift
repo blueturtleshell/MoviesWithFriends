@@ -20,7 +20,7 @@ struct TVShowDetail: MediaInfo {
 
     var overview: String?
 
-    var releaseDate: String
+    var releaseDate: String?
 
     var rating: String? {
         let regionRating = contentRatings.results.filter { $0.regionCode == "US" }.first

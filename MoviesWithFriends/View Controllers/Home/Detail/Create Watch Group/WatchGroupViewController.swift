@@ -164,7 +164,7 @@ class WatchGroupViewController: UIViewController {
         let today = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd"
-        if let date = dateFormatter.date(from: mediaInfo.releaseDate) {
+        if let releaseDate = mediaInfo.releaseDate, let date = dateFormatter.date(from: releaseDate) {
             return date > today ? date : today
         } else {
             return today

@@ -29,6 +29,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     private var mediaInfo: MediaInfo? {
         didSet {
             if let mediaInfo = mediaInfo {
+                createWatchGroupBarButtonItem.isEnabled = true
                 configureView(for: mediaInfo)
                 configureWatchGroupCreationButton()
             }
@@ -50,7 +51,11 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         let test = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(handleBookmarkButtonPressed))
         return test
     }
-    private var createWatchGroupBarButtonItem = UIBarButtonItem(title: "Create Group", style: .plain, target: self, action: #selector(createGroup))
+
+    private lazy var createWatchGroupBarButtonItem: UIBarButtonItem = {
+        let createWatchGroup = UIBarButtonItem(title: "Create Group", style: .plain, target: self, action: #selector(createGroup))
+        return createWatchGroup
+    }()
 
     init(mediaType: MediaType, mediaID: Int, mediaManager: MediaManager, allowGroupCreation: Bool = true) {
         self.mediaType = mediaType
@@ -127,7 +132,6 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
 
     @objc private func createGroup() {
         guard let mediaInfo = mediaInfo else { return }
-
         let watchGroupViewController = WatchGroupViewController(mediaType: mediaType, mediaInfo: mediaInfo, mediaManager: mediaManager)
         navigationController?.pushViewController(watchGroupViewController, animated: true)
     }
@@ -178,7 +182,15 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
 
         detailView.titleLabel.text = mediaInfo.title
         detailView.certificationLabel.text = mediaInfo.rating
-        detailView.releaseDateLabel.text = "Release Date: \(!mediaInfo.releaseDate.isEmpty ? mediaInfo.releaseDate : "N/A")"
+
+        let formattedReleaseDate: String
+        if let releaseDate = mediaInfo.releaseDate, !releaseDate.isEmpty {
+            formattedReleaseDate = releaseDate
+        } else {
+            formattedReleaseDate = "N/A"
+        }
+
+        detailView.releaseDateLabel.text = "Release Date: \(formattedReleaseDate)"
         detailView.overviewLabel.text = mediaInfo.overview
         detailView.overviewLabel.setLineSpacing(lineHeightMultiple: 1.2)
         if let runtime = mediaInfo.runtime {
@@ -205,6 +217,13 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
             detailView.posterImageView.kf.indicatorType = .activity
             let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
             detailView.posterImageView.kf.setImage(with: imageURL)
+
+            detailView.backgroundImageView.kf.indicatorType = .activity
+            detailView.backgroundImageView.kf.setImage(with: imageURL)
+        } else {
+            detailView.posterImageView.layer.borderColor = UIColor.white.cgColor
+            detailView.posterImageView.layer.borderWidth = 0.5
+            detailView.posterImageView.image = #imageLiteral(resourceName: "image_na")
         }
 
         getRelatedMedia(id: mediaInfo.id)
@@ -215,7 +234,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         let minutes = runtime % 60
         if hours > 0 && minutes > 0 {
             return "Runtime: \(hours) \(hours > 1 ? "Hours" : "Hour") \(minutes) \(minutes > 1 ? "Minutes" : "Minute")"
-        } else if hours > 1 && minutes == 0 {
+        } else if hours >= 1 && minutes == 0 {
             return "Runtime: \(hours) \(hours > 1 ? "Hours" : "Hour")"
         }
         return "Runtime: \(minutes) \(minutes > 1 ? "Minutes" : "Minute")"

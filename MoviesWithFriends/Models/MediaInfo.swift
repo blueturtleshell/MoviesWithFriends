@@ -9,7 +9,7 @@
 import Foundation
 
 protocol MediaInfo: MediaDisplayable {
-    var releaseDate: String { get }
+    var releaseDate: String? { get }
     var rating: String? { get }
     var reviewScore: Double? { get }
     var runtime: Int? { get }

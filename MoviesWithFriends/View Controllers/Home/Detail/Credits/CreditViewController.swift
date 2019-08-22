@@ -33,6 +33,8 @@ class CreditViewController: UITableViewController {
         navigationItem.title = "Credits"
         tableView.estimatedRowHeight = 120
         tableView.rowHeight = 120
+        tableView.separatorStyle = .none
+        tableView.backgroundView = CreditBackgroundView()
         tableView.tableFooterView = UIView()
         tableView.register(CreditCell.self, forCellReuseIdentifier: "CreditCell")
     }
@@ -77,6 +79,8 @@ class CreditViewController: UITableViewController {
             cell.profileImageView.kf.indicatorType = .activity
             let imageURL = mediaManager.getImageURL(for: .profile(path: profilePath, size: ImageEndpoint.ProfileSize.medium))
             cell.profileImageView.kf.setImage(with: imageURL)
+        } else {
+            cell.profileImageView.image = #imageLiteral(resourceName: "profile_na")
         }
 
         return cell

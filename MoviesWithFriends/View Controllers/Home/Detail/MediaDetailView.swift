@@ -9,10 +9,16 @@
 import UIKit
 
 class MediaDetailView: UIView {
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
+    let backgroundImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
+
+    private let containerView: UIVisualEffectView = {
+        let blur = UIBlurEffect(style: .dark)
+        let visualEffectView = UIVisualEffectView(effect: blur)
+        return visualEffectView
     }()
 
     let scrollView: UIScrollView = {
@@ -52,9 +58,7 @@ class MediaDetailView: UIView {
 
     let posterImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 4
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
 
@@ -185,8 +189,9 @@ class MediaDetailView: UIView {
     }
 
     private func setupView() {
+        addSubview(backgroundImageView)
         addSubview(containerView)
-        containerView.addSubview(scrollView)
+        containerView.contentView.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(backdropImageView)
         contentView.addSubview(backToPreviousMediaButton)
@@ -196,8 +201,11 @@ class MediaDetailView: UIView {
         contentView.addSubview(overviewLabel)
         contentView.addSubview(relatedTableView)
 
-        containerView.snp.makeConstraints { make in
+        backgroundImageView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        containerView.snp.makeConstraints { make in
+            make.edges.equalTo(backgroundImageView)
         }
 
         scrollView.snp.makeConstraints { make in
@@ -230,7 +238,7 @@ class MediaDetailView: UIView {
         movieInfoStackView.snp.makeConstraints { make in
             make.left.equalTo(posterImageView.snp.right).offset(12)
             make.right.equalTo(backdropImageView).inset(12)
-            make.top.equalTo(posterImageView)
+            make.top.equalTo(posterImageView).offset(12)
         }
 
         buttonStackView.snp.makeConstraints { make in
@@ -249,7 +257,7 @@ class MediaDetailView: UIView {
             make.left.equalToSuperview().offset(12)
             make.right.equalToSuperview().inset(12)
             make.bottom.equalToSuperview().inset(12)
-            make.height.equalTo(500)
+            make.height.equalTo(490)
         }
     }
 }

@@ -99,8 +99,10 @@ class MediaRowCell: UITableViewCell {
 extension MediaRowCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if media.count == 0 {
+            collectionView.isScrollEnabled = false
             return 1 // Empty Cell
         }
+        collectionView.isScrollEnabled = true
         return media.count
     }
 
@@ -115,6 +117,8 @@ extension MediaRowCell: UICollectionViewDelegate, UICollectionViewDataSource, UI
         } else {
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
+
+            cell.addShadow(cornerRadius: 4, maskedCorners: [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner], color: .black, offset: CGSize(width: 2, height: 2), opacity: 0.25, shadowRadius: 3)
 
             let mediaItem = media[indexPath.item]
             cell.titleLabel.text = mediaItem.title

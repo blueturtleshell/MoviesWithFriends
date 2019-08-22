@@ -19,7 +19,7 @@ struct MovieDetail: MediaInfo {
 
     let overview: String?
 
-    let releaseDate: String
+    let releaseDate: String?
     let regionReleaseDateInfo: RegionReleaseDates
 
     let runtime: Int?

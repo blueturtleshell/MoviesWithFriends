@@ -19,4 +19,13 @@ extension UIView {
         textField.returnKeyType = .done
         return textField
     }
+
+    func addShadow(cornerRadius: CGFloat, maskedCorners: CACornerMask, color: UIColor, offset: CGSize, opacity: Float, shadowRadius: CGFloat) {
+        self.layer.cornerRadius = cornerRadius
+        self.layer.maskedCorners = maskedCorners
+        self.layer.shadowColor = color.cgColor
+        self.layer.shadowOffset = offset
+        self.layer.shadowOpacity = opacity
+        self.layer.shadowRadius = shadowRadius
+    }
 }

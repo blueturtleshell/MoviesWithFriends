@@ -101,9 +101,13 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
         cell.titleLabel.text = mediaItem.title
 
         if let posterPath = mediaItem.posterPath, !posterPath.isEmpty {
+            cell.posterImageView.contentMode = .scaleAspectFill
             cell.posterImageView.kf.indicatorType = .activity
             let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
             cell.posterImageView.kf.setImage(with: imageURL)
+        } else {
+            cell.posterImageView.contentMode = .scaleAspectFit
+            cell.posterImageView.image = #imageLiteral(resourceName: "profile_na")
         }
         return cell
     }

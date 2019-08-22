@@ -61,6 +61,7 @@ class MediaListViewController: UICollectionViewController, UICollectionViewDataS
 
     private func setupView() {
         navigationItem.title = state.endpoint.description
+        collectionView.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         collectionView.register(PosterCell.self, forCellWithReuseIdentifier: "PosterCell")
         collectionView.prefetchDataSource = self
     }
@@ -88,13 +89,17 @@ class MediaListViewController: UICollectionViewController, UICollectionViewDataS
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
-
+        cell.posterImageView.layer.cornerRadius = 0
         let item = media[indexPath.item]
         cell.titleLabel.text = item.title
         if let posterPath = item.posterPath, !posterPath.isEmpty {
+            cell.posterImageView.contentMode = .scaleAspectFill
             cell.posterImageView.kf.indicatorType = .activity
             let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
             cell.posterImageView.kf.setImage(with: imageURL)
+        } else {
+            cell.posterImageView.contentMode = .scaleAspectFit
+            cell.posterImageView.image = #imageLiteral(resourceName: "profile_na")
         }
         return cell
     }
