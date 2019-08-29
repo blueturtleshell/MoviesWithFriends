@@ -65,7 +65,7 @@ class FriendCell: UITableViewCell {
         containerView.addSubview(fullNameLabel)
 
         containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12))
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6))
         }
 
         profileImageView.snp.makeConstraints { make in

@@ -47,6 +47,8 @@ class WatchGroupOptionsViewController: UITableViewController {
         tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
 
+        tableView.backgroundView = BlurBackgroundView()
+        tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
     }
 
@@ -171,6 +173,6 @@ class WatchGroupOptionsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return 68
     }
 }

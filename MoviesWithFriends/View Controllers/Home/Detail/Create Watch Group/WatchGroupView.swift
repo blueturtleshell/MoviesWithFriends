@@ -265,9 +265,9 @@ class WatchGroupView: UIView {
 
         friendsTableView.snp.makeConstraints { make in
             make.top.equalTo(dividerView.snp.bottom).offset(12)
-            make.left.equalToSuperview().offset(12)
-            make.right.equalToSuperview().inset(12)
-            make.bottom.equalToSuperview().inset(12)
+            make.left.equalToSuperview().offset(6)
+            make.right.equalToSuperview().inset(6)
+            make.bottom.equalToSuperview().inset(6)
             make.height.equalTo(400)
         }
 

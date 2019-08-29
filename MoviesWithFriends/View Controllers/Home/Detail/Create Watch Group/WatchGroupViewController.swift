@@ -354,7 +354,7 @@ extension WatchGroupViewController: UITableViewDelegate, UITableViewDataSource {
         let friend = friends[indexPath.row]
 
         //TODO: change colors
-        cell.containerView.backgroundColor = invitedFriends.contains(friend) ? UIColor.green : .white
+        cell.containerView.backgroundColor = invitedFriends.contains(friend) ? UIColor(named: "offGreen") : .white
 
         cell.userNameLabel.text = friend.userName
         cell.fullNameLabel.text = friend.fullName
@@ -399,7 +399,7 @@ extension WatchGroupViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return 68
     }
 }
 

@@ -332,7 +332,7 @@ extension CustomWatchGroupViewController: UITableViewDelegate, UITableViewDataSo
         let friend = friends[indexPath.row]
 
         //TODO: change colors
-        cell.containerView.backgroundColor = invitedFriends.contains(friend) ? UIColor.green : .white
+        cell.containerView.backgroundColor = invitedFriends.contains(friend) ? UIColor(named: "offGreen") : .white
 
         cell.userNameLabel.text = friend.userName
         cell.fullNameLabel.text = friend.fullName
