@@ -11,10 +11,10 @@ import FirebaseAuth
 
 class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
 
-    lazy var whiteBar: UIView = {
+    lazy var bottomBar: UIView = {
         let bar = UIView()
         bar.frame = self.tabBar.frame
-        bar.backgroundColor = .white
+        bar.backgroundColor = .black
         return bar
     }()
 
@@ -40,7 +40,7 @@ class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
         if let _ = Auth.auth().currentUser {
             userManager.setup()
         } else {
-            configureTabBarItems(hide: false)
+            configureTabBarItems(hide: true)
             setupViewControllers()
         }
     }
@@ -48,15 +48,11 @@ class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
     private func setup() {
         delegate = self
 
-        view.addSubview(whiteBar)
-        view.bringSubviewToFront(whiteBar)
+        view.addSubview(bottomBar)
+        view.bringSubviewToFront(bottomBar)
 
         NotificationCenter.default.addObserver(self, selector: #selector(handleUserLogin), name: .userDidLogin, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleUserLogout), name: .userDidLogout, object: nil)
-    }
-
-    @objc private func handleNoUserFound(_ notification: Notification) {
-        setupViewControllers()
     }
 
     @objc private func handleUserLogin(_ notification: Notification) {
@@ -125,8 +121,8 @@ class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     private func configureTabBarItems(hide: Bool) {
         UIView.animate(withDuration: 0.3) {
-            self.whiteBar.alpha = hide ? 0 : 1
-            self.whiteBar.isHidden = hide
+            self.bottomBar.alpha = hide ? 0 : 1
+            self.bottomBar.isHidden = hide
         }
     }
 }

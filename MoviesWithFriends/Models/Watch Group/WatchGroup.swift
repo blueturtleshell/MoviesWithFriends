@@ -49,6 +49,6 @@ struct WatchGroup: Equatable, Comparable {
     }
 
     static func < (lhs: WatchGroup, rhs: WatchGroup) -> Bool {
-        return lhs.name.lowercased() < rhs.name.lowercased()
+        return lhs.name.lowercased().compare(rhs.name.lowercased(), locale: .current) == .orderedAscending
     }
 }

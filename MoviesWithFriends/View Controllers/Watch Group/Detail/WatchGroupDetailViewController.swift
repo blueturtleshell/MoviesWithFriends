@@ -67,6 +67,7 @@ class WatchGroupDetailViewController: UITableViewController {
         navigationItem.titleView = titleButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Users", style: .plain, target: self, action: #selector(userOptions))
 
+        tableView.backgroundView = BlurBackgroundView()
         tableView.contentInset = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 0)
         tableView.register(MessageCell.self, forCellReuseIdentifier: "MessageCell")
 
@@ -201,7 +202,7 @@ class WatchGroupDetailViewController: UITableViewController {
         }
     }
 
-    // TableView
+    // MARK: - TableView
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
@@ -217,7 +218,10 @@ class WatchGroupDetailViewController: UITableViewController {
         }) {
             cell.userNameLabel.text = user.userName
             if let profilePath = user.profileURL {
+                cell.profileImageView.kf.indicatorType = .activity
                 cell.profileImageView.kf.setImage(with: URL(string: profilePath))
+            } else {
+                cell.profileImageView.image = #imageLiteral(resourceName: "user")
             }
         } else {
             getUser(userID: message.senderID) { mwfUser in

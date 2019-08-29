@@ -17,7 +17,7 @@ class AddUserCell: UITableViewCell {
 
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "offWhite")
         view.layer.cornerRadius = 12
         return view
     }()

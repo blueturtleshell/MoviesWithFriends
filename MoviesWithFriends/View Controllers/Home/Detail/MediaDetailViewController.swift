@@ -29,7 +29,6 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     private var mediaInfo: MediaInfo? {
         didSet {
             if let mediaInfo = mediaInfo {
-                createWatchGroupBarButtonItem.isEnabled = true
                 configureView(for: mediaInfo)
                 configureWatchGroupCreationButton()
             }
@@ -53,7 +52,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     private lazy var createWatchGroupBarButtonItem: UIBarButtonItem = {
-        let createWatchGroup = UIBarButtonItem(title: "Create Group", style: .plain, target: self, action: #selector(createGroup))
+        let createWatchGroup = UIBarButtonItem(image: #imageLiteral(resourceName: "group"), style: .plain, target: self, action: #selector(createGroup))
         return createWatchGroup
     }()
 
@@ -75,19 +74,12 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchMedia()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        navigationItem.rightBarButtonItems?.last?.isEnabled = Auth.auth().currentUser != nil
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -111,7 +103,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         detailView.relatedTableView.tableFooterView = UIView()
 
         navigationItem.rightBarButtonItems = [createWatchGroupBarButtonItem, bookmarkBarButtonItem()]
-        createWatchGroupBarButtonItem.isEnabled = false
+        navigationItem.rightBarButtonItems?.forEach { $0.isEnabled = false }
 
         detailView.creditButton.addTarget(self, action: #selector(showCredits), for: .touchUpInside)
         detailView.videosButton.addTarget(self, action: #selector(showVideos), for: .touchUpInside)
@@ -121,13 +113,16 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
 
     private func configureWatchGroupCreationButton() {
         let buttonEnabled: Bool
-        if mediaHistory.count > 0 {
+        if mediaHistory.count == 0 && !allowGroupCreation {
+            buttonEnabled = false
+        } else if mediaHistory.count > 0 {
             buttonEnabled = true
         } else {
             buttonEnabled = allowGroupCreation
         }
 
-        createWatchGroupBarButtonItem.isEnabled = buttonEnabled
+        createWatchGroupBarButtonItem.isEnabled = buttonEnabled && (Auth.auth().currentUser != nil)
+        navigationItem.rightBarButtonItems = [createWatchGroupBarButtonItem, bookmarkBarButtonItem()]
     }
 
     @objc private func createGroup() {
@@ -209,12 +204,16 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
 
         if let backdropPath = mediaInfo.backdropPath {
             detailView.backdropImageView.kf.indicatorType = .activity
+            let activity = detailView.backdropImageView.kf.indicator?.view as! UIActivityIndicatorView
+            activity.color = UIColor(named: "offYellow")
             let url = mediaManager.getImageURL(for: ImageEndpoint.backdrop(path: backdropPath, size: .medium))
             detailView.backdropImageView.kf.setImage(with: url)
         }
-
+        
         if let posterPath = mediaInfo.posterPath, !posterPath.isEmpty {
             detailView.posterImageView.kf.indicatorType = .activity
+            let activity = detailView.posterImageView.kf.indicator?.view as! UIActivityIndicatorView
+            activity.color = UIColor(named: "offYellow")
             let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
             detailView.posterImageView.kf.setImage(with: imageURL)
 
@@ -225,6 +224,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
             detailView.posterImageView.layer.borderWidth = 0.5
             detailView.posterImageView.image = #imageLiteral(resourceName: "image_na")
         }
+        detailView.posterImageView.roundCornersForAspectFit(radius: 4)
 
         getRelatedMedia(id: mediaInfo.id)
     }
@@ -310,7 +310,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         cell.mediaManager = mediaManager
         let media = (indexPath.row == 0 ? similarMedia : recommendedMedia)
         cell.titleLabel.text = indexPath.row == 0 ? "Related" : "If you liked \(mediaInfo?.title ?? "")"
-        cell.titleLabel.textColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
+        cell.titleLabel.textColor = UIColor(named: "offYellow")
         cell.media = media
         cell.mediaCollectionView.reloadData()
         cell.mediaCollectionView.contentOffset = .zero

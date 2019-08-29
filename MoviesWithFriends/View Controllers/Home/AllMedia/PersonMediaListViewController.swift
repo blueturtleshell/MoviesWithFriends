@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class PersonMediaListViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     lazy var mediaSegmentedControl: UISegmentedControl = {
@@ -18,9 +17,25 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
         return segmentedControl
     }()
 
+    lazy var titleSortView: TitleHeaderSortByView = {
+        let titleHeader = TitleHeaderSortByView()
+        titleHeader.sortByButton.addTarget(self, action: #selector(promptToChangeSort), for: .touchUpInside)
+        titleHeader.isUserInteractionEnabled = true
+        return titleHeader
+    }()
+
     private let person: PersonDisplayable
     private let mediaManager: MediaManager
-    private var media = [MediaDisplayable]()
+    private var media = [Media]()
+
+    private var sortBy: SortBy = .popularityDescending {
+        didSet {
+            titleSortView.sortByButton.setTitle("Sort by: \(sortBy.display)", for: .normal)
+            titleSortView.sizeToFit()
+            media = sortMedia(media, by: sortBy)
+            self.collectionView.reloadData()
+        }
+    }
 
     init(person: PersonDisplayable, mediaManager: MediaManager) {
         self.person = person
@@ -37,20 +52,43 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationItem.title = person.name
-
         setupView()
-
         fetchMedia()
     }
 
     private func setupView() {
+        titleSortView.titleLabel.text = person.name
+        titleSortView.sortByButton.setTitle("Sort by: \(sortBy.display)", for: .normal)
+        titleSortView.sizeToFit()
+
+        navigationItem.titleView = titleSortView
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: mediaSegmentedControl)
-
-
         collectionView.register(PosterCell.self, forCellWithReuseIdentifier: "PosterCell")
         collectionView.register(NothingFoundCell.self, forCellWithReuseIdentifier: "NothingFoundCell")
+    }
+
+    @objc private func promptToChangeSort() {
+        let alertController = UIAlertController(title: "Sorty By", message: nil, preferredStyle: .actionSheet)
+
+        SortBy.allCases.forEach { sortMethod in
+            let action = UIAlertAction(title: sortMethod.display, style: .default, handler: { alertAction in
+                guard self.sortBy != sortMethod else {
+                    return
+                }
+                self.sortBy = sortMethod
+            })
+
+            alertController.addAction(action)
+
+            if self.sortBy == sortMethod {
+                alertController.preferredAction = action
+            }
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
     }
 
     private func fetchMedia() {
@@ -67,8 +105,7 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
 
                 var mediaSet = Set<Media>(credits.cast)
                 mediaSet = mediaSet.union(credits.crew)
-
-                self.media = Array(mediaSet).sorted { $0.title < $1.title }
+                self.media = sortMedia(Array(mediaSet), by: self.sortBy)
                 self.collectionView.reloadData()
             } catch {
                 print(error)
@@ -96,13 +133,16 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
         }
 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
+        cell.posterImageView.layer.cornerRadius = 0
 
         let mediaItem = media[indexPath.item]
-        cell.titleLabel.text = mediaItem.title
+        cell.titleLabel.attributedText = NSAttributedString(string: mediaItem.title, attributes: cell.labelAttributes)
 
         if let posterPath = mediaItem.posterPath, !posterPath.isEmpty {
             cell.posterImageView.contentMode = .scaleAspectFill
             cell.posterImageView.kf.indicatorType = .activity
+            let activity = cell.posterImageView.kf.indicator?.view as! UIActivityIndicatorView
+            activity.color = UIColor(named: "offYellow")
             let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
             cell.posterImageView.kf.setImage(with: imageURL)
         } else {

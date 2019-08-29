@@ -22,12 +22,14 @@ class MediaRowCell: UITableViewCell {
 
     let titleLabel: UILabel = {
         let label = UILabel()
+        label.textColor = UIColor(named: "offYellow")
         label.font = UIFont.preferredFont(forTextStyle: .title2)
         return label
     }()
 
     let seeAllButton: UIButton = {
         let button = UIButton(type: .system)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.setTitle("See all", for: .normal)
         return button
     }()
@@ -74,8 +76,8 @@ class MediaRowCell: UITableViewCell {
         addSubview(mediaCollectionView)
 
         titleLabel.snp.makeConstraints { make in
-            make.left.top.equalToSuperview().offset(6)
-            make.right.equalToSuperview().inset(6)
+            make.top.equalToSuperview().offset(6)
+            make.left.right.equalToSuperview().inset(6)
         }
 
         seeAllButton.snp.makeConstraints { make in
@@ -84,7 +86,7 @@ class MediaRowCell: UITableViewCell {
         }
 
         mediaCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom)
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.left.right.bottom.equalToSuperview()
         }
     }
@@ -109,9 +111,9 @@ extension MediaRowCell: UICollectionViewDelegate, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if media.isEmpty {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyCell", for: indexPath) as! NothingFoundCell
-            if let endpoint = endpoint {
-                cell.textLabel.textColor = .black
-                cell.textLabel.text = "There was a problem fetching \(endpoint.description).\nPlease try again later"
+            if let _ = endpoint {
+                cell.textLabel.textColor = UIColor(named: "offWhite")
+                cell.textLabel.text = "Fetching"
             }
             return cell
         } else {
@@ -121,9 +123,11 @@ extension MediaRowCell: UICollectionViewDelegate, UICollectionViewDataSource, UI
             cell.addShadow(cornerRadius: 4, maskedCorners: [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner], color: .black, offset: CGSize(width: 2, height: 2), opacity: 0.25, shadowRadius: 3)
 
             let mediaItem = media[indexPath.item]
-            cell.titleLabel.text = mediaItem.title
+            cell.titleLabel.attributedText = NSAttributedString(string: mediaItem.title, attributes: cell.labelAttributes)
             if let posterPath = mediaItem.posterPath, !posterPath.isEmpty {
                 cell.posterImageView.kf.indicatorType = .activity
+                let activity = cell.posterImageView.kf.indicator?.view as! UIActivityIndicatorView
+                activity.color = UIColor(named: "offYellow")
                 let imageURL = mediaManager?.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
                 cell.posterImageView.kf.setImage(with: imageURL)
             }
@@ -134,9 +138,9 @@ extension MediaRowCell: UICollectionViewDelegate, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         if media.isEmpty {
-            return CGSize(width: collectionView.bounds.width, height: 180)
+            return CGSize(width: collectionView.bounds.width, height: 190)
         }
-        return CGSize(width: 135, height: 180)
+        return CGSize(width: 135, height: 190)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -19,7 +19,22 @@ struct MovieDetail: MediaInfo {
 
     let overview: String?
 
-    let releaseDate: String?
+    var releaseDate: String? {
+        let regionReleaseDates = regionReleaseDateInfo.results.filter { $0.regionCode == "US" }.first
+        var releaseDate: String?
+        if let regionReleaseDates = regionReleaseDates {
+            for test in regionReleaseDates.releaseDates {
+                let attempt = test.releaseDate
+                if !attempt.isEmpty && (test.type == 3 || test.type == 6) { // 3: theater | 6: tv
+                    releaseDate = attempt.components(separatedBy: "T").first
+                    break
+                }
+            }
+        }
+        return releaseDate ?? firstReleaseDate
+    }
+
+    private var firstReleaseDate: String?
     let regionReleaseDateInfo: RegionReleaseDates
 
     let runtime: Int?
@@ -41,6 +56,8 @@ struct MovieDetail: MediaInfo {
 
     let reviewScore: Double?
 
+    let popularity: Double?
+
     let genres: [Genre]
 
     let credits: Credits
@@ -48,10 +65,10 @@ struct MovieDetail: MediaInfo {
     let videos: Videos
 
     enum CodingKeys: String, CodingKey {
-        case id, title, overview, runtime, genres, videos, credits
+        case id, title, overview, runtime, genres, videos, credits, popularity
         case posterPath = "poster_path"
         case backdropPath = "backdrop_path"
-        case releaseDate = "release_date"
+        case firstReleaseDate = "release_date"
         case regionReleaseDateInfo = "release_dates"
         case reviewScore = "vote_average"
     }

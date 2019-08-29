@@ -51,7 +51,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "search"), style: .plain, target: self, action: #selector(handleSearch))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: mediaSegmentedControl)
 
-        homeView.tableView.rowHeight = 225
+        homeView.tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 24, right: 0)
+        homeView.tableView.rowHeight = 235
         homeView.tableView.delegate = self
         homeView.tableView.dataSource = self
         homeView.tableView.register(MediaRowCell.self, forCellReuseIdentifier: "MediaCell")

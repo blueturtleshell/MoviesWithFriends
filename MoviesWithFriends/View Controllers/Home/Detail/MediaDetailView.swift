@@ -236,7 +236,7 @@ class MediaDetailView: UIView {
         }
 
         movieInfoStackView.snp.makeConstraints { make in
-            make.left.equalTo(posterImageView.snp.right).offset(12)
+            make.left.equalTo(posterImageView.snp.right).offset(18)
             make.right.equalTo(backdropImageView).inset(12)
             make.top.equalTo(posterImageView).offset(12)
         }
@@ -248,8 +248,8 @@ class MediaDetailView: UIView {
 
         overviewLabel.snp.makeConstraints { make in
             make.top.equalTo(posterImageView.snp.bottom).offset(24)
-            make.left.equalToSuperview().offset(12)
-            make.right.equalToSuperview().inset(12)
+            make.left.equalToSuperview().offset(20)
+            make.right.equalToSuperview().inset(20)
         }
 
         relatedTableView.snp.makeConstraints { make in
@@ -257,7 +257,7 @@ class MediaDetailView: UIView {
             make.left.equalToSuperview().offset(12)
             make.right.equalToSuperview().inset(12)
             make.bottom.equalToSuperview().inset(12)
-            make.height.equalTo(490)
+            make.height.equalTo(480)
         }
     }
 }

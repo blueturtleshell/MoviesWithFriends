@@ -14,4 +14,7 @@ protocol MediaDisplayable: Decodable {
     var posterPath: String? { get }
     var backdropPath: String? { get }
     var overview: String? { get }
+    var releaseDate: String? { get }
+    var reviewScore: Double? { get }
+    var popularity: Double? { get }
 }

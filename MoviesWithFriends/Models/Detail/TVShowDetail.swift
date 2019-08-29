@@ -22,6 +22,8 @@ struct TVShowDetail: MediaInfo {
 
     var releaseDate: String?
 
+    var popularity: Double?
+
     var rating: String? {
         let regionRating = contentRatings.results.filter { $0.regionCode == "US" }.first
         var certification = ""
@@ -50,7 +52,7 @@ struct TVShowDetail: MediaInfo {
     var videos: Videos
 
     enum CodingKeys: String, CodingKey {
-        case id, overview, credits, videos, genres
+        case id, overview, credits, videos, genres, popularity
         case title = "name"
         case posterPath = "poster_path"
         case backdropPath = "backdrop_path"

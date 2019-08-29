@@ -23,6 +23,12 @@ class UserViewController: UIViewController {
     private var bookmarkedTV = [BookmarkMedia]()
     private var bookmarkListener: ListenerRegistration?
 
+    private var isBookmarkPublic = true {
+        didSet {
+            userView.tableView.reloadData()
+        }
+    }
+
 
     init(user: MWFUser?) {
         self.user = user
@@ -43,7 +49,6 @@ class UserViewController: UIViewController {
 
         setupView()
         configureForUser()
-        fetchBookmarks()
     }
 
     private func setupView() {
@@ -52,10 +57,12 @@ class UserViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
 
         userView.editProfileButton.addTarget(self, action: #selector(handleLogoutButtonPressed), for: .touchUpInside)
+        userView.settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
         userView.bookmarkSegmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
 
         userView.tableView.delegate = self
         userView.tableView.dataSource = self
+        userView.tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         userView.tableView.register(BookmarkCell.self, forCellReuseIdentifier: "BookmarkCell")
         userView.tableView.contentInset = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 0)
         userView.tableView.tableFooterView = UIView()
@@ -68,6 +75,13 @@ class UserViewController: UIViewController {
 
     @objc private func handleLogoutButtonPressed() {
         NotificationCenter.default.post(name: .userDidLogout, object: nil)
+    }
+
+    @objc private func settingsButtonPressed() {
+        guard let user = user else { return }
+        
+        let settingsViewController = SettingsViewController(user: user)
+        navigationController?.pushViewController(settingsViewController, animated: true)
     }
 
     @objc private func segmentedControlChanged(_ segment: UISegmentedControl) {
@@ -83,6 +97,23 @@ class UserViewController: UIViewController {
             userView.profileImageView.kf.setImage(with: URL(string: profileURL))
         } else {
             userView.profileImageView.image = #imageLiteral(resourceName: "user")
+        }
+
+        if let currentUserID = Auth.auth().currentUser?.uid, currentUserID != user.id {
+            userView.settingsButton.isHidden = true
+            userView.editProfileButton.isHidden = true
+
+            db.collection("user_settings").document(user.id).getDocument { settingsDocument, error in
+                if let error = error {
+                    print(error)
+                } else {
+                    if let settingsDocument = settingsDocument {
+                        self.isBookmarkPublic = settingsDocument.data()?["bookmark_public"] as? Bool ?? false
+                    }
+                }
+            }
+        } else {
+            fetchBookmarks()
         }
     }
 
@@ -102,8 +133,10 @@ class UserViewController: UIViewController {
                             switch bookmark.mediaType {
                             case .movie:
                                 self.bookmarkedMovies.append(bookmark)
+                                self.bookmarkedMovies.sort(by: <)
                             case .tv:
                                 self.bookmarkedTV.append(bookmark)
+                                self.bookmarkedTV.sort(by: <)
                             }
                             self.userView.tableView.reloadData()
                         case .removed:
@@ -130,10 +163,19 @@ class UserViewController: UIViewController {
 
 extension UserViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !isBookmarkPublic {
+            return 1
+        }
         return userView.bookmarkSegmentedControl.selectedSegmentIndex == 0 ? bookmarkedMovies.count : bookmarkedTV.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if !isBookmarkPublic {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell
+            cell.emptyTextLabel.text = "Private"
+            return cell
+        }
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkCell", for: indexPath) as! BookmarkCell
 
         let media = userView.bookmarkSegmentedControl.selectedSegmentIndex == 0 ?
@@ -150,6 +192,8 @@ extension UserViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard isBookmarkPublic else { return }
+
         let media = userView.bookmarkSegmentedControl.selectedSegmentIndex == 0 ?
             bookmarkedMovies[indexPath.row] : bookmarkedTV[indexPath.row]
         let mediaDetailViewController = MediaDetailViewController(mediaType: media.mediaType, mediaID: media.id, mediaManager: mediaManager)

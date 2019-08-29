@@ -100,7 +100,7 @@ class SignUpViewController: UIViewController {
             } else if let authResult = initialAuthResult {
                 let userID = authResult.user.uid
 
-                if let profileImage = self.profileImage, let imageData = profileImage.pngData() {
+                if let profileImage = self.profileImage, let imageData = profileImage.jpegData(compressionQuality: 0.4) {
                     uploadImage(imageData: imageData, imageName: userID, storageFolder: "profile_images") { uploadResult in
                         var profileImageURL: URL? = nil
                         do {

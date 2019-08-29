@@ -9,24 +9,6 @@
 import UIKit
 import Firebase
 
-enum WatchGroupState {
-    case empty
-    case editing
-    case validWatchGroup(group: WatchGroup)
-    case groupCreated
-    case noFriendsSelected
-    case error(message: String)
-
-    var message: String? {
-        switch self {
-        case .empty, .editing, .validWatchGroup: return nil
-        case .groupCreated: return "Group sent"
-        case .noFriendsSelected: return "No friends selected. Press Done again to confirm."
-        case .error(let message): return message
-        }
-    }
-}
-
 class WatchGroupViewController: UIViewController {
 
     private let watchGroupView: WatchGroupView = {
@@ -48,6 +30,12 @@ class WatchGroupViewController: UIViewController {
 
     private var friends = [MWFUser]()
     private var invitedFriends = Set<MWFUser>()
+    private var maxFriends = 10 {
+        didSet {
+            updateFriendCountLabel()
+        }
+    }
+    private let MAXFRIENDCAP = 10
 
     private var state: WatchGroupState = .empty {
         didSet {
@@ -108,19 +96,43 @@ class WatchGroupViewController: UIViewController {
         }
     }
 
+    private func configureView() {
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+
+        watchGroupView.mediaTitleLabel.text = mediaInfo.title
+
+        if let posterPath = mediaInfo.posterPath {
+            let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
+            watchGroupView.posterImageView.kf.setImage(with: imageURL)
+        }
+
+        if let watchGroupToEdit = watchGroupToEdit {
+            watchGroupView.groupNameTextField.text = watchGroupToEdit.name
+            let dateTitle = dateFormatter.string(from: Date(timeIntervalSince1970: watchGroupToEdit.dateInSeconds))
+            watchGroupView.dateButton.setTitle(dateTitle, for: .normal)
+            getUserFriendsAndConfigureForEditing(userID: userID, watchGroupID: watchGroupToEdit.id)
+        } else {
+            getUserFriends(userID: userID)
+        }
+    }
+
     @objc private func inviteAllButtonPressed() {
         invitedFriends = Set(friends)
-        getFriendCountLabel()
+        updateFriendCountLabel()
         watchGroupView.friendsTableView.reloadData()
     }
 
     @objc private func clearAllButtonPressed() {
         invitedFriends.removeAll()
-        getFriendCountLabel()
+        updateFriendCountLabel()
         watchGroupView.friendsTableView.reloadData()
     }
 
     @objc private func donePressed() {
+        guard invitedFriends.count <= maxFriends else {
+            state = .error(message: "Over invited user limit")
+            return
+        }
 
         if let watchGroup = watchGroupToEdit {
 
@@ -252,26 +264,6 @@ class WatchGroupViewController: UIViewController {
         }
     }
 
-    private func configureView() {
-        guard let userID = Auth.auth().currentUser?.uid else { return }
-
-        watchGroupView.movieNameLabel.text = mediaInfo.title
-
-        if let posterPath = mediaInfo.posterPath {
-            let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
-            watchGroupView.posterImageView.kf.setImage(with: imageURL)
-        }
-
-        if let watchGroupToEdit = watchGroupToEdit {
-            watchGroupView.groupNameTextField.text = watchGroupToEdit.name
-            let dateTitle = dateFormatter.string(from: Date(timeIntervalSince1970: watchGroupToEdit.dateInSeconds))
-            watchGroupView.dateButton.setTitle(dateTitle, for: .normal)
-            getUserFriendsAndConfigureForEditing(userID: userID, watchGroupID: watchGroupToEdit.id)
-        } else {
-            getUserFriends(userID: userID)
-        }
-    }
-
     private func getUserFriends(userID: String) {
         db.collection("relationships").document(userID).collection("friends").getDocuments { snapshot, error in
             if let error = error {
@@ -285,7 +277,7 @@ class WatchGroupViewController: UIViewController {
                                     self.friends.append(user)
                                     self.friends.sort()
                                     self.watchGroupView.friendsTableView.reloadData()
-                                    self.getFriendCountLabel()
+                                    self.updateFriendCountLabel()
                                 }
                             })
                         }
@@ -323,13 +315,19 @@ class WatchGroupViewController: UIViewController {
                                             var usersIDsValidToInvite = friendIDs.filter { !userIDsAlreadyInGroup.contains($0) }
                                             usersIDsValidToInvite = usersIDsValidToInvite.filter { !usersAlreadyInvited.contains($0) }
 
+                                            // subtract users already in group and users invited
+                                            self.maxFriends = (self.MAXFRIENDCAP - usersAlreadyInvited.count) - userIDsAlreadyInGroup.count
+                                            if self.maxFriends < 0 {
+                                                self.maxFriends = 0
+                                            }
+
                                             usersIDsValidToInvite.forEach {
                                                 getUser(userID: $0, completion: { user in
                                                     if let user = user {
                                                         self.friends.append(user)
                                                         self.friends.sort()
                                                         self.watchGroupView.friendsTableView.reloadData()
-                                                        self.getFriendCountLabel()
+                                                        self.updateFriendCountLabel()
                                                         self.watchGroupView.friendsTableView.reloadData()
                                                     }
                                                 })
@@ -355,6 +353,7 @@ extension WatchGroupViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! FriendCell
         let friend = friends[indexPath.row]
 
+        //TODO: change colors
         cell.containerView.backgroundColor = invitedFriends.contains(friend) ? UIColor.green : .white
 
         cell.userNameLabel.text = friend.userName
@@ -373,22 +372,30 @@ extension WatchGroupViewController: UITableViewDelegate, UITableViewDataSource {
         if invitedFriends.contains(friend) {
             invitedFriends.remove(friend)
         } else {
-            invitedFriends.insert(friend)
+            if invitedFriends.count < maxFriends {
+                invitedFriends.insert(friend)
+            } else {
+                return // cannot invite more friends
+            }
         }
 
         if let _ = watchGroupToEdit {
+            // button disabled at start for editing, if change detected enable done button
             navigationItem.rightBarButtonItem?.isEnabled = (invitedFriends.count != 0)
         }
 
-        getFriendCountLabel()
+        updateFriendCountLabel()
         tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 
-    private func getFriendCountLabel() {
-        let invitedFriendCount = invitedFriends.count
-        let totalFriendsCount = friends.count
+    private func updateFriendCountLabel() {
+        watchGroupView.friendCountLabel.text = "\(invitedFriends.count) / \(maxFriends)"
 
-        watchGroupView.friendCountLabel.text = "\(invitedFriendCount) / \(totalFriendsCount)"
+        if invitedFriends.count == maxFriends {
+            watchGroupView.friendCountLabel.textColor = .orange
+        } else {
+            watchGroupView.friendCountLabel.textColor = .white
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -396,11 +403,12 @@ extension WatchGroupViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension WatchGroupViewController: WatchGroupViewDelegate {
+extension WatchGroupViewController: WatchGroupDatePickerToggleDelegate {
 
     func toggleDatePicker(datePicker: UIDatePicker, isVisible: Bool) {
         watchDate = datePicker.date
         watchGroupView.dateButton.setTitle(dateFormatter.string(from: watchDate!), for: .normal)
+        watchGroupView.dateButton.sizeToFit()
     }
 }
 

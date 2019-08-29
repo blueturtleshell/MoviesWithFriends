@@ -96,6 +96,7 @@ class MediaManager {
                         completion(.failure(error))
                     }
                 } else {
+                    print(request)
                     completion(.failure(MediaManagerError.failedRequest))
                 }
             }

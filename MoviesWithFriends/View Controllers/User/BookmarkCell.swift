@@ -11,7 +11,7 @@ import UIKit
 class BookmarkCell: UITableViewCell {
         let containerView: UIView = {
             let view = UIView()
-            view.backgroundColor = .white
+            view.backgroundColor = UIColor(named: "offWhite")
             view.layer.cornerRadius = 4
             return view
         }()
@@ -58,7 +58,7 @@ class BookmarkCell: UITableViewCell {
 
             posterImageView.snp.makeConstraints { make in
                 make.size.equalTo(CGSize(width: 25, height: 40))
-                make.left.equalToSuperview().offset(12)
+                make.left.equalToSuperview().offset(6)
                 make.centerY.equalToSuperview()
             }
 

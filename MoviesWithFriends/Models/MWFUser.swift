@@ -32,7 +32,7 @@ struct MWFUser: Equatable, Comparable {
     }
 
     static func < (lhs: MWFUser, rhs: MWFUser) -> Bool {
-        return lhs.userName.lowercased() < rhs.userName.lowercased()
+        return lhs.userName.lowercased().compare(rhs.userName.lowercased(), locale: .current) == .orderedAscending
     }
 }
 

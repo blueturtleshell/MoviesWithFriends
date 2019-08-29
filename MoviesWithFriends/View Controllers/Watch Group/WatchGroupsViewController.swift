@@ -60,6 +60,7 @@ class WatchGroupsViewController: UIViewController {
         navigationItem.backBarButtonItem = UIBarButtonItem()
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "ticket"), style: .plain, target: self, action: #selector(createCustomWatchGroup))
 
+        watchGroupsView.tableView.backgroundView = BlurBackgroundView()
         watchGroupsView.tableView.dataSource = self
         watchGroupsView.tableView.delegate = self
         watchGroupsView.tableView.tableFooterView = UIView()
@@ -71,7 +72,8 @@ class WatchGroupsViewController: UIViewController {
     }
 
     @objc private func createCustomWatchGroup() {
-
+        let customWatchGroupViewController = CustomWatchGroupViewController()
+        navigationController?.pushViewController(customWatchGroupViewController, animated: true)
     }
 
     @objc private func cleanUpFirestoreListeners(_ notification: Notification) {
@@ -172,15 +174,24 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "WatchGroupCell", for: indexPath) as! WatchGroupCell
             cell.delegate = self
+
+            cell.addShadow(cornerRadius: 4, maskedCorners: [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner], color: .black, offset: CGSize(width: 2, height: 2), opacity: 0.25, shadowRadius: 3)
+
             let group = joinedWatchGroups[indexPath.row]
 
             cell.groupNameLabel.text = group.name
-            cell.movieNameLabel.text = group.mediaTitle
+            cell.mediaTitleLabel.text = group.mediaTitle
             cell.dateLabel.text = group.displayDate
 
-            if let posterImagePath = group.posterPath {
+            if let posterImagePath = group.posterPath, !posterImagePath.isEmpty {
                 let posterURL = mediaManager.getImageURL(for: .poster(path: posterImagePath, size: .medium))
                 cell.posterImageView.kf.setImage(with: posterURL)
+            } else {
+                if group.mediaID < 0 {
+                    cell.posterImageView.image = #imageLiteral(resourceName: "customPoster")
+                } else {
+                    cell.posterImageView.image = #imageLiteral(resourceName: "image_na")
+                }
             }
 
             return cell
@@ -188,6 +199,9 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "WatchGroupInviteCell", for: indexPath) as! WatchGroupInviteCell
             cell.delegate = self
+
+            cell.addShadow(cornerRadius: 4, maskedCorners: [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner], color: .black, offset: CGSize(width: 2, height: 2), opacity: 0.25, shadowRadius: 3)
+
             let pendingGroup = pendingWatchGroups[indexPath.row]
 
             cell.groupNameLabel.text = pendingGroup.name
@@ -199,9 +213,15 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
                 }
             }
 
-            if let posterImagePath = pendingGroup.posterPath {
+            if let posterImagePath = pendingGroup.posterPath, !posterImagePath.isEmpty {
                 let posterURL = mediaManager.getImageURL(for: .poster(path: posterImagePath, size: .medium))
                 cell.posterImageView.kf.setImage(with: posterURL)
+            } else {
+                if pendingGroup.mediaID < 0 {
+                    cell.posterImageView.image = #imageLiteral(resourceName: "customPoster")
+                } else {
+                    cell.posterImageView.image = #imageLiteral(resourceName: "image_na")
+                }
             }
 
             return cell
@@ -209,10 +229,13 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 0 else { return }
-
-        let groupDetailViewController = WatchGroupDetailViewController(watchGroup: joinedWatchGroups[indexPath.row])
-        navigationController?.pushViewController(groupDetailViewController, animated: true)
+        if indexPath.section == 0 {
+            let groupDetailViewController = WatchGroupDetailViewController(watchGroup: joinedWatchGroups[indexPath.row])
+            navigationController?.pushViewController(groupDetailViewController, animated: true)
+        } else if indexPath.section == 1 {
+            let userOptionsViewController = WatchGroupOptionsViewController(watchGroup: pendingWatchGroups[indexPath.row])
+            navigationController?.pushViewController(userOptionsViewController, animated: true)
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -246,7 +269,11 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
 extension WatchGroupsViewController: WatchGroupCellDelegate {
     func infoButtonPressed(_ cell: WatchGroupCell) {
         guard let indexPath = watchGroupsView.tableView.indexPath(for: cell) else { return }
-        displayMediaDetails(for: joinedWatchGroups[indexPath.row])
+        let watchGroup = joinedWatchGroups[indexPath.row]
+
+        if watchGroup.mediaID > 0 {
+            displayMediaDetails(for: joinedWatchGroups[indexPath.row])
+        }
     }
 }
 
@@ -254,13 +281,16 @@ extension WatchGroupsViewController: WatchGroupInviteCellDelegate {
 
     func infoButtonPressed(_ cell: WatchGroupInviteCell) {
         guard let indexPath = watchGroupsView.tableView.indexPath(for: cell) else { return }
+        let watchGroup = pendingWatchGroups[indexPath.row]
 
-        displayMediaDetails(for: pendingWatchGroups[indexPath.row])
+        if watchGroup.mediaID > 0 {
+            displayMediaDetails(for: pendingWatchGroups[indexPath.row])
+        }
     }
 
     func acceptPressed(_ cell: WatchGroupInviteCell) {
         guard let indexPath = watchGroupsView.tableView.indexPath(for: cell),
-        let userID = Auth.auth().currentUser?.uid else { return }
+            let userID = Auth.auth().currentUser?.uid else { return }
 
         let pendingWatchGroup = pendingWatchGroups[indexPath.row]
 

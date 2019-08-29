@@ -10,8 +10,15 @@ import UIKit
 
 class SearchView: UIView {
 
+    let blurBackgroundView: BlurBackgroundView = {
+        return BlurBackgroundView()
+    }()
+
     let segmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["Movie", "TV Show", "Person"])
+        segmentedControl.tintColor = UIColor(named: "offYellow")
+        let titleTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)]
+        segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .normal)
         return segmentedControl
     }()
 
@@ -35,9 +42,13 @@ class SearchView: UIView {
     }
 
     private func setupView() {
-        backgroundColor = .white
-        addSubview(segmentedControl)
-        addSubview(collectionView)
+        addSubview(blurBackgroundView)
+        blurBackgroundView.addSubview(segmentedControl)
+        blurBackgroundView.addSubview(collectionView)
+
+        blurBackgroundView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
 
         segmentedControl.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).offset(12)

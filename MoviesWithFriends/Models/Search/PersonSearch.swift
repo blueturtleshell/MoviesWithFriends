@@ -19,7 +19,7 @@ struct PersonSearch: Decodable {
     }
 }
 
-struct Person: PersonDisplayable {
+struct Person: PersonDisplayable, Comparable {
     var id: Int
     var name: String
     var profilePath: String?
@@ -27,5 +27,9 @@ struct Person: PersonDisplayable {
     enum CodingKeys: String, CodingKey {
         case id, name
         case profilePath = "profile_path"
+    }
+
+    static func < (lhs: Person, rhs: Person) -> Bool {
+        return lhs.name.localizedCompare(rhs.name) == .orderedAscending
     }
 }

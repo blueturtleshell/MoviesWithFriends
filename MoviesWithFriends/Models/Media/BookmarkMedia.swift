@@ -8,7 +8,8 @@
 
 import Foundation
 
-struct BookmarkMedia: Hashable {
+struct BookmarkMedia: Hashable, Comparable {
+
     let id: Int
     let title: String
     let posterPath: String?
@@ -23,6 +24,10 @@ struct BookmarkMedia: Hashable {
         self.title = title
         self.posterPath = dict["poster_path"] as? String
         self.mediaType = type == 0 ? .movie : .tv
+    }
+
+    static func < (lhs: BookmarkMedia, rhs: BookmarkMedia) -> Bool {
+        return lhs.title.localizedCompare(rhs.title) == .orderedAscending
     }
 
     func hash(into hasher: inout Hasher) {

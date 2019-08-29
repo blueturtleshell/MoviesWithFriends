@@ -36,8 +36,8 @@ class HUDView: UIView {
     }
 
     override func draw(_ rect: CGRect) {
-        let boxWidth: CGFloat = 120
-        let boxHeight: CGFloat = 120
+        let boxWidth: CGFloat = 140
+        let boxHeight: CGFloat = 140
 
         let boxRect = CGRect(
             x: round((bounds.size.width - boxWidth) / 2),
@@ -59,6 +59,7 @@ class HUDView: UIView {
             }
         case .activityIndicator:
             let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+            activityIndicator.color = UIColor(named: "offYellow")
             addSubview(activityIndicator)
             activityIndicator.center = CGPoint(x: center.x, y: center.y - (activityIndicator.frame.height / 2))
             activityIndicator.startAnimating()

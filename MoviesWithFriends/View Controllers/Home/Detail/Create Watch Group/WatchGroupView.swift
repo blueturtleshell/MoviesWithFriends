@@ -8,16 +8,14 @@
 
 import UIKit
 
-protocol WatchGroupViewDelegate: class {
+protocol WatchGroupDatePickerToggleDelegate: AnyObject {
     func toggleDatePicker(datePicker: UIDatePicker, isVisible: Bool)
 }
 
 class WatchGroupView: UIView {
 
-    let container: UIView = {
-        let view = UIView()
-        view.backgroundColor = .gray
-        return view
+    let container: BlurBackgroundView = {
+        return BlurBackgroundView()
     }()
 
     let scrollView: UIScrollView = {
@@ -45,7 +43,7 @@ class WatchGroupView: UIView {
         return label
     }()
 
-    let movieNameLabel: UILabel = {
+    let mediaTitleLabel: UILabel = {
         let label = UILabel()
         label.text = " "
         label.numberOfLines = 0
@@ -79,7 +77,7 @@ class WatchGroupView: UIView {
     let dateButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Set Date", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
         return button
@@ -109,7 +107,7 @@ class WatchGroupView: UIView {
     let inviteAllButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Invite All", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
         return button
@@ -118,7 +116,7 @@ class WatchGroupView: UIView {
     let clearSelectionButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Clear", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
         return button
@@ -140,7 +138,7 @@ class WatchGroupView: UIView {
     }()
     
 
-    weak var delegate: WatchGroupViewDelegate?
+    weak var delegate: WatchGroupDatePickerToggleDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -158,7 +156,7 @@ class WatchGroupView: UIView {
         scrollView.addSubview(contentView)
         contentView.addSubview(messageLabelContainer)
         messageLabelContainer.addSubview(messageLabel)
-        contentView.addSubview(movieNameLabel)
+        contentView.addSubview(mediaTitleLabel)
         contentView.addSubview(posterImageView)
         contentView.addSubview(groupNameTextField)
         contentView.addSubview(dateLabel)
@@ -186,7 +184,7 @@ class WatchGroupView: UIView {
         }
 
         messageLabelContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(24)
+            make.top.equalToSuperview().offset(12)
             make.left.right.equalToSuperview()
             make.height.equalTo(44)
         }
@@ -201,7 +199,7 @@ class WatchGroupView: UIView {
             make.size.equalTo(CGSize(width: 150, height: 200))
         }
 
-        movieNameLabel.snp.makeConstraints { make in
+        mediaTitleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(posterImageView).inset(3)
             make.left.equalTo(posterImageView.snp.right).offset(12)
             make.right.lessThanOrEqualToSuperview().inset(12)
@@ -223,6 +221,8 @@ class WatchGroupView: UIView {
             make.firstBaseline.equalTo(dateLabel)
             make.right.equalToSuperview().inset(12)
         }
+
+        dateButton.sizeToFit()
 
         datePicker.snp.makeConstraints { make in
             make.top.equalTo(dateLabel).offset(24)
@@ -268,7 +268,7 @@ class WatchGroupView: UIView {
             make.left.equalToSuperview().offset(12)
             make.right.equalToSuperview().inset(12)
             make.bottom.equalToSuperview().inset(12)
-            make.height.equalTo(800)
+            make.height.equalTo(400)
         }
 
         dateButton.addTarget(self, action: #selector(toggleDatePicker), for: .touchUpInside)

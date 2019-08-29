@@ -35,6 +35,14 @@
 		9990EEAA22F238BB006C0075 /* WatchGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990EEA922F238BB006C0075 /* WatchGroupCell.swift */; };
 		9990EEAE22F372D0006C0075 /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990EEAD22F372D0006C0075 /* HUDView.swift */; };
 		9990EEB122F38785006C0075 /* FirestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990EEB022F38785006C0075 /* FirestoreHelper.swift */; };
+		99A904EB23133B4B0054EE08 /* CustomWatchGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A904EA23133B4B0054EE08 /* CustomWatchGroupView.swift */; };
+		99A904ED231351C90054EE08 /* CustomWatchGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A904EC231351C90054EE08 /* CustomWatchGroupViewController.swift */; };
+		99A904EF231352CD0054EE08 /* WatchGroupState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A904EE231352CD0054EE08 /* WatchGroupState.swift */; };
+		99A904F323148B080054EE08 /* FetchingCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A904F223148B080054EE08 /* FetchingCVCell.swift */; };
+		99A904F62315D63B0054EE08 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A904F52315D63B0054EE08 /* SettingsViewController.swift */; };
+		99A904F82315D6480054EE08 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A904F72315D6480054EE08 /* SettingsView.swift */; };
+		99A904FB231716240054EE08 /* RegionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A904FA231716240054EE08 /* RegionViewController.swift */; };
+		99A904FD231757CA0054EE08 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A904FC231757CA0054EE08 /* UIImageView.swift */; };
 		99BA6F1222D6BBCD0002D5FF /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */; };
 		99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */; };
 		99BA6F1822D7A1C30002D5FF /* MediaDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1722D7A1C30002D5FF /* MediaDisplayable.swift */; };
@@ -91,8 +99,12 @@
 		99D1E2F5230C64D2004780F7 /* WatchGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2F4230C64D1004780F7 /* WatchGroupsView.swift */; };
 		99D1E2F7230C6685004780F7 /* MediaDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2F6230C6685004780F7 /* MediaDetailViewController.swift */; };
 		99D1E2F9230CEFEC004780F7 /* InviteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2F8230CEFEC004780F7 /* InviteHeaderView.swift */; };
-		99D1E2FB230DD032004780F7 /* CreditBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2FA230DD032004780F7 /* CreditBackgroundView.swift */; };
-		99DF3B9122EA3D04007C9660 /* FetchingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9022EA3D04007C9660 /* FetchingCell.swift */; };
+		99D1E2FB230DD032004780F7 /* BlurBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2FA230DD032004780F7 /* BlurBackgroundView.swift */; };
+		99D1E2FF230F3A59004780F7 /* TitleHeaderSortByView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E2FE230F3A59004780F7 /* TitleHeaderSortByView.swift */; };
+		99D1E30323107041004780F7 /* SortBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E30223107041004780F7 /* SortBy.swift */; };
+		99D1E3052310787D004780F7 /* MediaListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E3042310787D004780F7 /* MediaListState.swift */; };
+		99D1E30723107D3B004780F7 /* MediaHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1E30623107D3B004780F7 /* MediaHelper.swift */; };
+		99DF3B9122EA3D04007C9660 /* FetchingTBCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9022EA3D04007C9660 /* FetchingTBCell.swift */; };
 		99DF3B9822EA8529007C9660 /* WatchGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */; };
 		99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */; };
 		99EC9BA722E806C50008790C /* PendingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC9BA622E806C50008790C /* PendingCell.swift */; };
@@ -133,6 +145,14 @@
 		9990EEA922F238BB006C0075 /* WatchGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupCell.swift; sourceTree = "<group>"; };
 		9990EEAD22F372D0006C0075 /* HUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDView.swift; sourceTree = "<group>"; };
 		9990EEB022F38785006C0075 /* FirestoreHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreHelper.swift; sourceTree = "<group>"; };
+		99A904EA23133B4B0054EE08 /* CustomWatchGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWatchGroupView.swift; sourceTree = "<group>"; };
+		99A904EC231351C90054EE08 /* CustomWatchGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWatchGroupViewController.swift; sourceTree = "<group>"; };
+		99A904EE231352CD0054EE08 /* WatchGroupState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupState.swift; sourceTree = "<group>"; };
+		99A904F223148B080054EE08 /* FetchingCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchingCVCell.swift; sourceTree = "<group>"; };
+		99A904F52315D63B0054EE08 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		99A904F72315D6480054EE08 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		99A904FA231716240054EE08 /* RegionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionViewController.swift; sourceTree = "<group>"; };
+		99A904FC231757CA0054EE08 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
 		99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NothingFoundCell.swift; sourceTree = "<group>"; };
 		99BA6F1722D7A1C30002D5FF /* MediaDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDisplayable.swift; sourceTree = "<group>"; };
@@ -189,8 +209,12 @@
 		99D1E2F4230C64D1004780F7 /* WatchGroupsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchGroupsView.swift; sourceTree = "<group>"; };
 		99D1E2F6230C6685004780F7 /* MediaDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDetailViewController.swift; sourceTree = "<group>"; };
 		99D1E2F8230CEFEC004780F7 /* InviteHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteHeaderView.swift; sourceTree = "<group>"; };
-		99D1E2FA230DD032004780F7 /* CreditBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditBackgroundView.swift; sourceTree = "<group>"; };
-		99DF3B9022EA3D04007C9660 /* FetchingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchingCell.swift; sourceTree = "<group>"; };
+		99D1E2FA230DD032004780F7 /* BlurBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurBackgroundView.swift; sourceTree = "<group>"; };
+		99D1E2FE230F3A59004780F7 /* TitleHeaderSortByView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleHeaderSortByView.swift; sourceTree = "<group>"; };
+		99D1E30223107041004780F7 /* SortBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBy.swift; sourceTree = "<group>"; };
+		99D1E3042310787D004780F7 /* MediaListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaListState.swift; sourceTree = "<group>"; };
+		99D1E30623107D3B004780F7 /* MediaHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaHelper.swift; sourceTree = "<group>"; };
+		99DF3B9022EA3D04007C9660 /* FetchingTBCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchingTBCell.swift; sourceTree = "<group>"; };
 		99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupViewController.swift; sourceTree = "<group>"; };
 		99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupView.swift; sourceTree = "<group>"; };
 		99EC9BA622E806C50008790C /* PendingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingCell.swift; sourceTree = "<group>"; };
@@ -315,7 +339,7 @@
 				998F04D622E26FFD000AB52D /* FriendsViewController.swift */,
 				99EC9BAA22E91C060008790C /* FriendCell.swift */,
 				99EC9BA822E90AF60008790C /* RequestCell.swift */,
-				99DF3B9022EA3D04007C9660 /* FetchingCell.swift */,
+				99DF3B9022EA3D04007C9660 /* FetchingTBCell.swift */,
 				99331E4723036A7E00F8F96C /* Friend Code */,
 				998F04E022E51C71000AB52D /* Add Friend */,
 			);
@@ -351,9 +375,37 @@
 				99D1E2EE230C6468004780F7 /* WatchGroupInviteCell.swift */,
 				9921042522F62717003F4714 /* MemberCell.swift */,
 				99D1E2F8230CEFEC004780F7 /* InviteHeaderView.swift */,
+				99A904E923133B350054EE08 /* Custom Watch Group */,
 				9921042722F75CD8003F4714 /* Detail */,
 			);
 			path = "Watch Group";
+			sourceTree = "<group>";
+		};
+		99A904E923133B350054EE08 /* Custom Watch Group */ = {
+			isa = PBXGroup;
+			children = (
+				99A904EA23133B4B0054EE08 /* CustomWatchGroupView.swift */,
+				99A904EC231351C90054EE08 /* CustomWatchGroupViewController.swift */,
+			);
+			path = "Custom Watch Group";
+			sourceTree = "<group>";
+		};
+		99A904F42315C3320054EE08 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				99A904F72315D6480054EE08 /* SettingsView.swift */,
+				99A904F52315D63B0054EE08 /* SettingsViewController.swift */,
+				99A904F9231716140054EE08 /* Region */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		99A904F9231716140054EE08 /* Region */ = {
+			isa = PBXGroup;
+			children = (
+				99A904FA231716240054EE08 /* RegionViewController.swift */,
+			);
+			path = Region;
 			sourceTree = "<group>";
 		};
 		99BA6F1022D6BB6A0002D5FF /* Media Row Cell */ = {
@@ -428,6 +480,7 @@
 				99BA6F5322DA20B00002D5FF /* UILabel.swift */,
 				99BA6F7F22DBEA400002D5FF /* UIView.swift */,
 				99331E542308542400F8F96C /* Notification */,
+				99A904FC231757CA0054EE08 /* UIImageView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -498,6 +551,7 @@
 			children = (
 				99BA6F5822DA2AE80002D5FF /* Stack.swift */,
 				9990EEB022F38785006C0075 /* FirestoreHelper.swift */,
+				99D1E30623107D3B004780F7 /* MediaHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -507,6 +561,9 @@
 			children = (
 				99BA6F5F22DA4C350002D5FF /* MediaListViewController.swift */,
 				9957E5C422DFBEF7005AC297 /* PersonMediaListViewController.swift */,
+				99D1E2FE230F3A59004780F7 /* TitleHeaderSortByView.swift */,
+				99D1E30223107041004780F7 /* SortBy.swift */,
+				99D1E3042310787D004780F7 /* MediaListState.swift */,
 			);
 			path = AllMedia;
 			sourceTree = "<group>";
@@ -514,7 +571,7 @@
 		99BA6F6522DA7D6E0002D5FF /* Credits */ = {
 			isa = PBXGroup;
 			children = (
-				99D1E2FA230DD032004780F7 /* CreditBackgroundView.swift */,
+				99D1E2FA230DD032004780F7 /* BlurBackgroundView.swift */,
 				99BA6F6122DA79A00002D5FF /* CreditViewController.swift */,
 				99BA6F6322DA7A5B0002D5FF /* CreditCell.swift */,
 			);
@@ -536,6 +593,7 @@
 				99BA6F6E22DA8B080002D5FF /* UserView.swift */,
 				99BA6F6C22DA8AD00002D5FF /* UserViewController.swift */,
 				99331E452302509D00F8F96C /* BookmarkCell.swift */,
+				99A904F42315C3320054EE08 /* Settings */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -556,6 +614,7 @@
 			children = (
 				99BA6F8A22DE61FB0002D5FF /* SearchView.swift */,
 				99BA6F8822DE61EB0002D5FF /* SearchViewController.swift */,
+				99A904F223148B080054EE08 /* FetchingCVCell.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -565,6 +624,7 @@
 			children = (
 				99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */,
 				99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */,
+				99A904EE231352CD0054EE08 /* WatchGroupState.swift */,
 			);
 			path = "Create Watch Group";
 			sourceTree = "<group>";
@@ -716,10 +776,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99A904FD231757CA0054EE08 /* UIImageView.swift in Sources */,
 				99DF3B9822EA8529007C9660 /* WatchGroupViewController.swift in Sources */,
 				9990EEAA22F238BB006C0075 /* WatchGroupCell.swift in Sources */,
 				998F04E622E69C8A000AB52D /* AddUserCell.swift in Sources */,
 				99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */,
+				99A904F62315D63B0054EE08 /* SettingsViewController.swift in Sources */,
 				99D1E2F7230C6685004780F7 /* MediaDetailViewController.swift in Sources */,
 				99EC9BA922E90AF60008790C /* RequestCell.swift in Sources */,
 				99BA6F7B22DBDDA30002D5FF /* LoginViewController.swift in Sources */,
@@ -737,19 +799,21 @@
 				99BA6F2822D7B9CA0002D5FF /* TVEndpoint.swift in Sources */,
 				99D1E2F9230CEFEC004780F7 /* InviteHeaderView.swift in Sources */,
 				998F04E422E60566000AB52D /* FriendView.swift in Sources */,
-				99DF3B9122EA3D04007C9660 /* FetchingCell.swift in Sources */,
+				99A904EB23133B4B0054EE08 /* CustomWatchGroupView.swift in Sources */,
+				99DF3B9122EA3D04007C9660 /* FetchingTBCell.swift in Sources */,
 				99BA6F4222D915DA0002D5FF /* MediaDetailView.swift in Sources */,
 				9990EEB122F38785006C0075 /* FirestoreHelper.swift in Sources */,
 				99BA6F3922D7DEEF0002D5FF /* HomeView.swift in Sources */,
 				998F04D722E26FFD000AB52D /* FriendsViewController.swift in Sources */,
 				99BA6F4E22D940420002D5FF /* Genre.swift in Sources */,
 				9957E5C022DF6664005AC297 /* PersonSearch.swift in Sources */,
+				99D1E30723107D3B004780F7 /* MediaHelper.swift in Sources */,
 				99BA6F6822DA7ED80002D5FF /* VideosViewController.swift in Sources */,
 				99BA6F4A22D92EB90002D5FF /* Videos.swift in Sources */,
 				99BA6F7D22DBDDA30002D5FF /* SignUpView.swift in Sources */,
 				9957E5C322DF9083005AC297 /* TVShowDetail.swift in Sources */,
 				99331E4423024D5500F8F96C /* BookmarkMedia.swift in Sources */,
-				99D1E2FB230DD032004780F7 /* CreditBackgroundView.swift in Sources */,
+				99D1E2FB230DD032004780F7 /* BlurBackgroundView.swift in Sources */,
 				99BA6F5422DA20B00002D5FF /* UILabel.swift in Sources */,
 				99331E5623088F9D00F8F96C /* UserManager.swift in Sources */,
 				99BDA48B22FB69DD00474311 /* MessageInputAccessoryView.swift in Sources */,
@@ -761,6 +825,8 @@
 				99BA6F5222D948430002D5FF /* MediaDetailEndpoint.swift in Sources */,
 				99331E4B23036AE800F8F96C /* FriendCodeView.swift in Sources */,
 				99BA6F2622D7B9BB0002D5FF /* Endpoint.swift in Sources */,
+				99D1E2FF230F3A59004780F7 /* TitleHeaderSortByView.swift in Sources */,
+				99A904F323148B080054EE08 /* FetchingCVCell.swift in Sources */,
 				9990EEAE22F372D0006C0075 /* HUDView.swift in Sources */,
 				99BA6F8D22DE7AF10002D5FF /* SearchEndpoint.swift in Sources */,
 				99BA6F4422D92C790002D5FF /* MediaInfo.swift in Sources */,
@@ -768,13 +834,18 @@
 				99BA6F6222DA79A00002D5FF /* CreditViewController.swift in Sources */,
 				99EC9BA722E806C50008790C /* PendingCell.swift in Sources */,
 				9957E5C522DFBEF7005AC297 /* PersonMediaListViewController.swift in Sources */,
+				99A904ED231351C90054EE08 /* CustomWatchGroupViewController.swift in Sources */,
 				99BA6F6422DA7A5B0002D5FF /* CreditCell.swift in Sources */,
 				99BA6F2E22D7BF0D0002D5FF /* RequestBuilder.swift in Sources */,
 				99331E502304EFBF00F8F96C /* WatchGroupOptionsViewController.swift in Sources */,
 				9921042922F75CED003F4714 /* WatchGroupDetailViewController.swift in Sources */,
 				99BA6F3D22D903BF0002D5FF /* RootTabBarController.swift in Sources */,
+				99A904F82315D6480054EE08 /* SettingsView.swift in Sources */,
+				99D1E3052310787D004780F7 /* MediaListState.swift in Sources */,
+				99A904FB231716240054EE08 /* RegionViewController.swift in Sources */,
 				99BA6F7522DB8D7B0002D5FF /* Constants.swift in Sources */,
 				99D1E2F5230C64D2004780F7 /* WatchGroupsView.swift in Sources */,
+				99D1E30323107041004780F7 /* SortBy.swift in Sources */,
 				99BA6F6D22DA8AD00002D5FF /* UserViewController.swift in Sources */,
 				99BA6F8022DBEA400002D5FF /* UIView.swift in Sources */,
 				99BA6F8622DD00700002D5FF /* NotificationName.swift in Sources */,
@@ -784,6 +855,7 @@
 				99D1E2EF230C6468004780F7 /* WatchGroupInviteCell.swift in Sources */,
 				99BA6F3B22D810CD0002D5FF /* ImageEndpoint.swift in Sources */,
 				99BA6F7322DA8F810002D5FF /* MWFUser.swift in Sources */,
+				99A904EF231352CD0054EE08 /* WatchGroupState.swift in Sources */,
 				99BA6F8222DBEA8B0002D5FF /* PaddedTextField.swift in Sources */,
 				99BA6F4C22D932410002D5FF /* MovieDetail.swift in Sources */,
 				99331E4E2304B74000F8F96C /* CameraQRScannerViewController.swift in Sources */,

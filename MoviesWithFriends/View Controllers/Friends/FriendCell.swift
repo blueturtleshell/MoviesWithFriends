@@ -12,8 +12,8 @@ class FriendCell: UITableViewCell {
 
     let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 12
+        view.backgroundColor = UIColor(named: "offWhite")
+        view.layer.cornerRadius = 4
         return view
     }()
 

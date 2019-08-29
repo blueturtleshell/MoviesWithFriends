@@ -45,13 +45,15 @@ class FriendsViewController: UITableViewController {
     private func setupView() {
         navigationItem.title = "Friends"
         navigationItem.backBarButtonItem = UIBarButtonItem()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Friend", style: .plain, target: self, action: #selector(displayFriendCode))
 
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "qr"), style: .plain, target: self, action: #selector(displayFriendCode))
+
+        tableView.backgroundView = BlurBackgroundView()
         tableView.tableFooterView = UIView()
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
         tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         tableView.register(RequestCell.self, forCellReuseIdentifier: "RequestCell")
-        tableView.register(FetchingCell.self, forCellReuseIdentifier: "FetchingCell")
+        tableView.register(FetchingTBCell.self, forCellReuseIdentifier: "FetchingCell")
 
         NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
     }
@@ -160,7 +162,7 @@ class FriendsViewController: UITableViewController {
         if indexPath.section == 0 {
             if friends.isEmpty {
                 if isFetching {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "FetchingCell", for: indexPath) as! FetchingCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "FetchingCell", for: indexPath) as! FetchingTBCell
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell
@@ -199,11 +201,11 @@ class FriendsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if friends.isEmpty {
-            return isFetching ? 60 : 250
+            return isFetching ? 80 : 250
         }
 
         if indexPath.section == 0 {
-            return 60
+            return 80
         } else {
             return 125
         }
@@ -214,6 +216,13 @@ class FriendsViewController: UITableViewController {
             return "Requests"
         }
         return nil
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let friend = friends[indexPath.row]
+
+        let userViewController = UserViewController(user: friend)
+        navigationController?.pushViewController(userViewController, animated: true)
     }
 }
 

@@ -17,13 +17,13 @@ class WatchGroupCell: UITableViewCell {
 
     private let containerView: UIView = {
         let container = UIView()
-        container.backgroundColor = .white
+        container.backgroundColor = UIColor(named: "offWhite")
         container.layer.cornerRadius = 4
         container.clipsToBounds = true
         return container
     }()
 
-    let movieNameLabel: UILabel = {
+    let mediaTitleLabel: UILabel = {
         let label = UILabel()
         label.text = " "
         label.font = UIFont.preferredFont(forTextStyle: .headline)
@@ -41,7 +41,7 @@ class WatchGroupCell: UITableViewCell {
     let groupNameLabel: UILabel = {
         let label = UILabel()
         label.text = " "
-        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
 
         return label
     }()
@@ -75,7 +75,7 @@ class WatchGroupCell: UITableViewCell {
         addSubview(containerView)
         containerView.addSubview(posterImageView)
         containerView.addSubview(groupNameLabel)
-        containerView.addSubview(movieNameLabel)
+        containerView.addSubview(mediaTitleLabel)
         containerView.addSubview(dateLabel)
 
         containerView.snp.makeConstraints { make in
@@ -89,19 +89,19 @@ class WatchGroupCell: UITableViewCell {
         }
 
         groupNameLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(movieNameLabel.snp.top).offset(-12)
+            make.bottom.equalTo(mediaTitleLabel.snp.top).offset(-12)
             make.left.equalTo(posterImageView.snp.right).offset(12)
             make.right.equalToSuperview().inset(12)
         }
 
-        movieNameLabel.snp.makeConstraints { make in
+        mediaTitleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(posterImageView)
             make.left.equalTo(posterImageView.snp.right).offset(12)
             make.right.equalToSuperview().inset(12)
         }
 
         dateLabel.snp.makeConstraints { make in
-            make.top.equalTo(movieNameLabel.snp.bottom).offset(12)
+            make.top.equalTo(mediaTitleLabel.snp.bottom).offset(12)
             make.left.equalTo(posterImageView.snp.right).offset(12)
             make.right.equalToSuperview().inset(12)
         }

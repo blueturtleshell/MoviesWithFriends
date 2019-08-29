@@ -29,7 +29,6 @@ class UserManager {
 
     func retrieveUser(completion: @escaping () -> Void) {
         guard !isLoggedIn, let userID = Auth.auth().currentUser?.uid else { return } // user already logged in
-
         getUser(userID: userID) { user in
             self.currentUser = user
             completion()

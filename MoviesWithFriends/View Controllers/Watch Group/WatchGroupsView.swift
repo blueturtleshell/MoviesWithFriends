@@ -14,7 +14,6 @@ class WatchGroupsView: UIView {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .black
         return tableView
     }()
 

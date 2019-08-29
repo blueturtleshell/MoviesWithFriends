@@ -12,6 +12,7 @@ class VideoCell: UITableViewCell {
 
     let nameLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .white
         label.textAlignment = .left
         label.font = UIFont.preferredFont(forTextStyle: .title3)
         label.adjustsFontSizeToFitWidth = true

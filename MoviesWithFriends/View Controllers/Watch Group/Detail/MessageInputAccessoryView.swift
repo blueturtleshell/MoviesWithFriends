@@ -30,6 +30,7 @@ class MessageInputAccessoryView: UIView, UITextViewDelegate {
     let sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Send", for: .normal)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         return button
     }()
 
@@ -45,7 +46,7 @@ class MessageInputAccessoryView: UIView, UITextViewDelegate {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "backgroundColor")
         self.autoresizingMask = UIView.AutoresizingMask.flexibleHeight
 
         addSubview(messageTextView)

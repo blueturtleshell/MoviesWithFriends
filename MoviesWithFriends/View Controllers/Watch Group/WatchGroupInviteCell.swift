@@ -18,7 +18,7 @@ class WatchGroupInviteCell: UITableViewCell {
 
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "offWhite")
         view.layer.cornerRadius = 4
         return view
     }()

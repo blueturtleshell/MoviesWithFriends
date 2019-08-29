@@ -21,9 +21,13 @@ class PosterCell: UICollectionViewCell {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        label.textColor = .white
         return label
     }()
+
+    let labelAttributes: [NSAttributedString.Key: Any] =
+        [NSAttributedString.Key.strokeColor : UIColor.black,
+         NSAttributedString.Key.foregroundColor : UIColor.white,
+         NSAttributedString.Key.strokeWidth : -2.0]
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,7 +42,7 @@ class PosterCell: UICollectionViewCell {
     private func setupCell() {
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.8).cgColor]
-        gradient.locations = [0.70, 1.0]
+        gradient.locations = [0.5, 1.0]
         gradient.startPoint = CGPoint(x: 0.0, y: 0.0)
         gradient.endPoint = CGPoint(x: 0.0, y: 1.0)
         gradient.frame = CGRect(x: 0.0, y: 0.0, width: frame.width, height: frame.height)

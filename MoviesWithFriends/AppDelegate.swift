@@ -20,11 +20,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
 
+        UINavigationBar.appearance().barTintColor = UIColor.black
+        UINavigationBar.appearance().tintColor = UIColor(named: "offYellow")
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)]
+
+        UITabBar.appearance().barTintColor = .black
+        UITabBar.appearance().tintColor = UIColor(named: "offYellow")
+
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.backgroundColor = .white
+        window?.backgroundColor = #colorLiteral(red: 0.1940585673, green: 0.2092419863, blue: 0.2196866274, alpha: 1)
         window?.makeKeyAndVisible()
 
         window?.rootViewController = RootTabBarController(userManager: userManager)
+
         return true
     }
 

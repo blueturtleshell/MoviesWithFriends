@@ -31,57 +31,60 @@ class WatchGroupOptionsViewController: UITableViewController {
         super.viewDidLoad()
 
         setupView()
-        configureView()
 
         fetchUsers()
     }
 
     private func setupView() {
-        navigationItem.title = "Friends in watch group"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editGroup))
+        navigationItem.title = "Users in watch group"
+        if let currentUserID = Auth.auth().currentUser?.uid {
+            if watchGroup.creatorID == currentUserID {
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editGroup))
+            }
+        }
 
-        tableView.register(FetchingCell.self, forCellReuseIdentifier: "FetchingCell")
+        tableView.register(FetchingTBCell.self, forCellReuseIdentifier: "FetchingCell")
         tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
 
         tableView.tableFooterView = UIView()
-
     }
 
     @objc private func editGroup() {
+        if watchGroup.mediaID < 0 {
+            let customWatchGroupDetailViewController = CustomWatchGroupViewController()
+            customWatchGroupDetailViewController.watchGroupToEdit = watchGroup
+            navigationController?.pushViewController(customWatchGroupDetailViewController, animated: true)
+        } else {
+            let mediaManager = MediaManager()
 
-        let mediaManager = MediaManager()
-
-        switch watchGroup.type {
-        case .movie:
-            mediaManager.fetchMovieDetail(id: watchGroup.mediaID) { detailResult in
-                do {
-                    let mediaInfo = try detailResult.get()
-                    let watchGroupViewController = WatchGroupViewController(mediaType: self.watchGroup.type,
-                                                                            mediaInfo: mediaInfo, mediaManager: mediaManager)
-                    watchGroupViewController.watchGroupToEdit = self.watchGroup
-                    self.navigationController?.pushViewController(watchGroupViewController, animated: true)
-                } catch {
-                    print(error)
+            switch watchGroup.type {
+            case .movie:
+                mediaManager.fetchMovieDetail(id: watchGroup.mediaID) { detailResult in
+                    do {
+                        let mediaInfo = try detailResult.get()
+                        let watchGroupViewController = WatchGroupViewController(mediaType: self.watchGroup.type,
+                                                                                mediaInfo: mediaInfo, mediaManager: mediaManager)
+                        watchGroupViewController.watchGroupToEdit = self.watchGroup
+                        self.navigationController?.pushViewController(watchGroupViewController, animated: true)
+                    } catch {
+                        print(error)
+                    }
                 }
-            }
-        case .tv:
-            mediaManager.fetchTVShowDetail(id: watchGroup.mediaID) { detailResult in
-                do {
-                    let mediaInfo = try detailResult.get()
-                    let watchGroupViewController = WatchGroupViewController(mediaType: self.watchGroup.type,
-                                                                            mediaInfo: mediaInfo, mediaManager: mediaManager)
-                    watchGroupViewController.watchGroupToEdit = self.watchGroup
-                    self.navigationController?.pushViewController(watchGroupViewController, animated: true)
-                } catch {
-                    print(error)
+            case .tv:
+                mediaManager.fetchTVShowDetail(id: watchGroup.mediaID) { detailResult in
+                    do {
+                        let mediaInfo = try detailResult.get()
+                        let watchGroupViewController = WatchGroupViewController(mediaType: self.watchGroup.type,
+                                                                                mediaInfo: mediaInfo, mediaManager: mediaManager)
+                        watchGroupViewController.watchGroupToEdit = self.watchGroup
+                        self.navigationController?.pushViewController(watchGroupViewController, animated: true)
+                    } catch {
+                        print(error)
+                    }
                 }
             }
         }
-    }
-
-    private func configureView() {
-        //TODO: figure out what happens here
     }
 
     private func fetchUsers() {
@@ -145,7 +148,7 @@ class WatchGroupOptionsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if usersInGroup.isEmpty {
             if isFetching {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "FetchingCell", for: indexPath) as! FetchingCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FetchingCell", for: indexPath) as! FetchingTBCell
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell

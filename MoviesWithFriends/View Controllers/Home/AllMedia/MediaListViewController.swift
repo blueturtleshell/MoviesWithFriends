@@ -8,36 +8,28 @@
 
 import UIKit
 
-struct MediaListState {
-    let mediaType: MediaType
-    let endpoint: Endpoint
-    var currentPage: Int
-    var totalPages: Int
-
-    init(mediaType: MediaType, endpoint: Endpoint) {
-        self.mediaType = mediaType
-        self.endpoint = endpoint
-        currentPage = 1
-        totalPages = Int.max
-    }
-
-    mutating func updatePages(page: Int, totalPages: Int) {
-        self.currentPage = page
-        self.totalPages = totalPages
-    }
-
-    var canFetchMore: Bool {
-        return currentPage < totalPages
-    }
-}
-
 class MediaListViewController: UICollectionViewController, UICollectionViewDataSourcePrefetching, UICollectionViewDelegateFlowLayout {
+
+    lazy var titleSortView: TitleHeaderSortByView = {
+        let titleHeader = TitleHeaderSortByView()
+        titleHeader.sortByButton.addTarget(self, action: #selector(promptToChangeSort), for: .touchUpInside)
+        titleHeader.isUserInteractionEnabled = true
+        return titleHeader
+    }()
 
     private let mediaManager: MediaManager
 
-    private var media = [MediaDisplayable]()
+    private var media = [Media]()
 
     private var state: MediaListState
+    private var sortBy: SortBy = .popularityDescending {
+        didSet {
+            titleSortView.sortByButton.setTitle("Sort by: \(sortBy.display)", for: .normal)
+            titleSortView.sizeToFit()
+            media = sortMedia(media, by: sortBy)
+            self.collectionView.reloadData()
+        }
+    }
 
     init(mediaManager: MediaManager, mediaType: MediaType, endpoint: Endpoint) {
         self.mediaManager = mediaManager
@@ -60,10 +52,38 @@ class MediaListViewController: UICollectionViewController, UICollectionViewDataS
     }
 
     private func setupView() {
-        navigationItem.title = state.endpoint.description
+        titleSortView.titleLabel.text = state.endpoint.description
+        titleSortView.sortByButton.setTitle("Sort by: \(sortBy.display)", for: .normal)
+        titleSortView.sizeToFit()
+        navigationItem.titleView = titleSortView
+
         collectionView.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         collectionView.register(PosterCell.self, forCellWithReuseIdentifier: "PosterCell")
         collectionView.prefetchDataSource = self
+    }
+
+    @objc private func promptToChangeSort() {
+        let alertController = UIAlertController(title: "Sorty By", message: nil, preferredStyle: .actionSheet)
+
+        SortBy.allCases.forEach { sortMethod in
+            let action = UIAlertAction(title: sortMethod.display, style: .default, handler: { alertAction in
+                guard self.sortBy != sortMethod else {
+                    return
+                }
+                self.sortBy = sortMethod
+            })
+
+            alertController.addAction(action)
+
+            if self.sortBy == sortMethod {
+                alertController.preferredAction = action
+            }
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
     }
 
     private func fetchMedia() {
@@ -74,6 +94,7 @@ class MediaListViewController: UICollectionViewController, UICollectionViewDataS
                 let fetchResult = try result.get()
                 self.state.updatePages(page: fetchResult.page + 1, totalPages: fetchResult.totalPages)
                 self.media += fetchResult.results
+                self.media = sortMedia(self.media, by: self.sortBy)
                 self.collectionView.reloadData()
             } catch {
                 print(error)
@@ -91,10 +112,12 @@ class MediaListViewController: UICollectionViewController, UICollectionViewDataS
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
         cell.posterImageView.layer.cornerRadius = 0
         let item = media[indexPath.item]
-        cell.titleLabel.text = item.title
+        cell.titleLabel.attributedText = NSAttributedString(string: item.title, attributes: cell.labelAttributes)
         if let posterPath = item.posterPath, !posterPath.isEmpty {
             cell.posterImageView.contentMode = .scaleAspectFill
             cell.posterImageView.kf.indicatorType = .activity
+            let activity = cell.posterImageView.kf.indicator?.view as! UIActivityIndicatorView
+            activity.color = UIColor(named: "offYellow")
             let imageURL = mediaManager.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
             cell.posterImageView.kf.setImage(with: imageURL)
         } else {
