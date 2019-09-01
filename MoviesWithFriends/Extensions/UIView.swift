@@ -14,7 +14,7 @@ extension UIView {
         let textField = PaddedTextField(padding: 12, cornerRadius: 5)
         textField.placeholder = text
         textField.isSecureTextEntry = isSecure
-        textField.backgroundColor = UIColor.black.withAlphaComponent(0.03)
+        textField.backgroundColor = .white
         textField.keyboardType = keyboardType
         textField.returnKeyType = .done
         return textField

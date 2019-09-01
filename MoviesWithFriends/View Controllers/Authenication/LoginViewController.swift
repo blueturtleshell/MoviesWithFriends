@@ -62,10 +62,21 @@ class LoginViewController: UIViewController {
         let email = loginView.emailTextField.text!
         let password = loginView.passwordTextField.text!
 
+        let logInHud = HUDView.hud(inView: self.loginView, animated: true)
+        logInHud.accessoryType = .activityIndicator
+        logInHud.text = "Please wait"
+
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
             if let error = error {
-                print(error)
+                logInHud.remove(from: self.loginView)
+                self.loginView.errorMessageLabel.text = error.localizedDescription
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                    self.loginView.errorMessageLabel.text = nil
+                })
+
             } else if let _ = authResult {
+                logInHud.remove(from: self.loginView)
                 NotificationCenter.default.post(name: .userDidLogin, object: nil, userInfo: nil)
             }
         }
@@ -82,9 +93,11 @@ class LoginViewController: UIViewController {
 
     private func configureRegisterButton() {
         if loginView.loginButton.isEnabled {
-            loginView.loginButton.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+            loginView.loginButton.setTitleColor(.black, for: .normal)
+            loginView.loginButton.backgroundColor = UIColor(named: "offYellow")
         } else {
-            loginView.loginButton.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+            loginView.loginButton.setTitleColor(.lightGray, for: .normal)
+            loginView.loginButton.backgroundColor = #colorLiteral(red: 0.1869646256, green: 0.1869646256, blue: 0.1869646256, alpha: 1)
         }
     }
 }

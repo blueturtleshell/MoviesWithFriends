@@ -20,6 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
 
+        let countryDefaults: [String: String] = ["countryName": "United States of America", "countryCode": "US"]
+        UserDefaults.standard.register(defaults: countryDefaults)
+
         UINavigationBar.appearance().barTintColor = UIColor.black
         UINavigationBar.appearance().tintColor = UIColor(named: "offYellow")
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)]

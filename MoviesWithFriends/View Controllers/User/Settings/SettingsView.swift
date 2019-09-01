@@ -10,14 +10,14 @@ import UIKit
 
 class SettingsView: UIView {
 
-    let regionLabel: UILabel = {
+    private let countryLabel: UILabel = {
         let label = UILabel()
-        label.text = "Region"
+        label.text = "Country"
         label.textColor = .white
         return label
     }()
 
-    let currentRegionLabel: UILabel = {
+    let currentCountryLabel: UILabel = {
         let label = UILabel()
         label.text = " "
         label.textAlignment = .right
@@ -25,9 +25,9 @@ class SettingsView: UIView {
         return label
     }()
 
-    let changeRegionButton: UIButton = {
+    let changeCountryButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Change Region", for: .normal)
+        button.setTitle("Change Country", for: .normal)
         button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.layer.cornerRadius = 6
         button.backgroundColor = UIColor.black.withAlphaComponent(0.75)
@@ -43,6 +43,7 @@ class SettingsView: UIView {
 
     let bookmarkSwitch: UISwitch = {
         let bookmarkSwitch = UISwitch()
+        bookmarkSwitch.onTintColor = UIColor(named: "offYellow")
         bookmarkSwitch.isOn = false
         return bookmarkSwitch
     }()
@@ -56,6 +57,7 @@ class SettingsView: UIView {
 
     let friendsSwitch: UISwitch = {
         let friendSwitch = UISwitch()
+        friendSwitch.onTintColor = UIColor(named: "offYellow")
         friendSwitch.isOn = false
         return friendSwitch
     }()
@@ -72,33 +74,33 @@ class SettingsView: UIView {
 
     private func setupView() {
         backgroundColor = UIColor(named: "backgroundColor")
-        addSubview(regionLabel)
-        addSubview(currentRegionLabel)
-        addSubview(changeRegionButton)
+        addSubview(countryLabel)
+        addSubview(currentCountryLabel)
+        addSubview(changeCountryButton)
 
         addSubview(bookmarkLabel)
         addSubview(bookmarkSwitch)
         addSubview(friendsLabel)
         addSubview(friendsSwitch)
 
-        regionLabel.snp.makeConstraints { make in
+        countryLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).offset(48)
             make.left.equalToSuperview().offset(24)
         }
 
-        currentRegionLabel.snp.makeConstraints { make in
+        currentCountryLabel.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(24)
-            make.centerY.equalTo(regionLabel)
+            make.centerY.equalTo(countryLabel)
         }
 
-        changeRegionButton.snp.makeConstraints { make in
-            make.top.equalTo(regionLabel.snp.bottom).offset(12)
+        changeCountryButton.snp.makeConstraints { make in
+            make.top.equalTo(countryLabel.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
             make.size.equalTo(CGSize(width: 120, height: 44))
         }
 
         bookmarkLabel.snp.makeConstraints { make in
-            make.top.equalTo(changeRegionButton.snp.bottom).offset(24)
+            make.top.equalTo(changeCountryButton.snp.bottom).offset(24)
             make.left.equalToSuperview().offset(24)
         }
 

@@ -25,6 +25,14 @@ class LoginView: UIView {
         return view
     }()
 
+    let errorMessageLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.textColor = .white
+        return label
+    }()
+
     let logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Instagram_logo_white"))
         imageView.contentMode = .scaleAspectFit
@@ -41,8 +49,8 @@ class LoginView: UIView {
     let loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Log In", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 3
         return button
     }()
@@ -57,16 +65,17 @@ class LoginView: UIView {
 
     let signUpLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "AvenirNext-Regular", size: 12)
+        label.font = UIFont(name: "AvenirNext-Regular", size: 14)
         label.text = "Don't have an account?"
+        label.textColor = .white
         return label
     }()
 
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Create one here!", for: .normal)
-        button.setTitleColor(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), for: .normal)
-        button.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 12)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
+        button.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 14)
         button.backgroundColor = .clear
         button.layer.cornerRadius = 3
         return button
@@ -90,10 +99,11 @@ class LoginView: UIView {
     }
 
     private func setupView() {
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "backgroundColor")
 
         logoContainerView.addSubview(logoImageView)
         addSubview(logoContainerView)
+        addSubview(errorMessageLabel)
         addSubview(mainStackView)
         addSubview(bottomStackView)
         addSubview(dismissButton)
@@ -105,11 +115,18 @@ class LoginView: UIView {
 
         logoContainerView.snp.makeConstraints { make in
             make.left.top.right.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(200)
+            make.height.equalTo(180)
         }
 
         logoImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
+        }
+
+        errorMessageLabel.snp.makeConstraints { make in
+            make.top.equalTo(logoContainerView.snp.bottom).offset(36)
+            make.left.equalToSuperview().offset(24)
+            make.right.equalToSuperview().inset(24)
+            make.centerX.equalToSuperview()
         }
 
         mainStackView.snp.makeConstraints { make in

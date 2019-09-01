@@ -88,14 +88,24 @@ class SignUpViewController: UIViewController {
         let password = signUpView.passwordTextField.text!
         let passwordConfirm = signUpView.confirmPasswordTextField.text!
 
-        guard email == emailConfirm && password == passwordConfirm else {
-            print("Missmatch")
+        guard email == emailConfirm else {
+            showError(text: "Emails do not match")
             return
         }
 
+        guard password == passwordConfirm else {
+            showError(text: "Passwords do not match")
+            return
+        }
+
+        let signUpHUD = HUDView.hud(inView: signUpView, animated: true)
+        signUpHUD.text = "Please wait"
+        signUpHUD.accessoryType = .activityIndicator
+
         Auth.auth().createUser(withEmail: email, password: password) { initialAuthResult, error in
             if let error = error {
-                print(error)
+                signUpHUD.remove(from: self.signUpView)
+                self.showError(text: "There was an error.", error: error)
                 return
             } else if let authResult = initialAuthResult {
                 let userID = authResult.user.uid
@@ -107,8 +117,10 @@ class SignUpViewController: UIViewController {
                             profileImageURL = try uploadResult.get()
                             self.uploadUserData(id: userID, userName: userName, email: email, fullName: fullName, imageURL: profileImageURL, completion: { error in
                                 if let error = error {
-                                    print(error)
+                                    signUpHUD.remove(from: self.signUpView)
+                                    self.showError(text: "There was an error.", error: error)
                                 } else {
+                                    signUpHUD.remove(from: self.signUpView)
                                     NotificationCenter.default.post(name: .userDidLogin, object: nil, userInfo: nil)
                                     self.dismiss(animated: true, completion: nil)
                                 }
@@ -120,8 +132,10 @@ class SignUpViewController: UIViewController {
                 } else { // upload imageLess
                     self.uploadUserData(id: userID, userName: userName, email: email, fullName: fullName, imageURL: nil, completion: { error in
                         if let error = error {
-                            print(error)
+                            signUpHUD.remove(from: self.signUpView)
+                            self.showError(text: "There was an error.", error: error)
                         } else {
+                            signUpHUD.remove(from: self.signUpView)
                             NotificationCenter.default.post(name: .userDidLogin, object: nil, userInfo: nil)
                             self.dismiss(animated: true, completion: nil)
                         }
@@ -159,6 +173,10 @@ class SignUpViewController: UIViewController {
     }
 
     private func showError(text: String, error: Error? = nil) {
+        signUpView.errorMessageLabel.text = error?.localizedDescription ?? text
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+            self.signUpView.errorMessageLabel.text = nil
+        })
     }
 
     @objc func loginButtonPressed() {

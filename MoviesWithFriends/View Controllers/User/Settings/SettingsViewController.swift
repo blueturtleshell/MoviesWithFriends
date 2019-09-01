@@ -68,13 +68,16 @@ class SettingsViewController: UIViewController {
 
     private func setupView() {
         navigationItem.title = "Settings"
-        settingsView.changeRegionButton.addTarget(self, action: #selector(showChangeRegion), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(handleLogout))
+
+        settingsView.changeCountryButton.addTarget(self, action: #selector(showChangeCountry), for: .touchUpInside)
         settingsView.bookmarkSwitch.addTarget(self, action: #selector(bookmarksPublicSwitchChanged), for: .valueChanged)
         settingsView.friendsSwitch.addTarget(self, action: #selector(friendsPublicSwitchChanged), for: .valueChanged)
     }
 
     private func configureView() {
-        settingsView.currentRegionLabel.text = "USA"
+
+        settingsView.currentCountryLabel.text = UserDefaults.standard.string(forKey: "countryName") ?? "United States of America"
 
         db.collection("user_settings").document(user.id).getDocument { settingsDoc, error in
             if let error = error {
@@ -88,9 +91,24 @@ class SettingsViewController: UIViewController {
         }
     }
 
-    @objc private func showChangeRegion() {
-        let regionViewController = RegionViewController()
-        navigationController?.pushViewController(regionViewController, animated: true)
+    @objc private func handleLogout() {
+        let alertController = UIAlertController(title: "Log out", message: "Are you sure?", preferredStyle: .actionSheet)
+        let confirmAction = UIAlertAction(title: "Yes", style: .destructive, handler: logoutUser)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
+
+    @objc private func logoutUser(_ alertAction: UIAlertAction) {
+        NotificationCenter.default.post(name: .userDidLogout, object: nil)
+    }
+
+    @objc private func showChangeCountry() {
+        let countryViewController = CountryViewController()
+        countryViewController.delegate = self
+        navigationController?.pushViewController(countryViewController, animated: true)
     }
 
     @objc private func bookmarksPublicSwitchChanged(_ sender: UISwitch) {
@@ -101,5 +119,16 @@ class SettingsViewController: UIViewController {
     @objc private func friendsPublicSwitchChanged(_ sender: UISwitch) {
         changesMade = true
         isFriendsPublic = sender.isOn
+    }
+}
+
+extension SettingsViewController: CountryViewControllerDelegate {
+    func didSelectNewCountry(viewController: CountryViewController, country: Country) {
+        let countryValues: [String: String] = ["countryCode": country.name, "countryCode": country.countryCode]
+        UserDefaults.standard.setValuesForKeys(countryValues)
+
+        settingsView.currentCountryLabel.text = country.name
+
+        navigationController?.popViewController(animated: true)
     }
 }

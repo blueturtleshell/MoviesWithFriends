@@ -56,7 +56,7 @@ class UserViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
 
-        userView.editProfileButton.addTarget(self, action: #selector(handleLogoutButtonPressed), for: .touchUpInside)
+        userView.editProfileButton.addTarget(self, action: #selector(editProfilePressed), for: .touchUpInside)
         userView.settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
         userView.bookmarkSegmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
 
@@ -73,8 +73,8 @@ class UserViewController: UIViewController {
         bookmarkListener?.remove()
     }
 
-    @objc private func handleLogoutButtonPressed() {
-        NotificationCenter.default.post(name: .userDidLogout, object: nil)
+    @objc private func editProfilePressed() {
+        
     }
 
     @objc private func settingsButtonPressed() {
