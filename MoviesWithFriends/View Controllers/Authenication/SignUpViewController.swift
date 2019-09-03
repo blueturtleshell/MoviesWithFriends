@@ -112,9 +112,8 @@ class SignUpViewController: UIViewController {
 
                 if let profileImage = self.profileImage, let imageData = profileImage.jpegData(compressionQuality: 0.4) {
                     uploadImage(imageData: imageData, imageName: userID, storageFolder: "profile_images") { uploadResult in
-                        var profileImageURL: URL? = nil
                         do {
-                            profileImageURL = try uploadResult.get()
+                            let profileImageURL = try uploadResult.get()
                             self.uploadUserData(id: userID, userName: userName, email: email, fullName: fullName, imageURL: profileImageURL, completion: { error in
                                 if let error = error {
                                     signUpHUD.remove(from: self.signUpView)

@@ -21,6 +21,7 @@ class UserView: UIView {
         imageView.layer.borderWidth = 0.5
         imageView.layer.borderColor = UIColor.black.withAlphaComponent(0.75).cgColor
         imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
 
@@ -34,32 +35,6 @@ class UserView: UIView {
         return label
     }()
 
-    let editProfileButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Edit profile", for: .normal)
-        button.setTitleColor(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1), for: .normal)
-        button.layer.cornerRadius = 6
-        button.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-        return button
-    }()
-
-    let settingsButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Settings", for: .normal)
-        button.setTitleColor(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1), for: .normal)
-        button.layer.cornerRadius = 6
-        button.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-        return button
-    }()
-
-    lazy var editProfileSettingsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [editProfileButton, settingsButton])
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = 8
-        return stackView
-    }()
 
     let bookmarkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["Movies", "TV"])
@@ -92,7 +67,6 @@ class UserView: UIView {
         addSubview(blurBackgroundView)
         blurBackgroundView.addSubview(profileImageView)
         blurBackgroundView.addSubview(fullNameLabel)
-        blurBackgroundView.addSubview(editProfileSettingsStackView)
         blurBackgroundView.addSubview(bookmarkSegmentedControl)
         blurBackgroundView.addSubview(tableView)
 
@@ -108,18 +82,6 @@ class UserView: UIView {
         fullNameLabel.snp.makeConstraints { make in
             make.left.equalTo(profileImageView).offset(12)
             make.top.equalTo(profileImageView.snp.bottom).offset(12)
-        }
-
-        editProfileSettingsStackView.snp.makeConstraints { make in
-            make.centerY.equalTo(profileImageView)
-            make.left.equalTo(profileImageView.snp.right).offset(36)
-            make.right.equalToSuperview().inset(12)
-        }
-
-        [editProfileButton, settingsButton].forEach {
-            $0.snp.makeConstraints({ make in
-                make.height.equalTo(30)
-            })
         }
 
         bookmarkSegmentedControl.snp.makeConstraints { make in

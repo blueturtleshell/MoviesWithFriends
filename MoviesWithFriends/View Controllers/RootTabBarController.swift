@@ -96,27 +96,26 @@ class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
             let friendsViewController = FriendsViewController(user: currentUser)
             let friendsNavigationController = UINavigationController(rootViewController: friendsViewController)
             vcs.append(friendsNavigationController)
-        }
 
-        let userViewController = UserViewController(user: userManager.currentUser)
-        let userNavigationController = UINavigationController(rootViewController: userViewController)
-        vcs.append(userNavigationController)
+            let userViewController = UserViewController(user: currentUser)
+            let userNavigationController = UINavigationController(rootViewController: userViewController)
+            vcs.append(userNavigationController)
+        } else {
+            let loginPlaceholderViewController = UIViewController()
+            loginPlaceholderViewController.tabBarItem = UITabBarItem(title: "Log In", image: #imageLiteral(resourceName: "user"), tag: 99)
+            vcs.append(loginPlaceholderViewController)
+        }
 
         setViewControllers(vcs, animated: false)
     }
 
-
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        if !userManager.isLoggedIn {
-            print(viewController)
-            if let nav = viewController as? UINavigationController, let _ = nav.viewControllers.first as? UserViewController {
-                let authViewController = LoginViewController()
-                let authNavigationController = UINavigationController(rootViewController: authViewController)
-                present(authNavigationController, animated: true, completion: nil)
-                return false
-            }
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        if item.tag == 99 && !userManager.isLoggedIn {
+            let authViewController = LoginViewController()
+            let authNavigationController = UINavigationController(rootViewController: authViewController)
+            selectedIndex = 0
+            present(authNavigationController, animated: true, completion: nil)
         }
-        return true
     }
 
     private func configureTabBarItems(hide: Bool) {

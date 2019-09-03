@@ -15,7 +15,7 @@ class UserViewController: UIViewController {
         return UserView()
     }()
 
-    private let user: MWFUser?
+    private let user: MWFUser
     private let mediaManager = MediaManager()
     private let db = Firestore.firestore()
 
@@ -29,8 +29,7 @@ class UserViewController: UIViewController {
         }
     }
 
-
-    init(user: MWFUser?) {
+    init(user: MWFUser) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
         tabBarItem = UITabBarItem(title: "User", image: UIImage(named: "user"), tag: 3)
@@ -54,10 +53,17 @@ class UserViewController: UIViewController {
     private func setupView() {
         navigationItem.title = "User Profile"
 
+        if let currentUserID = Auth.auth().currentUser?.uid, currentUserID == user.id {
+            let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings"), style: .plain, target: self, action: #selector(settingsButtonPressed))
+            navigationItem.rightBarButtonItem = settingsButton
+
+            let changeProfileTapGesture = UITapGestureRecognizer(target: self, action: #selector(showChangeImageAlert))
+            userView.profileImageView.addGestureRecognizer(changeProfileTapGesture)
+        }
+
         NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
 
-        userView.editProfileButton.addTarget(self, action: #selector(editProfilePressed), for: .touchUpInside)
-        userView.settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
+
         userView.bookmarkSegmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
 
         userView.tableView.delegate = self
@@ -73,12 +79,25 @@ class UserViewController: UIViewController {
         bookmarkListener?.remove()
     }
 
-    @objc private func editProfilePressed() {
-        
+    @objc private func showChangeImageAlert() {
+        let alertController = UIAlertController(title: "Change Profile Image", message: "Are you sure?", preferredStyle: .actionSheet)
+        let confirmAction = UIAlertAction(title: "Change profile image", style: .destructive, handler: changeImage)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
+
+    @objc private func changeImage(_ action: UIAlertAction) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.allowsEditing = true
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
     }
 
     @objc private func settingsButtonPressed() {
-        guard let user = user else { return }
+        guard let currentUserID = Auth.auth().currentUser?.uid, currentUserID == user.id else { return }
         
         let settingsViewController = SettingsViewController(user: user)
         navigationController?.pushViewController(settingsViewController, animated: true)
@@ -89,8 +108,6 @@ class UserViewController: UIViewController {
     }
 
     private func configureForUser() {
-        guard let user = user else { return }
-
         userView.fullNameLabel.text = user.fullName ?? ""
         if let profileURL = user.profileURL {
             userView.profileImageView.kf.indicatorType = .activity
@@ -99,10 +116,8 @@ class UserViewController: UIViewController {
             userView.profileImageView.image = #imageLiteral(resourceName: "user")
         }
 
+        // not the current user, ie friend page
         if let currentUserID = Auth.auth().currentUser?.uid, currentUserID != user.id {
-            userView.settingsButton.isHidden = true
-            userView.editProfileButton.isHidden = true
-
             db.collection("user_settings").document(user.id).getDocument { settingsDocument, error in
                 if let error = error {
                     print(error)
@@ -118,8 +133,7 @@ class UserViewController: UIViewController {
     }
 
     private func fetchBookmarks() {
-        guard let userID = user?.id else { return }
-        bookmarkListener = db.collection("bookmarks").document(userID).collection("media").addSnapshotListener { snapshot, error in
+        bookmarkListener = db.collection("bookmarks").document(user.id).collection("media").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
                 self.bookmarkListener?.remove()
@@ -155,6 +169,25 @@ class UserViewController: UIViewController {
                             print(diff.type.rawValue)
                         }
                     }
+                }
+            }
+        }
+    }
+
+    @objc fileprivate func changeProfileImage(with image: UIImage, completion: @escaping () -> Void) {
+        if let imageData = image.jpegData(compressionQuality: 0.4) {
+            uploadImage(imageData: imageData, imageName: user.id, storageFolder: "profile_images") { uploadResult in
+                do {
+                    let profileImageURL = try uploadResult.get()
+                    self.db.document("users/\(self.user.id)").updateData(["profile_image": profileImageURL?.absoluteString ?? ""], completion: { error in
+                        if let error = error {
+                            print(error)
+                        } else {
+                            completion()
+                        }
+                    })
+                } catch {
+                    print(error)
                 }
             }
         }
@@ -214,5 +247,26 @@ extension UserViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+}
+
+extension UserViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.editedImage] as? UIImage else { return }
+
+        userView.profileImageView.image = image
+
+        let uploadImageHUD = HUDView.hud(inView: picker.view, animated: true)
+        uploadImageHUD.text = "Uploading Image"
+        uploadImageHUD.accessoryType = .activityIndicator
+
+        changeProfileImage(with: image) {
+            uploadImageHUD.remove(from: picker.view)
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }

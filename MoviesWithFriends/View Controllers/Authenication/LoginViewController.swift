@@ -53,7 +53,10 @@ class LoginViewController: UIViewController {
     }
 
     @objc private func handleDismiss() {
-        dismiss(animated: true, completion: nil)
+        if let tabBarController = presentingViewController as? RootTabBarController {
+            tabBarController.selectedIndex = 0
+            dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc func loginButtonPressed() {
