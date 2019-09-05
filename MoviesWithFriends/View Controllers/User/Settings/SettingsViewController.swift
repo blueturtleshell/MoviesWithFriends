@@ -28,6 +28,11 @@ class SettingsViewController: UIViewController {
             settingsView.friendsSwitch.isOn = isFriendsPublic
         }
     }
+    private var isWatchGroupsPublic = false {
+        didSet {
+            settingsView.watchGroupsSwitch.isOn = isWatchGroupsPublic
+        }
+    }
 
     private var changesMade = false
 
@@ -56,7 +61,8 @@ class SettingsViewController: UIViewController {
 
         if changesMade {
             let userSettingsData: [String: Bool] = ["bookmark_public": isBookmarkPublic,
-                                                  "friends_public": isFriendsPublic]
+                                                  "friends_public": isFriendsPublic,
+                                                  "watch_groups_public": isWatchGroupsPublic]
 
             db.collection("user_settings").document(user.id).setData(userSettingsData) { error in
                 if let error = error {
@@ -73,6 +79,7 @@ class SettingsViewController: UIViewController {
         settingsView.changeCountryButton.addTarget(self, action: #selector(showChangeCountry), for: .touchUpInside)
         settingsView.bookmarkSwitch.addTarget(self, action: #selector(bookmarksPublicSwitchChanged), for: .valueChanged)
         settingsView.friendsSwitch.addTarget(self, action: #selector(friendsPublicSwitchChanged), for: .valueChanged)
+        settingsView.watchGroupsSwitch.addTarget(self, action: #selector(watchGroupsPublicSwitchChanged), for: .valueChanged)
     }
 
     private func configureView() {
@@ -86,6 +93,7 @@ class SettingsViewController: UIViewController {
                 if let settingsDoc = settingsDoc {
                     self.isBookmarkPublic = settingsDoc.data()?["bookmark_public"] as? Bool ?? false
                     self.isFriendsPublic = settingsDoc.data()?["friends_public"] as? Bool ?? false
+                    self.isWatchGroupsPublic = settingsDoc.data()?["watch_groups_public"] as? Bool ?? false
                 }
             }
         }
@@ -119,6 +127,11 @@ class SettingsViewController: UIViewController {
     @objc private func friendsPublicSwitchChanged(_ sender: UISwitch) {
         changesMade = true
         isFriendsPublic = sender.isOn
+    }
+
+    @objc private func watchGroupsPublicSwitchChanged(_ sender: UISwitch) {
+        changesMade = true
+        isWatchGroupsPublic = sender.isOn
     }
 }
 

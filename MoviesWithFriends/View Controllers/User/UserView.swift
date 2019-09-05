@@ -9,10 +9,6 @@
 import UIKit
 
 class UserView: UIView {
-    let blurBackgroundView: BlurBackgroundView = {
-        return BlurBackgroundView()
-    }()
-
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .lightGray
@@ -25,16 +21,35 @@ class UserView: UIView {
         return imageView
     }()
 
-    let fullNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "AvenirNext-Regular", size: 16)
-        label.textColor = UIColor(named: "offWhite")
-        label.contentMode = .center
-        label.text = " "
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    let fullNameLabel: UILabel = createLabel(text: " ", textAlignment: .center)
+
+    private lazy var friendsLabel: UILabel = UIView.createLabel(text: "Friends", textAlignment: .center)
+    lazy var friendCountView = PrivateButtonView()
+
+    private lazy var watchGroupsLabel: UILabel = UIView.createLabel(text: "Watch Groups", textAlignment: .center)
+    lazy var watchGroupCountView = PrivateButtonView()
+
+    private lazy var friendsStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [friendsLabel, friendCountView])
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        return stackView
     }()
 
+    private lazy var watchGroupsStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [watchGroupsLabel, watchGroupCountView])
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        return stackView
+    }()
+
+    lazy var fullInfoStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [friendsStackView, watchGroupsStackView])
+        stackView.axis = .horizontal
+        stackView.alignment = .top
+        stackView.spacing = 24
+        return stackView
+    }()
 
     let bookmarkSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["Movies", "TV"])
@@ -64,24 +79,27 @@ class UserView: UIView {
     }
 
     private func setupView() {
-        addSubview(blurBackgroundView)
-        blurBackgroundView.addSubview(profileImageView)
-        blurBackgroundView.addSubview(fullNameLabel)
-        blurBackgroundView.addSubview(bookmarkSegmentedControl)
-        blurBackgroundView.addSubview(tableView)
-
-        blurBackgroundView.snp.makeConstraints { make in
-            make.edges.equalTo(safeAreaLayoutGuide)
-        }
+        backgroundColor = UIColor(named: "backgroundColor")
+        addSubview(profileImageView)
+        addSubview(fullInfoStackView)
+        addSubview(fullNameLabel)
+        addSubview(bookmarkSegmentedControl)
+        addSubview(tableView)
 
         profileImageView.snp.makeConstraints { make in
             make.width.height.equalTo(100)
-            make.left.top.equalToSuperview().offset(12)
+            make.left.top.equalTo(safeAreaLayoutGuide).offset(12)
         }
 
         fullNameLabel.snp.makeConstraints { make in
             make.left.equalTo(profileImageView).offset(12)
             make.top.equalTo(profileImageView.snp.bottom).offset(12)
+        }
+
+        fullInfoStackView.snp.makeConstraints { make in
+            make.centerY.equalTo(profileImageView).inset(18)
+            make.centerX.equalToSuperview().offset(56)
+            make.right.lessThanOrEqualToSuperview().inset(12)
         }
 
         bookmarkSegmentedControl.snp.makeConstraints { make in

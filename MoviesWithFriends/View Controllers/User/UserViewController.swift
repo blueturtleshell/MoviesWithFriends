@@ -23,6 +23,8 @@ class UserViewController: UIViewController {
     private var bookmarkedTV = [BookmarkMedia]()
     private var bookmarkListener: ListenerRegistration?
 
+    private var isFriendsPublic = true
+    private var isWatchGroupsPublic = true
     private var isBookmarkPublic = true {
         didSet {
             userView.tableView.reloadData()
@@ -59,6 +61,8 @@ class UserViewController: UIViewController {
 
             let changeProfileTapGesture = UITapGestureRecognizer(target: self, action: #selector(showChangeImageAlert))
             userView.profileImageView.addGestureRecognizer(changeProfileTapGesture)
+
+            userView.fullInfoStackView.isHidden = true // current user does not have to see this
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
@@ -108,7 +112,7 @@ class UserViewController: UIViewController {
     }
 
     private func configureForUser() {
-        userView.fullNameLabel.text = user.fullName ?? ""
+        userView.fullNameLabel.text = user.fullName ?? user.userName
         if let profileURL = user.profileURL {
             userView.profileImageView.kf.indicatorType = .activity
             userView.profileImageView.kf.setImage(with: URL(string: profileURL))
@@ -124,6 +128,34 @@ class UserViewController: UIViewController {
                 } else {
                     if let settingsDocument = settingsDocument {
                         self.isBookmarkPublic = settingsDocument.data()?["bookmark_public"] as? Bool ?? false
+                        self.isFriendsPublic = settingsDocument.data()?["friends_public"] as? Bool ?? false
+                        self.isWatchGroupsPublic = settingsDocument.data()?["watch_groups_public"] as? Bool ?? false
+
+                        if self.isBookmarkPublic {
+                            self.fetchBookmarks()
+                        }
+
+                        // get friends count, if not public show lock and unable to click
+                        self.db.collection("relationships").document(self.user.id).collection("friends").getDocuments(completion: { snapshot, error in
+                            if let error = error {
+                                print(error)
+                            } else {
+                                if let snapshot = snapshot {
+                                    self.userView.friendCountView.set(text: "\(snapshot.count)", isPublic: self.isFriendsPublic)
+                                }
+                            }
+                        })
+
+                        // get watch group count, if not public show lock and unable to click
+                        self.db.collection("watch_group").document(self.user.id).collection("joined").getDocuments(completion: { snapshot, error in
+                            if let error = error {
+                                print(error)
+                            } else {
+                                if let snapshot = snapshot {
+                                    self.userView.watchGroupCountView.set(text: "\(snapshot.count)", isPublic: self.isWatchGroupsPublic)
+                                }
+                            }
+                        })
                     }
                 }
             }

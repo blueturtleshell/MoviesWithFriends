@@ -310,7 +310,7 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         cell.mediaManager = mediaManager
         let media = (indexPath.row == 0 ? similarMedia : recommendedMedia)
         cell.titleLabel.text = indexPath.row == 0 ? "Related" : "If you liked \(mediaInfo?.title ?? "")"
-        cell.titleLabel.textColor = UIColor(named: "offYellow")
+        //TODO change mediatitle font style maybe italics
         cell.media = media
         cell.mediaCollectionView.reloadData()
         cell.mediaCollectionView.contentOffset = .zero

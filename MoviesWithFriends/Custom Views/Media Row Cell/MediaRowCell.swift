@@ -22,7 +22,7 @@ class MediaRowCell: UITableViewCell {
 
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "offYellow")
+        label.textColor = UIColor(named: "offWhite")
         label.font = UIFont.preferredFont(forTextStyle: .title2)
         return label
     }()

@@ -46,6 +46,7 @@
 		99A904FF231AECB50054EE08 /* country.json in Resources */ = {isa = PBXBuildFile; fileRef = 99A904FE231AECB50054EE08 /* country.json */; };
 		99A90501231AEDDB0054EE08 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A90500231AEDDB0054EE08 /* Country.swift */; };
 		99A90503231AF1080054EE08 /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A90502231AF1080054EE08 /* CountryCell.swift */; };
+		99AE7027232085520003322B /* PrivateButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE7026232085520003322B /* PrivateButtonView.swift */; };
 		99BA6F1222D6BBCD0002D5FF /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */; };
 		99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */; };
 		99BA6F1822D7A1C30002D5FF /* MediaDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1722D7A1C30002D5FF /* MediaDisplayable.swift */; };
@@ -159,6 +160,7 @@
 		99A904FE231AECB50054EE08 /* country.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = country.json; sourceTree = "<group>"; };
 		99A90500231AEDDB0054EE08 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		99A90502231AF1080054EE08 /* CountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
+		99AE7026232085520003322B /* PrivateButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateButtonView.swift; sourceTree = "<group>"; };
 		99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
 		99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NothingFoundCell.swift; sourceTree = "<group>"; };
 		99BA6F1722D7A1C30002D5FF /* MediaDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDisplayable.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 				99BA6F1022D6BB6A0002D5FF /* Media Row Cell */,
 				99BA6F8122DBEA8B0002D5FF /* PaddedTextField.swift */,
 				9990EEAD22F372D0006C0075 /* HUDView.swift */,
+				99AE7026232085520003322B /* PrivateButtonView.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -872,6 +875,7 @@
 				99BA6F4C22D932410002D5FF /* MovieDetail.swift in Sources */,
 				99331E4E2304B74000F8F96C /* CameraQRScannerViewController.swift in Sources */,
 				99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */,
+				99AE7027232085520003322B /* PrivateButtonView.swift in Sources */,
 				99BA6F8B22DE61FB0002D5FF /* SearchView.swift in Sources */,
 				99BA6F5022D944490002D5FF /* RegionReleaseDates.swift in Sources */,
 				99BA6F5922DA2AE80002D5FF /* Stack.swift in Sources */,

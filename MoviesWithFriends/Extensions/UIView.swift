@@ -20,6 +20,25 @@ extension UIView {
         return textField
     }
 
+
+    /// Helper to create label using 'AvenirNext-Regular' font
+    ///
+    /// - Parameters:
+    ///   - text: Label text
+    ///   - textColor: Color of text
+    ///   - fontSize: Font size, default of **16**
+    ///   - textAlignment: Label text alignment
+    /// - Returns: Label with specified values
+    static func createLabel(text: String, textColor: UIColor? = UIColor(named: "offWhite"),
+                            fontSize: CGFloat = 16, textAlignment: NSTextAlignment) -> UILabel {
+        let label = UILabel()
+        label.font = UIFont(name: "AvenirNext-Regular", size: fontSize)
+        label.textColor = textColor
+        label.textAlignment = textAlignment
+        label.text = text
+        return label
+    }
+
     func addShadow(cornerRadius: CGFloat, maskedCorners: CACornerMask, color: UIColor, offset: CGSize, opacity: Float, shadowRadius: CGFloat) {
         self.layer.cornerRadius = cornerRadius
         self.layer.maskedCorners = maskedCorners

@@ -10,6 +10,8 @@ import UIKit
 
 class SettingsView: UIView {
 
+    //TODO: - show friends and watch groups
+
     private let countryLabel: UILabel = {
         let label = UILabel()
         label.text = "Country"
@@ -62,6 +64,20 @@ class SettingsView: UIView {
         return friendSwitch
     }()
 
+    let watchGroupsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Watch Groups public"
+        label.textColor = .white
+        return label
+    }()
+
+    let watchGroupsSwitch: UISwitch = {
+        let watchGroupSwitch = UISwitch()
+        watchGroupSwitch.onTintColor = UIColor(named: "offYellow")
+        watchGroupSwitch.isOn = false
+        return watchGroupSwitch
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -82,6 +98,8 @@ class SettingsView: UIView {
         addSubview(bookmarkSwitch)
         addSubview(friendsLabel)
         addSubview(friendsSwitch)
+        addSubview(watchGroupsLabel)
+        addSubview(watchGroupsSwitch)
 
         countryLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).offset(48)
@@ -117,6 +135,16 @@ class SettingsView: UIView {
         friendsSwitch.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(24)
             make.centerY.equalTo(friendsLabel)
+        }
+
+        watchGroupsLabel.snp.makeConstraints { make in
+            make.top.equalTo(friendsLabel.snp.bottom).offset(24)
+            make.left.equalToSuperview().offset(24)
+        }
+
+        watchGroupsSwitch.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(24)
+            make.centerY.equalTo(watchGroupsLabel)
         }
     }
 }
