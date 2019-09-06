@@ -13,7 +13,7 @@ class HomeView: UIView {
     let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0)
-        tableView.backgroundView = BlurBackgroundView()
+        tableView.backgroundColor = UIColor(named: "backgroundColor")
         tableView.separatorStyle = .none
         return tableView
     }()

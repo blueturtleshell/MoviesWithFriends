@@ -47,6 +47,8 @@
 		99A90501231AEDDB0054EE08 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A90500231AEDDB0054EE08 /* Country.swift */; };
 		99A90503231AF1080054EE08 /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A90502231AF1080054EE08 /* CountryCell.swift */; };
 		99AE7027232085520003322B /* PrivateButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE7026232085520003322B /* PrivateButtonView.swift */; };
+		99AE702A2321AAD00003322B /* FriendRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE70292321AAD00003322B /* FriendRequestCell.swift */; };
+		99AE702C2322E2490003322B /* TableViewBackgroundLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE702B2322E2490003322B /* TableViewBackgroundLabelView.swift */; };
 		99BA6F1222D6BBCD0002D5FF /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */; };
 		99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */; };
 		99BA6F1822D7A1C30002D5FF /* MediaDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1722D7A1C30002D5FF /* MediaDisplayable.swift */; };
@@ -112,7 +114,7 @@
 		99DF3B9822EA8529007C9660 /* WatchGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */; };
 		99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */; };
 		99EC9BA722E806C50008790C /* PendingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC9BA622E806C50008790C /* PendingCell.swift */; };
-		99EC9BA922E90AF60008790C /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC9BA822E90AF60008790C /* RequestCell.swift */; };
+		99EC9BA922E90AF60008790C /* FriendPendingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC9BA822E90AF60008790C /* FriendPendingCell.swift */; };
 		99EC9BAB22E91C060008790C /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC9BAA22E91C060008790C /* FriendCell.swift */; };
 		E34DB04C4AC76A838B4D1403 /* Pods_MoviesWithFriends.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8234AAA8614024796E0DEF41 /* Pods_MoviesWithFriends.framework */; };
 /* End PBXBuildFile section */
@@ -161,6 +163,8 @@
 		99A90500231AEDDB0054EE08 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		99A90502231AF1080054EE08 /* CountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
 		99AE7026232085520003322B /* PrivateButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateButtonView.swift; sourceTree = "<group>"; };
+		99AE70292321AAD00003322B /* FriendRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestCell.swift; sourceTree = "<group>"; };
+		99AE702B2322E2490003322B /* TableViewBackgroundLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewBackgroundLabelView.swift; sourceTree = "<group>"; };
 		99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
 		99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NothingFoundCell.swift; sourceTree = "<group>"; };
 		99BA6F1722D7A1C30002D5FF /* MediaDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDisplayable.swift; sourceTree = "<group>"; };
@@ -226,7 +230,7 @@
 		99DF3B9722EA8529007C9660 /* WatchGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupViewController.swift; sourceTree = "<group>"; };
 		99DF3B9B22EBBFA3007C9660 /* WatchGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGroupView.swift; sourceTree = "<group>"; };
 		99EC9BA622E806C50008790C /* PendingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingCell.swift; sourceTree = "<group>"; };
-		99EC9BA822E90AF60008790C /* RequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
+		99EC9BA822E90AF60008790C /* FriendPendingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPendingCell.swift; sourceTree = "<group>"; };
 		99EC9BAA22E91C060008790C /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		C620A3CBA09A139E4B5C4088 /* Pods-MoviesWithFriends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoviesWithFriends.debug.xcconfig"; path = "Target Support Files/Pods-MoviesWithFriends/Pods-MoviesWithFriends.debug.xcconfig"; sourceTree = "<group>"; };
 		C98A9F997564D8AD4D71F6E9 /* Pods-MoviesWithFriends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoviesWithFriends.release.xcconfig"; path = "Target Support Files/Pods-MoviesWithFriends/Pods-MoviesWithFriends.release.xcconfig"; sourceTree = "<group>"; };
@@ -346,8 +350,10 @@
 				998F04D822E41749000AB52D /* EmptyCell.swift */,
 				998F04D622E26FFD000AB52D /* FriendsViewController.swift */,
 				99EC9BAA22E91C060008790C /* FriendCell.swift */,
-				99EC9BA822E90AF60008790C /* RequestCell.swift */,
+				99EC9BA822E90AF60008790C /* FriendPendingCell.swift */,
+				99AE70292321AAD00003322B /* FriendRequestCell.swift */,
 				99DF3B9022EA3D04007C9660 /* FetchingTBCell.swift */,
+				99AE702B2322E2490003322B /* TableViewBackgroundLabelView.swift */,
 				99331E4723036A7E00F8F96C /* Friend Code */,
 				998F04E022E51C71000AB52D /* Add Friend */,
 			);
@@ -796,7 +802,7 @@
 				99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */,
 				99A904F62315D63B0054EE08 /* SettingsViewController.swift in Sources */,
 				99D1E2F7230C6685004780F7 /* MediaDetailViewController.swift in Sources */,
-				99EC9BA922E90AF60008790C /* RequestCell.swift in Sources */,
+				99EC9BA922E90AF60008790C /* FriendPendingCell.swift in Sources */,
 				99A90501231AEDDB0054EE08 /* Country.swift in Sources */,
 				99BA6F7B22DBDDA30002D5FF /* LoginViewController.swift in Sources */,
 				9921042E22F8F20B003F4714 /* Message.swift in Sources */,
@@ -872,6 +878,7 @@
 				99BA6F7322DA8F810002D5FF /* MWFUser.swift in Sources */,
 				99A904EF231352CD0054EE08 /* WatchGroupState.swift in Sources */,
 				99BA6F8222DBEA8B0002D5FF /* PaddedTextField.swift in Sources */,
+				99AE702A2321AAD00003322B /* FriendRequestCell.swift in Sources */,
 				99BA6F4C22D932410002D5FF /* MovieDetail.swift in Sources */,
 				99331E4E2304B74000F8F96C /* CameraQRScannerViewController.swift in Sources */,
 				99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */,
@@ -880,6 +887,7 @@
 				99BA6F5022D944490002D5FF /* RegionReleaseDates.swift in Sources */,
 				99BA6F5922DA2AE80002D5FF /* Stack.swift in Sources */,
 				9957E5C722DFCB8D005AC297 /* CreditsEndpoint.swift in Sources */,
+				99AE702C2322E2490003322B /* TableViewBackgroundLabelView.swift in Sources */,
 				99BDA48D22FCFAF400474311 /* MessageCell.swift in Sources */,
 				99BA6F6A22DA7F7D0002D5FF /* VideoCell.swift in Sources */,
 				9990EEA522EFB35E006C0075 /* WatchGroup.swift in Sources */,

@@ -33,7 +33,7 @@ class VideosViewController: UITableViewController {
 
     private func setup() {
         navigationController?.title = "Videos"
-        tableView.backgroundView = BlurBackgroundView()
+        tableView.backgroundColor = UIColor(named: "backgroundColor")
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self

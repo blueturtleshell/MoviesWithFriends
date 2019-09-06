@@ -55,6 +55,8 @@ class UserViewController: UIViewController {
     private func setupView() {
         navigationItem.title = "User Profile"
 
+        NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
+
         if let currentUserID = Auth.auth().currentUser?.uid, currentUserID == user.id {
             let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings"), style: .plain, target: self, action: #selector(settingsButtonPressed))
             navigationItem.rightBarButtonItem = settingsButton
@@ -65,8 +67,8 @@ class UserViewController: UIViewController {
             userView.fullInfoStackView.isHidden = true // current user does not have to see this
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
-
+        userView.friendCountView.countButton.addTarget(self, action: #selector(showFriends), for: .touchUpInside)
+        userView.watchGroupCountView.countButton.addTarget(self, action: #selector(showWatchGroups), for: .touchUpInside)
 
         userView.bookmarkSegmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
 
@@ -98,6 +100,19 @@ class UserViewController: UIViewController {
         imagePicker.allowsEditing = true
         imagePicker.delegate = self
         present(imagePicker, animated: true, completion: nil)
+    }
+
+    @objc private func showFriends() {
+        guard isFriendsPublic else { return }
+
+        let friendsViewController = FriendsViewController(user: user)
+        navigationController?.pushViewController(friendsViewController, animated: true)
+    }
+
+    @objc private func showWatchGroups() {
+        guard isWatchGroupsPublic else { return }
+
+
     }
 
     @objc private func settingsButtonPressed() {
@@ -141,7 +156,7 @@ class UserViewController: UIViewController {
                                 print(error)
                             } else {
                                 if let snapshot = snapshot {
-                                    self.userView.friendCountView.set(text: "\(snapshot.count)", isPublic: self.isFriendsPublic)
+                                    self.userView.friendCountView.configure(count: snapshot.count, isPublic: self.isFriendsPublic)
                                 }
                             }
                         })
@@ -152,7 +167,7 @@ class UserViewController: UIViewController {
                                 print(error)
                             } else {
                                 if let snapshot = snapshot {
-                                    self.userView.watchGroupCountView.set(text: "\(snapshot.count)", isPublic: self.isWatchGroupsPublic)
+                                    self.userView.watchGroupCountView.configure(count: snapshot.count, isPublic: self.isWatchGroupsPublic)
                                 }
                             }
                         })
@@ -165,6 +180,10 @@ class UserViewController: UIViewController {
     }
 
     private func fetchBookmarks() {
+        let fetchingHUD = HUDView.hud(inView: userView, animated: true)
+        fetchingHUD.text = "Fetching bookmarks"
+        fetchingHUD.accessoryType = .activityIndicator
+
         bookmarkListener = db.collection("bookmarks").document(user.id).collection("media").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
@@ -172,6 +191,8 @@ class UserViewController: UIViewController {
                 return
             } else {
                 if let snapshot = snapshot {
+                    fetchingHUD.remove(from: self.userView)
+                    
                     snapshot.documentChanges.forEach { diff in
                         guard let bookmark = BookmarkMedia(from: diff.document.data()) else { return }
                         switch diff.type {
@@ -229,17 +250,30 @@ class UserViewController: UIViewController {
 extension UserViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !isBookmarkPublic {
-            return 1
+            let backgroundView = TableViewBackgroundLabelView()
+            backgroundView.textLabel.text = "Bookmarks private"
+            tableView.backgroundView = backgroundView
+            return 0
+        } else {
+            if userView.bookmarkSegmentedControl.selectedSegmentIndex == 0 {
+                if bookmarkedMovies.isEmpty {
+                    tableView.backgroundView = TableViewBackgroundLabelView()
+                    return 0
+                }
+                tableView.backgroundView = nil
+                return bookmarkedMovies.count
+            } else {
+                if bookmarkedTV.isEmpty {
+                    tableView.backgroundView = TableViewBackgroundLabelView()
+                    return 0
+                }
+                tableView.backgroundView = nil
+                return bookmarkedTV.count
+            }
         }
-        return userView.bookmarkSegmentedControl.selectedSegmentIndex == 0 ? bookmarkedMovies.count : bookmarkedTV.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if !isBookmarkPublic {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell
-            cell.emptyTextLabel.text = "Private"
-            return cell
-        }
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkCell", for: indexPath) as! BookmarkCell
 

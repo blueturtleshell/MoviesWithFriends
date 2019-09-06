@@ -47,7 +47,7 @@ class CountryViewController: UITableViewController {
 
     private func setupView() {
         tableView.register(CountryCell.self, forCellReuseIdentifier: "CountryCell")
-        tableView.backgroundView = BlurBackgroundView()
+        tableView.backgroundColor = UIColor(named: "backgroundColor")
         tableView.sectionIndexColor = UIColor(named: "offYellow")
     }
 

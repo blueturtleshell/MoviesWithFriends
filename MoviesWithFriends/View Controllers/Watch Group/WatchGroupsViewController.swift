@@ -60,7 +60,7 @@ class WatchGroupsViewController: UIViewController {
         navigationItem.backBarButtonItem = UIBarButtonItem()
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "ticket"), style: .plain, target: self, action: #selector(createCustomWatchGroup))
 
-        watchGroupsView.tableView.backgroundView = BlurBackgroundView()
+        watchGroupsView.tableView.backgroundColor = UIColor(named: "backgroundColor")
         watchGroupsView.tableView.dataSource = self
         watchGroupsView.tableView.delegate = self
         watchGroupsView.tableView.tableFooterView = UIView()

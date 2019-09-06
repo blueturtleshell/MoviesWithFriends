@@ -36,8 +36,8 @@ class HUDView: UIView {
     }
 
     override func draw(_ rect: CGRect) {
-        let boxWidth: CGFloat = 140
-        let boxHeight: CGFloat = 140
+        let boxWidth: CGFloat = 160
+        let boxHeight: CGFloat = 160
 
         let boxRect = CGRect(
             x: round((bounds.size.width - boxWidth) / 2),

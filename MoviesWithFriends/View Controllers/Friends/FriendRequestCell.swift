@@ -1,19 +1,18 @@
 //
-//  RequestCell.swift
+//  FriendRequestCell.swift
 //  MoviesWithFriends
 //
-//  Created by Peter Sun on 7/24/19.
+//  Created by Peter Sun on 9/5/19.
 //  Copyright © 2019 Peter Sun. All rights reserved.
 //
 
 import UIKit
 
-protocol RequestCellDelegate: AnyObject {
-    func acceptPressed(_ cell: RequestCell)
-    func denyPressed(_ cell: RequestCell)
+protocol FriendRequestCellDelegate: AnyObject {
+    func requestSent(_ cell: FriendRequestCell)
 }
 
-class RequestCell: UITableViewCell {
+class FriendRequestCell: UITableViewCell {
 
     private let containerView: UIView = {
         let view = UIView()
@@ -44,35 +43,24 @@ class RequestCell: UITableViewCell {
         return label
     }()
 
-    let acceptButton: UIButton = {
+    let loadingIndicatorView: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+        activityIndicator.color = UIColor(named: "offYellow")
+        activityIndicator.startAnimating()
+        return activityIndicator
+    }()
+
+    // FIXME: - maybe make image button right centered
+    let sendRequestButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Accept", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitle("Send Friend Request", for: .normal)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
         return button
     }()
 
-    let denyButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Deny", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        button.layer.cornerRadius = 6
-        return button
-    }()
-
-    private lazy var bottomStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [acceptButton, denyButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 12
-        return stackView
-    }()
-
-    weak var delegate: RequestCellDelegate?
+    weak var delegate: FriendRequestCellDelegate?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -98,16 +86,16 @@ class RequestCell: UITableViewCell {
         containerView.addSubview(profileImageView)
         containerView.addSubview(userNameLabel)
         containerView.addSubview(fullNameLabel)
-        containerView.addSubview(bottomStackView)
+        containerView.addSubview(sendRequestButton)
 
         containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0))
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12))
         }
 
         profileImageView.snp.makeConstraints { make in
             make.width.height.equalTo(60)
             make.left.equalToSuperview().offset(12)
-            make.top.equalToSuperview().offset(6)
+            make.centerY.equalToSuperview()
         }
 
         userNameLabel.snp.makeConstraints { make in
@@ -122,26 +110,15 @@ class RequestCell: UITableViewCell {
             make.right.lessThanOrEqualToSuperview().inset(12)
         }
 
-        [acceptButton, denyButton].forEach {
-            $0.snp.makeConstraints({ make in
-                make.width.equalTo(100)
-            })
-        }
+        sendRequestButton.snp.makeConstraints({ make in
+            make.top.equalTo(fullNameLabel.snp.bottom)
+            make.right.equalToSuperview().inset(24)
+        })
 
-        bottomStackView.snp.makeConstraints { make in
-            make.top.equalTo(fullNameLabel.snp.bottom).offset(6)
-            make.right.equalToSuperview().inset(12)
-        }
-
-        acceptButton.addTarget(self, action: #selector(acceptPressed), for: .touchUpInside)
-        denyButton.addTarget(self, action: #selector(denyPressed), for: .touchUpInside)
+        sendRequestButton.addTarget(self, action: #selector(sendFriendRequestPressed), for: .touchUpInside)
     }
 
-    @objc private func acceptPressed() {
-        delegate?.acceptPressed(self)
-    }
-
-    @objc private func denyPressed() {
-        delegate?.denyPressed(self)
+    @objc private func sendFriendRequestPressed() {
+        delegate?.requestSent(self)
     }
 }

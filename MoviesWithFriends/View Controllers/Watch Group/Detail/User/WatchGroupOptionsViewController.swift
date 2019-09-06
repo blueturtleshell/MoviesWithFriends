@@ -47,7 +47,7 @@ class WatchGroupOptionsViewController: UITableViewController {
         tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
 
-        tableView.backgroundView = BlurBackgroundView()
+        tableView.backgroundColor = UIColor(named: "backgroundColor")
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
     }

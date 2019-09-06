@@ -10,7 +10,7 @@ import UIKit
 
 class PrivateButtonView: UIView {
 
-    private lazy var countButton: UIButton = {
+    lazy var countButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = UIColor(named: "offYellow")
         button.setTitle("   ", for: .normal)
@@ -50,9 +50,9 @@ class PrivateButtonView: UIView {
         }
     }
 
-    func set(text: String, isPublic: Bool) {
-        countButton.setTitle(text, for: .normal)
-        countButton.isEnabled = isPublic
+    func configure(count: Int, isPublic: Bool) {
+        countButton.setTitle("\(count)", for: .normal)
+        countButton.isEnabled = isPublic && count > 0
         lockImageView.isHidden = isPublic
     }
 }

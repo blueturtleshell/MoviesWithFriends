@@ -203,6 +203,7 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
+        
         return 2
     }
 

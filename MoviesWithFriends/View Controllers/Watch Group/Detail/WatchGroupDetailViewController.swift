@@ -67,7 +67,7 @@ class WatchGroupDetailViewController: UITableViewController {
         navigationItem.titleView = titleButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Users", style: .plain, target: self, action: #selector(userOptions))
 
-        tableView.backgroundView = BlurBackgroundView()
+        tableView.backgroundColor = UIColor(named: "backgroundColor")
         tableView.contentInset = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 0)
         tableView.register(MessageCell.self, forCellReuseIdentifier: "MessageCell")
 

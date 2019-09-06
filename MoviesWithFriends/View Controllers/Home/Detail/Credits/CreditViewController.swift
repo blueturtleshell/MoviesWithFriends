@@ -34,7 +34,7 @@ class CreditViewController: UITableViewController {
         tableView.estimatedRowHeight = 120
         tableView.rowHeight = 120
         tableView.separatorColor = .white
-        tableView.backgroundView = BlurBackgroundView()
+        tableView.backgroundColor = UIColor(named: "backgroundColor")
         tableView.tableFooterView = UIView()
         tableView.register(CreditCell.self, forCellReuseIdentifier: "CreditCell")
     }
