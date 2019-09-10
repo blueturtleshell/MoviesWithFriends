@@ -64,7 +64,6 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
         navigationItem.titleView = titleSortView
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: mediaSegmentedControl)
         collectionView.register(PosterCell.self, forCellWithReuseIdentifier: "PosterCell")
-        collectionView.register(NothingFoundCell.self, forCellWithReuseIdentifier: "NothingFoundCell")
     }
 
     @objc private func promptToChangeSort() {
@@ -87,7 +86,7 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
-
+        alertController.popoverPresentationController?.sourceView = titleSortView
         present(alertController, animated: true, completion: nil)
     }
 
@@ -99,10 +98,14 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
             endpoint = CreditsEndpoint.tv(id: person.id)
         }
 
+        let searchHUD = HUDView.hud(inView: view, animated: true)
+        searchHUD.text = "Searching media"
+        searchHUD.accessoryType = .activityIndicator
+
         mediaManager.mediaWithPerson(endpoint: endpoint) { result in
             do {
                 let credits = try result.get()
-
+                searchHUD.remove(from: self.view)
                 var mediaSet = Set<Media>(credits.cast)
                 mediaSet = mediaSet.union(credits.crew)
                 self.media = sortMedia(Array(mediaSet), by: self.sortBy)
@@ -121,17 +124,17 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if media.isEmpty {
-            return 1
+            let backgroundView = BackgroundLabelView()
+            backgroundView.textLabel.text =
+            "No \(mediaSegmentedControl.selectedSegmentIndex == 0 ? "Movies" : "TV Shows") featuring\n\(person.name)\nwere found"
+            collectionView.backgroundView = backgroundView
+            return 0
         }
+        collectionView.backgroundView = nil
         return media.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if media.isEmpty {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NothingFoundCell", for: indexPath) as! NothingFoundCell
-            return cell
-        }
-
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
         cell.posterImageView.layer.cornerRadius = 0
 
@@ -163,10 +166,6 @@ class PersonMediaListViewController: UICollectionViewController, UICollectionVie
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        if media.isEmpty {
-            return CGSize(width: view.bounds.width, height: 200)
-        }
 
         let cellWidth = view.bounds.width / 2.0
         let cellHeight = cellWidth * 1.66

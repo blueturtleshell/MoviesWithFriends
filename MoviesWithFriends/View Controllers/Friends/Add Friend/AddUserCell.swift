@@ -47,9 +47,8 @@ class AddUserCell: UITableViewCell {
     }()
 
     let sendRequestButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Send Request", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
@@ -57,9 +56,8 @@ class AddUserCell: UITableViewCell {
     }()
 
     let cancelButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Cancel", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
@@ -69,7 +67,7 @@ class AddUserCell: UITableViewCell {
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [sendRequestButton, cancelButton])
         stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fillEqually
         stackView.spacing = 12
         return stackView
     }()
@@ -121,14 +119,6 @@ class AddUserCell: UITableViewCell {
         fullNameLabel.snp.makeConstraints { make in
             make.top.equalTo(userNameLabel.snp.bottom).offset(24)
             make.left.right.equalTo(userNameLabel)
-        }
-
-        sendRequestButton.snp.makeConstraints { make in
-            make.width.equalTo(140)
-        }
-
-        cancelButton.snp.makeConstraints { make in
-            make.width.equalTo(100)
         }
 
         buttonStackView.snp.makeConstraints { make in

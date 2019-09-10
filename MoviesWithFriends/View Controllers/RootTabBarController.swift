@@ -22,9 +22,9 @@ class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     private let userManager: UserManager
 
-    init(userManager: UserManager) {
+    init(userManager: UserManager, mediaManager: MediaManager) {
         self.userManager = userManager
-        self.mediaManager = MediaManager()
+        self.mediaManager = mediaManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -68,7 +68,7 @@ class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
         hud.text = "Fetching User"
         hud.accessoryType = .activityIndicator
         
-        userManager.retrieveUser {
+        userManager.fetchCurrentUser {
             hud.remove(from: self.view)
 
             self.configureTabBarItems(hide: true)
@@ -89,15 +89,15 @@ class RootTabBarController: UITabBarController, UITabBarControllerDelegate {
         vcs.append(homeNavigationController)
 
         if let currentUser = userManager.currentUser {
-            let watchGroupsViewController = WatchGroupsViewController(user: currentUser)
+            let watchGroupsViewController = WatchGroupsViewController(user: currentUser, mediaManager: mediaManager)
             let watchGroupsNavigationController = UINavigationController(rootViewController: watchGroupsViewController)
             vcs.append(watchGroupsNavigationController)
 
-            let friendsViewController = FriendsViewController(user: currentUser)
+            let friendsViewController = FriendsViewController(user: currentUser, mediaManager: mediaManager)
             let friendsNavigationController = UINavigationController(rootViewController: friendsViewController)
             vcs.append(friendsNavigationController)
 
-            let userViewController = UserViewController(user: currentUser)
+            let userViewController = UserViewController(user: currentUser, mediaManager: mediaManager)
             let userNavigationController = UINavigationController(rootViewController: userViewController)
             vcs.append(userNavigationController)
         } else {

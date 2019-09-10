@@ -353,7 +353,6 @@ extension WatchGroupViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! FriendCell
         let friend = friends[indexPath.row]
 
-        //TODO: change colors
         cell.containerView.backgroundColor = invitedFriends.contains(friend) ? UIColor(named: "offGreen") : .white
 
         cell.userNameLabel.text = friend.userName

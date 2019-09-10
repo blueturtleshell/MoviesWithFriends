@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     private let userManager = UserManager()
+    private lazy var mediaManager = MediaManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
@@ -34,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = #colorLiteral(red: 0.1940585673, green: 0.2092419863, blue: 0.2196866274, alpha: 1)
         window?.makeKeyAndVisible()
 
-        window?.rootViewController = RootTabBarController(userManager: userManager)
+        window?.rootViewController = RootTabBarController(userManager: userManager, mediaManager: mediaManager)
 
         return true
     }

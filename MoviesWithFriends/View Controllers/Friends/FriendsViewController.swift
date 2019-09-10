@@ -10,18 +10,9 @@ import UIKit
 import Firebase
 
 class FriendsViewController: UITableViewController {
-    //FIXME: cleanup
-    fileprivate var relationshipState: RelationshipState = .sendRequest
 
-    enum RelationshipState: String {
-        case sendRequest = "Send Request"
-        case requestSent = "Request Sent"
-        case alreadyFriends = "Unfriend"
-        case currentUser = "This is you"
-        case blocked = "Blocked" // maybe
-    }
 
-    private let mediaManager = MediaManager()
+    private let mediaManager: MediaManager
 
     private var db = Firestore.firestore()
     private var friendSnapshotListener: ListenerRegistration?
@@ -33,11 +24,13 @@ class FriendsViewController: UITableViewController {
         return Auth.auth().currentUser?.uid == user.id
     }
 
+    fileprivate var relationshipState: RelationshipState = .sendRequest
     private var friends = [(user: MWFUser, state: RelationshipState)]()
     private var pendingFriends = [MWFUser]()
 
-    init(user: MWFUser) {
+    init(user: MWFUser, mediaManager: MediaManager) {
         self.user = user
+        self.mediaManager = mediaManager
         super.init(style: .plain)
         tabBarItem = UITabBarItem(title: "Friends", image: UIImage(named: "user"), tag: 2)
     }
@@ -49,14 +42,18 @@ class FriendsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addFriend))
-
         setupView()
         fetchFriends()
     }
 
     private func setupView() {
-        navigationItem.title = "Friends"
+        if isCurrentUser {
+            navigationItem.title = "Your friends"
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addFriend))
+        } else {
+            navigationItem.title = "\(user.fullName ?? user.userName) friends"
+        }
+
         navigationItem.backBarButtonItem = UIBarButtonItem()
 
         if isCurrentUser {
@@ -65,9 +62,9 @@ class FriendsViewController: UITableViewController {
 
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         tableView.backgroundColor = UIColor(named: "backgroundColor")
+        tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
-        tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         tableView.register(FriendPendingCell.self, forCellReuseIdentifier: "PendingCell")
         tableView.register(FriendRequestCell.self, forCellReuseIdentifier: "RequestCell")
         tableView.register(FetchingTBCell.self, forCellReuseIdentifier: "FetchingCell")
@@ -116,7 +113,7 @@ class FriendsViewController: UITableViewController {
 
                             switch diff.type {
                             case .added:
-                                if self.isCurrentUser {
+                                if self.isCurrentUser { // you are the user, add all your friends to the list
                                     self.friends.append((user: user, state: .alreadyFriends))
                                 } else {
                                     guard let currentUserID = Auth.auth().currentUser?.uid else { return }
@@ -128,6 +125,8 @@ class FriendsViewController: UITableViewController {
                                         self.checkifFriends(currentUserID: currentUserID, otherUser: user, completion: { isFriends in
                                             if isFriends {
                                                 self.friends.append((user: user, state: .alreadyFriends))
+                                                self.friends.sort(by: { $0.user < $1.user })
+                                                self.tableView.reloadData()
                                             } else {
                                                 // check if request already sent
                                                 self.checkIfUserIsPending(currentUserID: currentUserID, otherUser: user, completion: { isPending in
@@ -136,6 +135,9 @@ class FriendsViewController: UITableViewController {
                                                     } else {
                                                         self.friends.append((user: user, state: .sendRequest))
                                                     }
+
+                                                    self.friends.sort(by: { $0.user < $1.user })
+                                                    self.tableView.reloadData()
                                                 })
                                             }
                                         })
@@ -163,7 +165,7 @@ class FriendsViewController: UITableViewController {
         // only current user can see users requesting to be friends
         if isCurrentUser {
             // users that have requested to be friends, pending approval
-            pendingFriendSnapshotListener = db.collection("relationships").document(user.id).collection("request").addSnapshotListener { snapshot, error in
+            pendingFriendSnapshotListener = db.collection("relationships").document(user.id).collection("requests").addSnapshotListener { snapshot, error in
                 if let error = error {
                     print(error)
                 } else {
@@ -219,19 +221,19 @@ class FriendsViewController: UITableViewController {
     private func configure(cell: FriendRequestCell, state: RelationshipState) {
         switch state {
         case .sendRequest, .alreadyFriends:
-            cell.sendRequestButton.isEnabled = true
-            cell.sendRequestButton.isHidden = false
+            cell.actionButton.isEnabled = true
+            cell.actionButton.isHidden = false
         case .requestSent:
-            cell.sendRequestButton.isEnabled = false
-            cell.sendRequestButton.isHidden = false
+            cell.actionButton.isEnabled = false
+            cell.actionButton.isHidden = false
         case .currentUser:
-            cell.sendRequestButton.isEnabled = false
-            cell.sendRequestButton.isHidden = true
+            cell.actionButton.isEnabled = false
+            cell.actionButton.isHidden = true
         default:
-            cell.sendRequestButton.isEnabled = true
-            cell.sendRequestButton.isHidden = false
+            cell.actionButton.isEnabled = true
+            cell.actionButton.isHidden = false
         }
-        cell.sendRequestButton.setTitle(state.rawValue, for: .normal)
+        cell.actionButton.setTitle(state.rawValue, for: .normal)
     }
 
     // MARK: - tableview
@@ -244,18 +246,21 @@ class FriendsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            if friends.isEmpty {
-                let backgroundView = TableViewBackgroundLabelView()
-                backgroundView.textLabel.text = "No friends found"
-                tableView.backgroundView = backgroundView
-                return 0
-            }
-            tableView.backgroundView = nil
-            return friends.count
+
+        if friends.isEmpty && pendingFriends.isEmpty {
+            let backgroundView = BackgroundLabelView()
+            backgroundView.textLabel.text = "No friends found"
+            tableView.backgroundView = backgroundView
+            return 0
         }
+
         tableView.backgroundView = nil
-        return pendingFriends.count
+
+        if section == 0 {
+            return friends.count
+        } else {
+            return pendingFriends.count
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -321,16 +326,24 @@ class FriendsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let friend = friends[indexPath.row].user
 
-        let userViewController = UserViewController(user: friend)
+        let userViewController = UserViewController(user: friend, mediaManager: mediaManager)
         navigationController?.pushViewController(userViewController, animated: true)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 0 : 52
+        if section == 0 {
+            return 0
+        } else {
+            if pendingFriends.isEmpty {
+                return 0
+            } else {
+                return 52
+            }
+        }
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 1 {
+        if section == 1 && !pendingFriends.isEmpty {
             let inviteHeader = InviteHeaderView()
             inviteHeader.headerTitleLabel.text = "Requests"
             return inviteHeader
@@ -409,7 +422,7 @@ extension FriendsViewController: FriendRequestCellDelegate {
             if let error = error {
                 print(error)
             } else {
-                self.tableView.reloadRows(at: [IndexPath(item: 0, section: 0)], with: .automatic)
+                self.tableView.reloadRows(at: [IndexPath(item: indexPath.row, section: 0)], with: .automatic)
             }
         }
     }

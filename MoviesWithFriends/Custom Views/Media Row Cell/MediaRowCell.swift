@@ -19,6 +19,7 @@ class MediaRowCell: UITableViewCell {
     var endpoint: Endpoint?
     weak var mediaManager: MediaManager?
     weak var delegate: MediaRowDelegate?
+    var isFetching = false
 
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -68,7 +69,6 @@ class MediaRowCell: UITableViewCell {
 
         mediaCollectionView.delegate = self
         mediaCollectionView.dataSource = self
-        mediaCollectionView.register(NothingFoundCell.self, forCellWithReuseIdentifier: "EmptyCell")
         mediaCollectionView.register(PosterCell.self, forCellWithReuseIdentifier: "PosterCell")
 
         addSubview(titleLabel)
@@ -100,46 +100,44 @@ class MediaRowCell: UITableViewCell {
 
 extension MediaRowCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if media.count == 0 {
+        if media.isEmpty && !isFetching {
             collectionView.isScrollEnabled = false
-            return 1 // Empty Cell
+            let backgroundView = BackgroundLabelView()
+            backgroundView.textLabel.text = "No results found"
+            collectionView.backgroundView = backgroundView
+            return 0
+        } else if isFetching {
+            collectionView.isScrollEnabled = false
+            let backgroundView = BackgroundLabelView()
+            backgroundView.textLabel.text = "Fetching"
+            collectionView.backgroundView = backgroundView
+            return 0
         }
+
+        collectionView.backgroundView = nil
         collectionView.isScrollEnabled = true
         return media.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if media.isEmpty {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyCell", for: indexPath) as! NothingFoundCell
-            if let _ = endpoint {
-                cell.textLabel.textColor = UIColor(named: "offWhite")
-                cell.textLabel.text = "Fetching"
-            }
-            return cell
-        } else {
-            
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
 
-            cell.addShadow(cornerRadius: 4, maskedCorners: [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner], color: .black, offset: CGSize(width: 2, height: 2), opacity: 0.25, shadowRadius: 3)
+        cell.addShadow(cornerRadius: 4, maskedCorners: [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner], color: .black, offset: CGSize(width: 2, height: 2), opacity: 0.25, shadowRadius: 3)
 
-            let mediaItem = media[indexPath.item]
-            cell.titleLabel.attributedText = NSAttributedString(string: mediaItem.title, attributes: cell.labelAttributes)
-            if let posterPath = mediaItem.posterPath, !posterPath.isEmpty {
-                cell.posterImageView.kf.indicatorType = .activity
-                let activity = cell.posterImageView.kf.indicator?.view as! UIActivityIndicatorView
-                activity.color = UIColor(named: "offYellow")
-                let imageURL = mediaManager?.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
-                cell.posterImageView.kf.setImage(with: imageURL)
-            }
-            return cell
+        let mediaItem = media[indexPath.item]
+        cell.titleLabel.attributedText = NSAttributedString(string: mediaItem.title, attributes: cell.labelAttributes)
+        if let posterPath = mediaItem.posterPath, !posterPath.isEmpty {
+            cell.posterImageView.kf.indicatorType = .activity
+            let activity = cell.posterImageView.kf.indicator?.view as! UIActivityIndicatorView
+            activity.color = UIColor(named: "offYellow")
+            let imageURL = mediaManager?.getImageURL(for: .poster(path: posterPath, size: ImageEndpoint.PosterSize.medium))
+            cell.posterImageView.kf.setImage(with: imageURL)
         }
+        return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if media.isEmpty {
-            return CGSize(width: collectionView.bounds.width, height: 190)
-        }
         return CGSize(width: 135, height: 190)
     }
 

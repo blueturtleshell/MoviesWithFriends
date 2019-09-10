@@ -43,7 +43,7 @@ class MediaDetailView: UIView {
     }()
 
     let backToPreviousMediaButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.isHidden = true
         button.setTitle("Go back ...", for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
@@ -51,7 +51,6 @@ class MediaDetailView: UIView {
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
-        button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
         button.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return button
     }()
@@ -108,19 +107,18 @@ class MediaDetailView: UIView {
     }()
 
     let scoreButton: UIButton = {
-        let button = UIButton(type: .custom)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Score", for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
         button.tintColor = .white
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 8
-        button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
         button.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return button
     }()
 
     let creditButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Credits", for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
         button.tintColor = .white
@@ -128,13 +126,12 @@ class MediaDetailView: UIView {
         button.layer.cornerRadius = 8
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 0.5
-        button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
         button.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return button
     }()
 
     let videosButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Videos", for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
         button.tintColor = .white
@@ -142,7 +139,6 @@ class MediaDetailView: UIView {
         button.layer.cornerRadius = 8
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 0.5
-        button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
         button.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return button
     }()
@@ -194,7 +190,7 @@ class MediaDetailView: UIView {
         containerView.contentView.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(backdropImageView)
-        contentView.addSubview(backToPreviousMediaButton)
+        backdropImageView.addSubview(backToPreviousMediaButton)
         contentView.addSubview(posterImageView)
         contentView.addSubview(movieInfoStackView)
         contentView.addSubview(buttonStackView)
@@ -204,6 +200,7 @@ class MediaDetailView: UIView {
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
         }
+
         containerView.snp.makeConstraints { make in
             make.edges.equalTo(backgroundImageView)
         }
@@ -220,12 +217,12 @@ class MediaDetailView: UIView {
 
         backdropImageView.snp.makeConstraints { make in
             make.left.top.right.equalToSuperview()
-            make.height.equalTo(200)
+            make.height.equalTo(snp.height).multipliedBy(0.3)
         }
 
         backToPreviousMediaButton.snp.makeConstraints { make in
-            make.left.equalTo(backdropImageView).offset(6)
-            make.bottom.equalTo(backdropImageView).inset(6)
+            make.left.equalToSuperview().offset(6)
+            make.bottom.equalToSuperview().inset(6)
             make.height.equalTo(22)
         }
 

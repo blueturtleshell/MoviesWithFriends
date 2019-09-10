@@ -24,14 +24,16 @@ class InviteHeaderView: UIView {
         return label
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private let offset: Bool
+
+    init(offset: Bool = true) {
+        self.offset = offset
+        super.init(frame: .zero)
         setupView()
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupView()
+        fatalError("Not used")
     }
 
     private func setupView() {
@@ -40,8 +42,8 @@ class InviteHeaderView: UIView {
 
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalToSuperview().offset(12)
-            make.bottom.equalToSuperview().inset(12)
+            make.top.equalToSuperview().offset(offset ? 12 : 0)
+            make.bottom.equalToSuperview().inset(offset ? 12 : 0)
         }
 
         headerTitleLabel.snp.makeConstraints { make in

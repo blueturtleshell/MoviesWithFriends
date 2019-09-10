@@ -16,7 +16,7 @@ class FriendView: UIView {
 
     let container: UIView = {
         let view = UIView()
-        view.backgroundColor = .gray
+        view.backgroundColor = UIColor(named: "backgroundColor")
         return view
     }()
 
@@ -41,7 +41,7 @@ class FriendView: UIView {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .title3)
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = UIColor(named: "offWhite")
         return label
     }()
 
@@ -59,27 +59,25 @@ class FriendView: UIView {
     let confirmButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Confirm", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
         return button
     }()
 
     let pasteButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Paste from clipboard", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
         return button
     }()
 
     let qrCodeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("QR Code", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
-        button.setTitleColor(.white, for: .normal)
+        let button = PaddedButton(padding: 12)
+        button.setTitle("Scan QR Code", for: .normal)
+        button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
         return button
@@ -88,7 +86,7 @@ class FriendView: UIView {
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [pasteButton, qrCodeButton])
         stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fillEqually
         stackView.spacing = 12
         return stackView
     }()
@@ -163,10 +161,6 @@ class FriendView: UIView {
             make.size.equalTo(CGSize(width: 64, height: 44))
         }
 
-        pasteButton.snp.makeConstraints { make in
-            make.width.equalTo(180)
-        }
-
         buttonStackView.snp.makeConstraints { make in
             make.top.equalTo(friendCodeTextField.snp.bottom).offset(24)
             make.left.equalToSuperview().offset(12)
@@ -178,7 +172,7 @@ class FriendView: UIView {
             make.top.equalTo(buttonStackView.snp.bottom).offset(24)
             make.left.equalToSuperview().offset(12)
             make.right.equalToSuperview().inset(12)
-            make.height.equalTo(800)
+            make.height.equalTo(400)
             make.bottom.equalToSuperview().inset(12)
         }
     }

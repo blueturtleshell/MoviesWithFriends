@@ -75,7 +75,7 @@ class WatchGroupView: UIView {
     }()
 
     let dateButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Set Date", for: .normal)
         button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -105,7 +105,7 @@ class WatchGroupView: UIView {
     }()
 
     let inviteAllButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Invite All", for: .normal)
         button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -114,7 +114,7 @@ class WatchGroupView: UIView {
     }()
 
     let clearSelectionButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Clear", for: .normal)
         button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)

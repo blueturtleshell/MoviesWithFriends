@@ -11,15 +11,16 @@ import Firebase
 
 class WatchGroupOptionsViewController: UITableViewController {
 
+    private let mediaManager: MediaManager
+
     private let watchGroup: WatchGroup
 
     private let db = Firestore.firestore()
     private var usersInGroup = [MWFUser]()
 
-    private var isFetching = false
-
-    init(watchGroup: WatchGroup) {
+    init(watchGroup: WatchGroup, mediaManager: MediaManager) {
         self.watchGroup = watchGroup
+        self.mediaManager = mediaManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -44,7 +45,6 @@ class WatchGroupOptionsViewController: UITableViewController {
         }
 
         tableView.register(FetchingTBCell.self, forCellReuseIdentifier: "FetchingCell")
-        tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
 
         tableView.backgroundColor = UIColor(named: "backgroundColor")
@@ -54,19 +54,17 @@ class WatchGroupOptionsViewController: UITableViewController {
 
     @objc private func editGroup() {
         if watchGroup.mediaID < 0 {
-            let customWatchGroupDetailViewController = CustomWatchGroupViewController()
+            let customWatchGroupDetailViewController = CustomWatchGroupViewController(mediaManager: mediaManager)
             customWatchGroupDetailViewController.watchGroupToEdit = watchGroup
             navigationController?.pushViewController(customWatchGroupDetailViewController, animated: true)
         } else {
-            let mediaManager = MediaManager()
-
             switch watchGroup.type {
             case .movie:
                 mediaManager.fetchMovieDetail(id: watchGroup.mediaID) { detailResult in
                     do {
                         let mediaInfo = try detailResult.get()
                         let watchGroupViewController = WatchGroupViewController(mediaType: self.watchGroup.type,
-                                                                                mediaInfo: mediaInfo, mediaManager: mediaManager)
+                                                                                mediaInfo: mediaInfo, mediaManager: self.mediaManager)
                         watchGroupViewController.watchGroupToEdit = self.watchGroup
                         self.navigationController?.pushViewController(watchGroupViewController, animated: true)
                     } catch {
@@ -78,7 +76,7 @@ class WatchGroupOptionsViewController: UITableViewController {
                     do {
                         let mediaInfo = try detailResult.get()
                         let watchGroupViewController = WatchGroupViewController(mediaType: self.watchGroup.type,
-                                                                                mediaInfo: mediaInfo, mediaManager: mediaManager)
+                                                                                mediaInfo: mediaInfo, mediaManager: self.mediaManager)
                         watchGroupViewController.watchGroupToEdit = self.watchGroup
                         self.navigationController?.pushViewController(watchGroupViewController, animated: true)
                     } catch {
@@ -90,15 +88,19 @@ class WatchGroupOptionsViewController: UITableViewController {
     }
 
     private func fetchUsers() {
-        isFetching = true
+        let fetchingUsersHUD = HUDView.hud(inView: view, animated: true)
+        fetchingUsersHUD.text = "Fetching users"
+        fetchingUsersHUD.accessoryType = .activityIndicator
+
         db.collection("watch_groups").document(watchGroup.id).collection("users_joined").addSnapshotListener { snapshot, error in
             if let error = error {
                 print(error)
             } else {
                 if let snapshot = snapshot {
 
+                    fetchingUsersHUD.remove(from: self.view)
+
                     if snapshot.documents.count == 0 {
-                        self.isFetching = false
                         self.tableView.reloadData()
                         return
                     }
@@ -107,8 +109,6 @@ class WatchGroupOptionsViewController: UITableViewController {
                         guard let userID = diff.document.data()["user_id"] as? String else { return }
                         getUser(userID: userID, completion: { user in
                             guard let user = user else { return }
-
-                            self.isFetching = false
 
                             switch diff.type {
                             case .added:
@@ -141,24 +141,10 @@ class WatchGroupOptionsViewController: UITableViewController {
     // MARK: - Tableview
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if usersInGroup.isEmpty {
-            return 1
-        }
         return usersInGroup.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if usersInGroup.isEmpty {
-            if isFetching {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "FetchingCell", for: indexPath) as! FetchingTBCell
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell
-                cell.emptyTextLabel.text = "No Friends Invited"
-                return cell
-            }
-        }
-
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! FriendCell
         let friend = usersInGroup[indexPath.row]
 

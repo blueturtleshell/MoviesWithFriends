@@ -43,18 +43,12 @@ class FriendRequestCell: UITableViewCell {
         return label
     }()
 
-    let loadingIndicatorView: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
-        activityIndicator.color = UIColor(named: "offYellow")
-        activityIndicator.startAnimating()
-        return activityIndicator
-    }()
-
     // FIXME: - maybe make image button right centered
-    let sendRequestButton: UIButton = {
-        let button = UIButton(type: .system)
+    let actionButton: UIButton = {
+        let button = PaddedButton(padding: 12)
         button.setTitle("Send Friend Request", for: .normal)
         button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
+        button.setTitleColor(UIColor(named: "offWhite"), for: .disabled)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
         return button
@@ -86,7 +80,7 @@ class FriendRequestCell: UITableViewCell {
         containerView.addSubview(profileImageView)
         containerView.addSubview(userNameLabel)
         containerView.addSubview(fullNameLabel)
-        containerView.addSubview(sendRequestButton)
+        containerView.addSubview(actionButton)
 
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12))
@@ -101,21 +95,21 @@ class FriendRequestCell: UITableViewCell {
         userNameLabel.snp.makeConstraints { make in
             make.top.equalTo(profileImageView).offset(6)
             make.left.equalTo(profileImageView.snp.right).offset(12)
-            make.right.lessThanOrEqualToSuperview().inset(12)
+            make.right.lessThanOrEqualTo(actionButton.snp.left).offset(12)
         }
 
         fullNameLabel.snp.makeConstraints { make in
             make.top.equalTo(userNameLabel.snp.bottom).offset(4)
             make.left.equalTo(userNameLabel)
-            make.right.lessThanOrEqualToSuperview().inset(12)
+            make.right.lessThanOrEqualTo(actionButton.snp.left).offset(12)
         }
 
-        sendRequestButton.snp.makeConstraints({ make in
-            make.top.equalTo(fullNameLabel.snp.bottom)
+        actionButton.snp.makeConstraints({ make in
+            make.centerY.equalToSuperview()
             make.right.equalToSuperview().inset(24)
         })
 
-        sendRequestButton.addTarget(self, action: #selector(sendFriendRequestPressed), for: .touchUpInside)
+        actionButton.addTarget(self, action: #selector(sendFriendRequestPressed), for: .touchUpInside)
     }
 
     @objc private func sendFriendRequestPressed() {

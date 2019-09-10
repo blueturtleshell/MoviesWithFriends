@@ -10,8 +10,6 @@ import UIKit
 
 class SettingsView: UIView {
 
-    //TODO: - show friends and watch groups
-
     private let countryLabel: UILabel = {
         let label = UILabel()
         label.text = "Country"
@@ -28,7 +26,7 @@ class SettingsView: UIView {
     }()
 
     let changeCountryButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Change Country", for: .normal)
         button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.layer.cornerRadius = 6
@@ -113,12 +111,12 @@ class SettingsView: UIView {
 
         changeCountryButton.snp.makeConstraints { make in
             make.top.equalTo(countryLabel.snp.bottom).offset(24)
-            make.centerX.equalToSuperview()
-            make.size.equalTo(CGSize(width: 120, height: 44))
+            make.right.equalToSuperview().inset(24)
+            make.height.equalTo(44)
         }
 
         bookmarkLabel.snp.makeConstraints { make in
-            make.top.equalTo(changeCountryButton.snp.bottom).offset(24)
+            make.top.equalTo(changeCountryButton.snp.bottom).offset(48)
             make.left.equalToSuperview().offset(24)
         }
 

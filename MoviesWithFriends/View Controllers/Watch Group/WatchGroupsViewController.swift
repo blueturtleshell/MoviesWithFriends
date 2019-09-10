@@ -15,7 +15,7 @@ class WatchGroupsViewController: UIViewController {
         return WatchGroupsView()
     }()
 
-    private let mediaManager = MediaManager()
+    private let mediaManager: MediaManager
     private let currentUser: MWFUser
 
     private var db = Firestore.firestore()
@@ -27,8 +27,9 @@ class WatchGroupsViewController: UIViewController {
 
     private var didFetch = false
 
-    init(user: MWFUser) {
+    init(user: MWFUser, mediaManager: MediaManager) {
         self.currentUser = user
+        self.mediaManager = mediaManager
         super.init(nibName: nil, bundle: nil)
         tabBarItem = UITabBarItem(title: "Watch Groups", image: UIImage(named: "user"), tag: 2)
     }
@@ -51,7 +52,6 @@ class WatchGroupsViewController: UIViewController {
         super.viewWillAppear(animated)
         if !didFetch {
             fetchWatchGroups()
-            didFetch = true
         }
     }
 
@@ -65,14 +65,13 @@ class WatchGroupsViewController: UIViewController {
         watchGroupsView.tableView.delegate = self
         watchGroupsView.tableView.tableFooterView = UIView()
         watchGroupsView.tableView.register(WatchGroupCell.self, forCellReuseIdentifier: "WatchGroupCell")
-        watchGroupsView.tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         watchGroupsView.tableView.register(WatchGroupInviteCell.self, forCellReuseIdentifier: "WatchGroupInviteCell")
 
         NotificationCenter.default.addObserver(self, selector: #selector(cleanUpFirestoreListeners), name: .userDidLogout, object: nil)
     }
 
     @objc private func createCustomWatchGroup() {
-        let customWatchGroupViewController = CustomWatchGroupViewController()
+        let customWatchGroupViewController = CustomWatchGroupViewController(mediaManager: mediaManager)
         navigationController?.pushViewController(customWatchGroupViewController, animated: true)
     }
 
@@ -95,6 +94,8 @@ class WatchGroupsViewController: UIViewController {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.75, execute: {
                         fetchingHUD.remove(from: self.watchGroupsView)
                     })
+
+                    self.didFetch = true
 
                     if snapshot.documents.count == 0 {
                         self.watchGroupsView.tableView.reloadData()
@@ -164,10 +165,21 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+        if joinedWatchGroups.isEmpty && pendingWatchGroups.isEmpty {
+            let backgroundView = BackgroundLabelView()
+            backgroundView.textLabel.text = didFetch ? "No watch groups found" : ""
+            tableView.backgroundView = backgroundView
+            return 0
+        }
+
+        tableView.backgroundView = nil
+
         if section == 0 {
             return joinedWatchGroups.count
+        } else {
+            return pendingWatchGroups.count
         }
-        return pendingWatchGroups.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -188,8 +200,10 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
                 cell.posterImageView.kf.setImage(with: posterURL)
             } else {
                 if group.mediaID < 0 {
+                    // custom group image
                     cell.posterImageView.image = #imageLiteral(resourceName: "customPoster")
                 } else {
+                    // poster does not exist for media
                     cell.posterImageView.image = #imageLiteral(resourceName: "image_na")
                 }
             }
@@ -230,10 +244,10 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            let groupDetailViewController = WatchGroupDetailViewController(watchGroup: joinedWatchGroups[indexPath.row])
+            let groupDetailViewController = WatchGroupDetailViewController(watchGroup: joinedWatchGroups[indexPath.row], mediaManager: mediaManager)
             navigationController?.pushViewController(groupDetailViewController, animated: true)
         } else if indexPath.section == 1 {
-            let userOptionsViewController = WatchGroupOptionsViewController(watchGroup: pendingWatchGroups[indexPath.row])
+            let userOptionsViewController = WatchGroupOptionsViewController(watchGroup: pendingWatchGroups[indexPath.row], mediaManager: mediaManager)
             navigationController?.pushViewController(userOptionsViewController, animated: true)
         }
     }
@@ -248,11 +262,19 @@ extension WatchGroupsViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 0 : 52
+        if section == 0 {
+            return 0
+        } else {
+            if pendingWatchGroups.isEmpty {
+                return 0
+            } else {
+                return 52
+            }
+        }
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 1 {
+        if section == 1 && !pendingWatchGroups.isEmpty {
             let inviteHeader = InviteHeaderView()
             return inviteHeader
         }

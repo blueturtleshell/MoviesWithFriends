@@ -21,7 +21,7 @@ class CustomWatchGroupViewController: UIViewController {
         return dateFormatter
     }()
 
-    private let mediaManager = MediaManager()
+    private let mediaManager: MediaManager
     var watchGroupToEdit: WatchGroup?
 
     private let db = Firestore.firestore()
@@ -45,7 +45,17 @@ class CustomWatchGroupViewController: UIViewController {
             }
         }
     }
+    
     private var watchDate: Date?
+
+    init(mediaManager: MediaManager) {
+        self.mediaManager = mediaManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func loadView() {
         view = customWatchGroupView
@@ -331,7 +341,6 @@ extension CustomWatchGroupViewController: UITableViewDelegate, UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! FriendCell
         let friend = friends[indexPath.row]
 
-        //TODO: change colors
         cell.containerView.backgroundColor = invitedFriends.contains(friend) ? UIColor(named: "offGreen") : .white
 
         cell.userNameLabel.text = friend.userName

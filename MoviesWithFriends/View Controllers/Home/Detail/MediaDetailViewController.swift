@@ -15,8 +15,6 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         return MediaDetailView()
     }()
 
-    // TODO: blur background / poster image for effect
-
     private let mediaManager: MediaManager
     private let mediaType: MediaType
     private var mediaID: Int {
@@ -95,15 +93,17 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     private func setupView() {
+        navigationItem.rightBarButtonItems = [createWatchGroupBarButtonItem, bookmarkBarButtonItem()]
+        navigationItem.rightBarButtonItems?.forEach { $0.isEnabled = false }
+
+        detailView.scrollView.delegate = self
+
         detailView.relatedTableView.register(MediaRowCell.self, forCellReuseIdentifier: "MediaRow")
         detailView.relatedTableView.delegate = self
         detailView.relatedTableView.dataSource = self
         detailView.relatedTableView.rowHeight = 240
         detailView.relatedTableView.separatorColor = .clear
         detailView.relatedTableView.tableFooterView = UIView()
-
-        navigationItem.rightBarButtonItems = [createWatchGroupBarButtonItem, bookmarkBarButtonItem()]
-        navigationItem.rightBarButtonItems?.forEach { $0.isEnabled = false }
 
         detailView.creditButton.addTarget(self, action: #selector(showCredits), for: .touchUpInside)
         detailView.videosButton.addTarget(self, action: #selector(showVideos), for: .touchUpInside)
@@ -310,11 +310,18 @@ class MediaDetailViewController: UIViewController, UITableViewDataSource, UITabl
         cell.mediaManager = mediaManager
         let media = (indexPath.row == 0 ? similarMedia : recommendedMedia)
         cell.titleLabel.text = indexPath.row == 0 ? "Related" : "If you liked \(mediaInfo?.title ?? "")"
-        //TODO change mediatitle font style maybe italics
         cell.media = media
         cell.mediaCollectionView.reloadData()
         cell.mediaCollectionView.contentOffset = .zero
         return cell
+    }
+}
+
+extension MediaDetailViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y < 0 {
+            detailView.backdropImageView.transform = CGAffineTransform(translationX: 0, y: scrollView.contentOffset.y)
+        }
     }
 }
 

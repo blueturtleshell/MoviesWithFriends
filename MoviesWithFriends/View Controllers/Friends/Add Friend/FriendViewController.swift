@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+// TODO: move to own file
 enum FriendRequestState {
     case empty
     case validUser(user: MWFUser)
@@ -70,7 +71,6 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
         navigationItem.title = "Add Friend"
         friendView.tableView.delegate = self
         friendView.tableView.dataSource = self
-        friendView.tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         friendView.tableView.register(AddUserCell.self, forCellReuseIdentifier: "AddUserCell")
         friendView.tableView.register(PendingCell.self, forCellReuseIdentifier: "PendingCell")
 
@@ -129,7 +129,7 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                             self.checkifFriends(user) { isFriends in
                                                 if !isFriends {
                                                     self.requestState = .validUser(user: user)
-                                                    self.friendView.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .left)
+                                                    self.friendView.tableView.reloadData()
                                                 } else {
                                                     self.requestState = .error(message: "You are already friends.")
                                                 }
@@ -203,12 +203,14 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 2
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
+            if case .empty = requestState {
+                return 0
+            }
             return 1
         } else {
             return requestsPending.count
@@ -229,9 +231,7 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell
-                cell.backgroundColor = .clear
-                return cell
+                return UITableViewCell()
             }
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PendingCell", for: indexPath) as! PendingCell
@@ -251,7 +251,11 @@ class FriendViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 180
+            if case FriendRequestState.validUser(_) = requestState {
+                return 180
+            } else {
+                return 0
+            }
         } else {
             return 125
         }
@@ -283,7 +287,7 @@ extension FriendViewController: AddUserCellDelegate {
                     print(error)
                 } else {
                     self.requestState = .requestSent
-                    self.friendView.tableView.reloadRows(at: [IndexPath(item: 0, section: 0)], with: .right)
+                    self.friendView.tableView.reloadData()
                 }
             }
         }

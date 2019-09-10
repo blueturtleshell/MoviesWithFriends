@@ -23,7 +23,10 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     private let mediaManager: MediaManager
     private var currentMediaType: MediaType = .movie
-    private var mediaDictionary = [Int: [Media]]()
+
+    // index because dictionary doesnt guarantee order
+    // index -> ([Media], isFetching)
+    private var mediaDictionary = [Int: (media: [Media], isFetching: Bool)]()
 
     init(mediaManager: MediaManager) {
         self.mediaManager = mediaManager
@@ -60,10 +63,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     private func fetchMedia() {
         for (index, endpoint) in currentMediaType.endpoints.enumerated() {
+            mediaDictionary[index] = (media: [], isFetching: true)
+            homeView.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+
             mediaManager.fetchMedia(endpoint: endpoint, page: 1) { result in
                 do {
                     let media = try result.get()
-                    self.mediaDictionary[index] = media.results
+                    self.mediaDictionary[index] = (media: media.results, isFetching: false)
                     self.homeView.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                 } catch {
                     print(error)
@@ -93,8 +99,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         let endpoint = currentMediaType.endpoints[indexPath.row]
         cell.endpoint = endpoint
         cell.titleLabel.text = endpoint.description
-        if let media =  mediaDictionary[indexPath.row] {
-            cell.media = media
+        if let mediaTuple =  mediaDictionary[indexPath.row] {
+            cell.media = mediaTuple.media
+            cell.isFetching = mediaTuple.isFetching
         }
         return cell
     }

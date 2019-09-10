@@ -30,6 +30,8 @@ class WatchGroupDetailViewController: UITableViewController {
         return true
     }
 
+    private let mediaManager: MediaManager
+
     private let watchGroup: WatchGroup
 
     private let db = Firestore.firestore()
@@ -38,8 +40,9 @@ class WatchGroupDetailViewController: UITableViewController {
 
     private var titleCycleIndex = 0
 
-    init(watchGroup: WatchGroup) {
+    init(watchGroup: WatchGroup, mediaManager: MediaManager) {
         self.watchGroup = watchGroup
+        self.mediaManager = mediaManager
         super.init(style: .plain)
     }
 
@@ -82,7 +85,7 @@ class WatchGroupDetailViewController: UITableViewController {
     }
 
     @objc private func userOptions() {
-        let userOptionsViewController = WatchGroupOptionsViewController(watchGroup: watchGroup)
+        let userOptionsViewController = WatchGroupOptionsViewController(watchGroup: watchGroup, mediaManager: mediaManager)
         navigationController?.pushViewController(userOptionsViewController, animated: true)
     }
 

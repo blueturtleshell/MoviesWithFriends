@@ -16,7 +16,7 @@ class UserViewController: UIViewController {
     }()
 
     private let user: MWFUser
-    private let mediaManager = MediaManager()
+    private let mediaManager: MediaManager
     private let db = Firestore.firestore()
 
     private var bookmarkedMovies = [BookmarkMedia]()
@@ -31,8 +31,9 @@ class UserViewController: UIViewController {
         }
     }
 
-    init(user: MWFUser) {
+    init(user: MWFUser, mediaManager: MediaManager) {
         self.user = user
+        self.mediaManager = mediaManager
         super.init(nibName: nil, bundle: nil)
         tabBarItem = UITabBarItem(title: "User", image: UIImage(named: "user"), tag: 3)
     }
@@ -74,7 +75,6 @@ class UserViewController: UIViewController {
 
         userView.tableView.delegate = self
         userView.tableView.dataSource = self
-        userView.tableView.register(EmptyCell.self, forCellReuseIdentifier: "EmptyCell")
         userView.tableView.register(BookmarkCell.self, forCellReuseIdentifier: "BookmarkCell")
         userView.tableView.contentInset = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 0)
         userView.tableView.tableFooterView = UIView()
@@ -105,7 +105,7 @@ class UserViewController: UIViewController {
     @objc private func showFriends() {
         guard isFriendsPublic else { return }
 
-        let friendsViewController = FriendsViewController(user: user)
+        let friendsViewController = FriendsViewController(user: user, mediaManager: mediaManager)
         navigationController?.pushViewController(friendsViewController, animated: true)
     }
 
@@ -232,7 +232,7 @@ class UserViewController: UIViewController {
             uploadImage(imageData: imageData, imageName: user.id, storageFolder: "profile_images") { uploadResult in
                 do {
                     let profileImageURL = try uploadResult.get()
-                    self.db.document("users/\(self.user.id)").updateData(["profile_image": profileImageURL?.absoluteString ?? ""], completion: { error in
+                    self.db.document("users/\(self.user.id)").updateData(["profile_url": profileImageURL?.absoluteString ?? ""], completion: { error in
                         if let error = error {
                             print(error)
                         } else {
@@ -250,21 +250,21 @@ class UserViewController: UIViewController {
 extension UserViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !isBookmarkPublic {
-            let backgroundView = TableViewBackgroundLabelView()
+            let backgroundView = BackgroundLabelView()
             backgroundView.textLabel.text = "Bookmarks private"
             tableView.backgroundView = backgroundView
             return 0
         } else {
             if userView.bookmarkSegmentedControl.selectedSegmentIndex == 0 {
                 if bookmarkedMovies.isEmpty {
-                    tableView.backgroundView = TableViewBackgroundLabelView()
+                    tableView.backgroundView = BackgroundLabelView()
                     return 0
                 }
                 tableView.backgroundView = nil
                 return bookmarkedMovies.count
             } else {
                 if bookmarkedTV.isEmpty {
-                    tableView.backgroundView = TableViewBackgroundLabelView()
+                    tableView.backgroundView = BackgroundLabelView()
                     return 0
                 }
                 tableView.backgroundView = nil

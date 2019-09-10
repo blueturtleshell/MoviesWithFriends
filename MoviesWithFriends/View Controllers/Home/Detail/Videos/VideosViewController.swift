@@ -43,6 +43,14 @@ class VideosViewController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if videos.results.isEmpty {
+            let backgroundView = BackgroundLabelView()
+            backgroundView.textLabel.text = "Videos not found"
+            tableView.backgroundView = backgroundView
+            return 0
+        }
+        tableView.backgroundView = nil
+
         return headerTitles.count
     }
 
@@ -69,11 +77,17 @@ class VideosViewController: UITableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let inviteHeader = InviteHeaderView(offset: false)
+        inviteHeader.headerTitleLabel.text = headerTitles[section]
+        return inviteHeader
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if self.tableView(tableView, numberOfRowsInSection: section) == 0 {
-            return nil
+            return 0
         } else {
-            return headerTitles[section]
+            return 32
         }
     }
 }

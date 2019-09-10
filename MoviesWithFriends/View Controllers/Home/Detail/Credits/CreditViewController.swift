@@ -46,6 +46,15 @@ class CreditViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if credits.cast.isEmpty && credits.crew.isEmpty {
+            let backgroundView = BackgroundLabelView()
+            backgroundView.textLabel.text = "Cast and Crew not found"
+            tableView.backgroundView = backgroundView
+            return 0
+        }
+
+        tableView.backgroundView = nil
+
         if section == 0 {
             return credits.cast.count
         } else {

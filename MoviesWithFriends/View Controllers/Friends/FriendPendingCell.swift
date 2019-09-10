@@ -45,9 +45,8 @@ class FriendPendingCell: UITableViewCell {
     }()
 
     let acceptButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Accept", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
         button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
@@ -55,9 +54,8 @@ class FriendPendingCell: UITableViewCell {
     }()
 
     let denyButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = PaddedButton(padding: 12)
         button.setTitle("Deny", for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0,left: 10,bottom: 0,right: 10)
         button.setTitleColor(UIColor(named: "offYellow"), for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 6
@@ -101,7 +99,7 @@ class FriendPendingCell: UITableViewCell {
         containerView.addSubview(bottomStackView)
 
         containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0))
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12))
         }
 
         profileImageView.snp.makeConstraints { make in

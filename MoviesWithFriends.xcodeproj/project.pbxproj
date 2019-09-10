@@ -26,7 +26,6 @@
 		99703A6922D66C5300B3F2DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99703A6822D66C5300B3F2DB /* Assets.xcassets */; };
 		99703A6C22D66C5300B3F2DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99703A6A22D66C5300B3F2DB /* LaunchScreen.storyboard */; };
 		998F04D722E26FFD000AB52D /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04D622E26FFD000AB52D /* FriendsViewController.swift */; };
-		998F04D922E41749000AB52D /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04D822E41749000AB52D /* EmptyCell.swift */; };
 		998F04E222E60547000AB52D /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04E122E60547000AB52D /* FriendViewController.swift */; };
 		998F04E422E60566000AB52D /* FriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04E322E60566000AB52D /* FriendView.swift */; };
 		998F04E622E69C8A000AB52D /* AddUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998F04E522E69C8A000AB52D /* AddUserCell.swift */; };
@@ -48,9 +47,10 @@
 		99A90503231AF1080054EE08 /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A90502231AF1080054EE08 /* CountryCell.swift */; };
 		99AE7027232085520003322B /* PrivateButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE7026232085520003322B /* PrivateButtonView.swift */; };
 		99AE702A2321AAD00003322B /* FriendRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE70292321AAD00003322B /* FriendRequestCell.swift */; };
-		99AE702C2322E2490003322B /* TableViewBackgroundLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE702B2322E2490003322B /* TableViewBackgroundLabelView.swift */; };
+		99AE702C2322E2490003322B /* BackgroundLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE702B2322E2490003322B /* BackgroundLabelView.swift */; };
+		99AE702E2326B9FF0003322B /* RelationshipState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE702D2326B9FF0003322B /* RelationshipState.swift */; };
+		99AE70302326E0170003322B /* PaddedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE702F2326E0170003322B /* PaddedButton.swift */; };
 		99BA6F1222D6BBCD0002D5FF /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */; };
-		99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */; };
 		99BA6F1822D7A1C30002D5FF /* MediaDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1722D7A1C30002D5FF /* MediaDisplayable.swift */; };
 		99BA6F1A22D7ADF60002D5FF /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F1922D7ADF60002D5FF /* Media.swift */; };
 		99BA6F2122D7B4190002D5FF /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BA6F2022D7B4190002D5FF /* MediaManager.swift */; };
@@ -142,7 +142,6 @@
 		99703A6B22D66C5300B3F2DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		99703A6D22D66C5300B3F2DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		998F04D622E26FFD000AB52D /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
-		998F04D822E41749000AB52D /* EmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCell.swift; sourceTree = "<group>"; };
 		998F04E122E60547000AB52D /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
 		998F04E322E60566000AB52D /* FriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendView.swift; sourceTree = "<group>"; };
 		998F04E522E69C8A000AB52D /* AddUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserCell.swift; sourceTree = "<group>"; };
@@ -164,9 +163,10 @@
 		99A90502231AF1080054EE08 /* CountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
 		99AE7026232085520003322B /* PrivateButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateButtonView.swift; sourceTree = "<group>"; };
 		99AE70292321AAD00003322B /* FriendRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestCell.swift; sourceTree = "<group>"; };
-		99AE702B2322E2490003322B /* TableViewBackgroundLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewBackgroundLabelView.swift; sourceTree = "<group>"; };
+		99AE702B2322E2490003322B /* BackgroundLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundLabelView.swift; sourceTree = "<group>"; };
+		99AE702D2326B9FF0003322B /* RelationshipState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipState.swift; sourceTree = "<group>"; };
+		99AE702F2326E0170003322B /* PaddedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedButton.swift; sourceTree = "<group>"; };
 		99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
-		99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NothingFoundCell.swift; sourceTree = "<group>"; };
 		99BA6F1722D7A1C30002D5FF /* MediaDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDisplayable.swift; sourceTree = "<group>"; };
 		99BA6F1922D7ADF60002D5FF /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
 		99BA6F2022D7B4190002D5FF /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
@@ -347,13 +347,13 @@
 		998F04D522E26D2F000AB52D /* Friends */ = {
 			isa = PBXGroup;
 			children = (
-				998F04D822E41749000AB52D /* EmptyCell.swift */,
 				998F04D622E26FFD000AB52D /* FriendsViewController.swift */,
 				99EC9BAA22E91C060008790C /* FriendCell.swift */,
 				99EC9BA822E90AF60008790C /* FriendPendingCell.swift */,
 				99AE70292321AAD00003322B /* FriendRequestCell.swift */,
 				99DF3B9022EA3D04007C9660 /* FetchingTBCell.swift */,
-				99AE702B2322E2490003322B /* TableViewBackgroundLabelView.swift */,
+				99AE702B2322E2490003322B /* BackgroundLabelView.swift */,
+				99AE702D2326B9FF0003322B /* RelationshipState.swift */,
 				99331E4723036A7E00F8F96C /* Friend Code */,
 				998F04E022E51C71000AB52D /* Add Friend */,
 			);
@@ -430,7 +430,6 @@
 			children = (
 				99D1E2F2230C64BE004780F7 /* MediaRowCell.swift */,
 				99BA6F1122D6BBCD0002D5FF /* PosterCell.swift */,
-				99BA6F1322D6BD1A0002D5FF /* NothingFoundCell.swift */,
 			);
 			path = "Media Row Cell";
 			sourceTree = "<group>";
@@ -442,6 +441,7 @@
 				99BA6F8122DBEA8B0002D5FF /* PaddedTextField.swift */,
 				9990EEAD22F372D0006C0075 /* HUDView.swift */,
 				99AE7026232085520003322B /* PrivateButtonView.swift */,
+				99AE702F2326E0170003322B /* PaddedButton.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -797,6 +797,7 @@
 			files = (
 				99A904FD231757CA0054EE08 /* UIImageView.swift in Sources */,
 				99DF3B9822EA8529007C9660 /* WatchGroupViewController.swift in Sources */,
+				99AE70302326E0170003322B /* PaddedButton.swift in Sources */,
 				9990EEAA22F238BB006C0075 /* WatchGroupCell.swift in Sources */,
 				998F04E622E69C8A000AB52D /* AddUserCell.swift in Sources */,
 				99DF3B9C22EBBFA3007C9660 /* WatchGroupView.swift in Sources */,
@@ -812,7 +813,6 @@
 				99BA6F2C22D7BA020002D5FF /* MediaType.swift in Sources */,
 				99BA6F7C22DBDDA30002D5FF /* SignUpViewController.swift in Sources */,
 				99BA6F6F22DA8B080002D5FF /* UserView.swift in Sources */,
-				998F04D922E41749000AB52D /* EmptyCell.swift in Sources */,
 				99BA6F2122D7B4190002D5FF /* MediaManager.swift in Sources */,
 				99BA6F1A22D7ADF60002D5FF /* Media.swift in Sources */,
 				99BA6F1222D6BBCD0002D5FF /* PosterCell.swift in Sources */,
@@ -846,6 +846,7 @@
 				99331E4B23036AE800F8F96C /* FriendCodeView.swift in Sources */,
 				99BA6F2622D7B9BB0002D5FF /* Endpoint.swift in Sources */,
 				99D1E2FF230F3A59004780F7 /* TitleHeaderSortByView.swift in Sources */,
+				99AE702E2326B9FF0003322B /* RelationshipState.swift in Sources */,
 				99A904F323148B080054EE08 /* FetchingCVCell.swift in Sources */,
 				9990EEAE22F372D0006C0075 /* HUDView.swift in Sources */,
 				99BA6F8D22DE7AF10002D5FF /* SearchEndpoint.swift in Sources */,
@@ -881,13 +882,12 @@
 				99AE702A2321AAD00003322B /* FriendRequestCell.swift in Sources */,
 				99BA6F4C22D932410002D5FF /* MovieDetail.swift in Sources */,
 				99331E4E2304B74000F8F96C /* CameraQRScannerViewController.swift in Sources */,
-				99BA6F1422D6BD1A0002D5FF /* NothingFoundCell.swift in Sources */,
 				99AE7027232085520003322B /* PrivateButtonView.swift in Sources */,
 				99BA6F8B22DE61FB0002D5FF /* SearchView.swift in Sources */,
 				99BA6F5022D944490002D5FF /* RegionReleaseDates.swift in Sources */,
 				99BA6F5922DA2AE80002D5FF /* Stack.swift in Sources */,
 				9957E5C722DFCB8D005AC297 /* CreditsEndpoint.swift in Sources */,
-				99AE702C2322E2490003322B /* TableViewBackgroundLabelView.swift in Sources */,
+				99AE702C2322E2490003322B /* BackgroundLabelView.swift in Sources */,
 				99BDA48D22FCFAF400474311 /* MessageCell.swift in Sources */,
 				99BA6F6A22DA7F7D0002D5FF /* VideoCell.swift in Sources */,
 				9990EEA522EFB35E006C0075 /* WatchGroup.swift in Sources */,
@@ -1049,7 +1049,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.petercsun.MoviesWithFriends;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1069,7 +1069,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.petercsun.MoviesWithFriends;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
